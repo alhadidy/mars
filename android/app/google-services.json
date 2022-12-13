@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "641358260927",
+    "project_id": "mars-coffee",
+    "storage_bucket": "mars-coffee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641358260927:android:919c7703bfdf86728f340a",
+        "android_client_info": {
+          "package_name": "com.alhadidy.mars"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "641358260927-99ebp5sqf359r8cav921ffoupms5eg2h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alhadidy.mars",
+            "certificate_hash": "540ae04fd792006b60c5c15c11cbe7aea916b0cf"
+          }
+        },
+        {
+          "client_id": "641358260927-aq66i7om8ctgkd249qt0v8paum0dn6kk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alhadidy.mars",
+            "certificate_hash": "a0ddc22dca12a14c7c7c0dcf31ccf9ff0b1bbee3"
+          }
+        },
+        {
+          "client_id": "641358260927-g8fh3kin0vq245rt8rp3j69uf0mir9ip.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwhEcQoLa3EWCAbBepJTszXCbP7yG_POE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "641358260927-g8fh3kin0vq245rt8rp3j69uf0mir9ip.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "641358260927-0sohqqkg60dehsqqs6nj0nk3300bdv1c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mars"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
