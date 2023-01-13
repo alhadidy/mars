@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -10,6 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:mars/models/order.dart';
 import 'package:mars/screens/home/widgets/round_icon_button.dart';
+import 'package:mars/services/notifications.dart';
 
 class Methods {
   static void showLoaderDialog(BuildContext context) {
@@ -33,6 +36,20 @@ class Methods {
         return alert;
       },
     );
+  }
+
+  static initFCM(context) async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    messaging.subscribeToTopic('allUsers');
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      inspect(message);
+
+      NotificationsApi.showNotification(
+          title: message.data['title'],
+          body: message.data['body'],
+          payload: jsonEncode(message.data));
+    });
   }
 
   static void showConfirmDialog(
@@ -271,7 +288,7 @@ class Methods {
     String formattedDate;
     date == null
         ? formattedDate = ''
-        : formattedDate = intl.DateFormat('MMMd', 'ar').format(date);
+        : formattedDate = intl.DateFormat('MMMd', 'en').format(date);
 
     return formattedDate;
   }

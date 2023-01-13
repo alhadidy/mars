@@ -19,13 +19,13 @@ class ItemTile extends StatelessWidget {
           margin: EdgeInsets.zero,
           color: Colors.brown[300],
           shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(30))),
+              borderRadius: BorderRadius.all(Radius.circular(25))),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(0.0),
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(25)),
                   child: CachedNetworkImage(

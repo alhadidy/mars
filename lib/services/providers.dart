@@ -48,7 +48,7 @@ final userDataProvider = StateProvider<UserData>((ref) {
       return value;
     },
     orElse: (() {
-      return UserData([], 0);
+      return UserData([], 0, 0);
     }),
   );
 }); // user data

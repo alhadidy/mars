@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mars/models/item.dart';
+import 'package:mars/screens/home/widgets/basket_button.dart';
 import 'package:mars/screens/home/widgets/item_tile.dart';
 import 'package:mars/services/firestore/items.dart';
 import 'package:mars/services/locator.dart';
@@ -20,11 +21,7 @@ class _CategoryPageState extends State<CategoryPage> {
       appBar: AppBar(
         title: Text(widget.category),
         centerTitle: true,
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: const FaIcon(FontAwesomeIcons.bagShopping))
-        ],
+        actions: const [BasketButton()],
       ),
       body: FutureBuilder(
         future: locator.get<Items>().getItemsByCategory(widget.category),

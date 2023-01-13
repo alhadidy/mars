@@ -8,6 +8,7 @@ class RoundIconButton extends StatelessWidget {
   final Color iconColor;
   final String tooltip;
   final double iconSize;
+  final double size;
   final OnTap? onTap;
   final Color color;
   const RoundIconButton(
@@ -15,23 +16,27 @@ class RoundIconButton extends StatelessWidget {
       this.icon = FontAwesomeIcons.question,
       this.iconColor = Colors.white,
       this.iconSize = 14,
+      this.size = 20,
       this.tooltip = '',
       required this.onTap,
       this.color = Colors.cyan});
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      backgroundColor: color,
-      radius: 20,
-      child: IconButton(
-        disabledColor: color,
-        onPressed: onTap,
-        tooltip: tooltip,
-        icon: FaIcon(
-          icon,
-          size: iconSize,
-          color: iconColor,
+    return GestureDetector(
+      onTap: onTap,
+      child: ClipOval(
+        child: Container(
+          color: color,
+          width: size,
+          height: size,
+          child: Center(
+            child: FaIcon(
+              icon,
+              size: iconSize,
+              color: iconColor,
+            ),
+          ),
         ),
       ),
     );

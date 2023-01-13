@@ -8,6 +8,7 @@ import 'package:mars/models/order_item.dart';
 import 'package:mars/models/sSettings.dart';
 import 'package:mars/models/store.dart';
 import 'package:mars/models/user.dart';
+import 'package:mars/models/user_data.dart';
 import 'package:mars/services/firestore/orders.dart';
 import 'package:mars/services/firestore/stores.dart';
 import 'package:mars/services/locator.dart';
@@ -27,6 +28,8 @@ class _CompleteOrderState extends ConsumerState<CompleteOrder> {
   String locationText = 'اضغط هنا من اجل تحديد موقع التوصيل';
   LatLng? location;
   bool dataCompleted = false;
+
+  bool walletPay = false;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -52,6 +55,7 @@ class _CompleteOrderState extends ConsumerState<CompleteOrder> {
   Widget build(BuildContext context) {
     AppDatabase db = ref.watch(dbProvider);
     UserModel? user = ref.watch(userProvider);
+    UserData userData = ref.watch(userDataProvider);
     SSetting? settings = ref.watch(shopSettingsProvider);
 
     if (user == null || settings == null) {
@@ -228,6 +232,38 @@ class _CompleteOrderState extends ConsumerState<CompleteOrder> {
                             });
                           },
                         ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 75),
+                    child: userData.cash != 0
+                        ? StreamBuilder(
+                            stream: db.localOrdersDao.watchOrderTotalFuture(),
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
+                              if (snapshot.data > userData.cash) {
+                                return Container();
+                              }
+                              return ListTile(
+                                title: const Text('الدفع عن طريق المحفظة'),
+                                leading: Checkbox(
+                                  value: walletPay,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      walletPay = value ?? false;
+                                    });
+                                  },
+                                ),
+                                trailing: Text(
+                                    '${Methods.formatPrice(userData.cash)} د.ع'),
+                                onTap: () {
+                                  setState(() {
+                                    walletPay = !walletPay;
+                                  });
+                                },
+                              );
+                            },
+                          )
+                        : Container(),
+                  ),
                 ],
               ),
             ),

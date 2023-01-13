@@ -99,12 +99,35 @@ class LocalOrdersDao extends DatabaseAccessor<AppDatabase>
     return total;
   }
 
+  Stream<int> watchOrderTotalFuture() {
+    Stream<List<LocalOrder>> order = select(localOrders).watch();
+
+    return order.map((event) {
+      int total = 0;
+      for (var element in event) {
+        total = total +
+            element.quantity *
+                Methods.roundPriceWithDiscountIQD(
+                    price: element.price, discount: element.discount);
+      }
+      return total;
+    });
+  }
+
   Stream<LocalOrder> searchInOrder(String name) {
     return (select(localOrders)
           ..where((tbl) {
             return tbl.name.equals(name);
           }))
         .watchSingle();
+  }
+
+  Future<LocalOrder> searchInOrderFuture(String name) {
+    return (select(localOrders)
+          ..where((tbl) {
+            return tbl.name.equals(name);
+          }))
+        .getSingle();
   }
 
   Future<List<LocalOrder>> getTheOrder() {
@@ -145,8 +168,7 @@ class LocalOrdersDao extends DatabaseAccessor<AppDatabase>
   }
 
   Future deleteFromTheOrder(LocalOrder order) {
-    return (delete(localOrders)..where((tbl) => tbl.fid.equals(order.fid)))
-        .go();
+    return (delete(localOrders)..where((tbl) => tbl.id.equals(order.id!))).go();
   }
 
   Future clearTheOrder() => delete(localOrders).go();

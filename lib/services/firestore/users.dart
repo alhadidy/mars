@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -25,9 +23,20 @@ class Users {
     });
   }
 
+  Future scanGiftCard(String userId, String cardId) {
+    return firestore
+        .collection('users')
+        .doc(userId)
+        .collection('cards')
+        .doc(cardId)
+        .set({
+      'time': FieldValue.serverTimestamp(),
+    });
+  }
+
   Stream<UserData> watchUserData(UserModel? _user) {
     if (_user == null) {
-      return Stream.value(UserData([], 0));
+      return Stream.value(UserData([], 0, 0));
     }
     DocumentReference ref = firestore.collection('users').doc(_user.uid);
 

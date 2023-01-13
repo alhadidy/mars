@@ -21,15 +21,15 @@ class ItemTileHorizontal extends StatelessWidget {
             margin: EdgeInsets.zero,
             color: Colors.brown[300],
             shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(30))),
+                borderRadius: BorderRadius.all(Radius.circular(25))),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 2 - 16,
-                  height: 216,
+                  height: 250,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 8),
+                    padding: const EdgeInsets.only(left: 0),
                     child: ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
                       child: CachedNetworkImage(

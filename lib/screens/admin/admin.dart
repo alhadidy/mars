@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mars/models/user.dart';
+import 'package:mars/services/providers.dart';
 
-class Admin extends StatefulWidget {
+class Admin extends ConsumerStatefulWidget {
   const Admin({Key? key}) : super(key: key);
 
   @override
-  State<Admin> createState() => _AdminState();
+  ConsumerState<Admin> createState() => _AdminState();
 }
 
-class _AdminState extends State<Admin> {
+class _AdminState extends ConsumerState<Admin> {
   @override
   Widget build(BuildContext context) {
+    UserModel? user = ref.watch(userProvider);
+    if (user == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Admin Dash'),
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Admin Dash'),
@@ -60,6 +71,22 @@ class _AdminState extends State<Admin> {
                 Navigator.pushNamed(context, '/adminItems');
               },
             ),
+            user.role == Roles.admin
+                ? ListTile(
+                    title: const Text('Editors'),
+                    trailing: SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: Center(
+                            child: FaIcon(
+                          FontAwesomeIcons.users,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ))),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/adminEditors');
+                    },
+                  )
+                : Container(),
             ListTile(
               title: const Text('Promotions'),
               trailing: SizedBox(
@@ -101,7 +128,7 @@ class _AdminState extends State<Admin> {
               onTap: () {},
             ),
             ListTile(
-              title: const Text('Points'),
+              title: const Text('Loyalty Program'),
               trailing: SizedBox(
                   height: 30,
                   width: 30,
@@ -110,7 +137,9 @@ class _AdminState extends State<Admin> {
                     FontAwesomeIcons.coins,
                     color: Theme.of(context).colorScheme.secondary,
                   ))),
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, '/adminPoints');
+              },
             ),
           ],
         ),

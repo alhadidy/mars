@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,9 +12,12 @@ import 'package:mars/screens/home/widgets/home_title.dart';
 import 'package:mars/screens/home/widgets/round_icon_button.dart';
 import 'package:mars/services/auth_service.dart';
 import 'package:mars/services/firebase_links.dart';
+import 'package:mars/services/firestore/users.dart';
+import 'package:mars/services/locator.dart';
 import 'package:mars/services/methods.dart';
 import 'package:mars/services/providers.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 class Profile extends ConsumerStatefulWidget {
@@ -91,33 +93,57 @@ class _ProfileState extends ConsumerState<Profile> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: user.isAnon
-                  ? const CircleAvatar(
-                      radius: 50,
-                      child: FaIcon(
-                        FontAwesomeIcons.userSecret,
-                        color: Colors.white,
-                        size: 45,
-                      ))
-                  : CachedNetworkImage(
-                      placeholder: (context, url) {
-                        return const CircleAvatar(
-                          radius: 50,
-                        );
-                      },
-                      imageUrl: user.photoUrl,
-                      imageBuilder: (context, imageProvider) => Container(
-                        width: 100.0,
-                        height: 100.0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: imageProvider, fit: BoxFit.cover),
-                        ),
-                      ),
-                    ),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                QrImage(
+                    errorCorrectionLevel: QrErrorCorrectLevel.H,
+                    data: user.uid,
+                    version: QrVersions.auto,
+                    size: 300,
+                    gapless: false,
+                    foregroundColor: Colors.white,
+                    dataModuleStyle: const QrDataModuleStyle(
+                        dataModuleShape: QrDataModuleShape.circle),
+                    eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.circle)),
+                CircleAvatar(
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  radius: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: user.isAnon
+                        ? const CircleAvatar(
+                            radius: 50,
+                            child: FaIcon(
+                              FontAwesomeIcons.userSecret,
+                              color: Colors.white,
+                              size: 45,
+                            ))
+                        : CachedNetworkImage(
+                            placeholder: (context, url) {
+                              return const CircleAvatar(
+                                radius: 50,
+                              );
+                            },
+                            errorWidget: ((context, url, error) {
+                              return const CircleAvatar(
+                                radius: 50,
+                              );
+                            }),
+                            imageUrl: user.photoUrl,
+                            imageBuilder: (context, imageProvider) => Container(
+                              width: 100.0,
+                              height: 100.0,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: imageProvider, fit: BoxFit.cover),
+                              ),
+                            ),
+                          ),
+                  ),
+                ),
+              ],
             ),
             Text(user.isAnon ? "لم تقم بتسجيل الدخول" : user.name,
                 textAlign: TextAlign.center,
@@ -255,7 +281,7 @@ class _ProfileState extends ConsumerState<Profile> {
                           Padding(
                             padding: const EdgeInsets.all(4.0),
                             child: RoundIconButton(
-                              icon: FontAwesomeIcons.bomb,
+                              icon: FontAwesomeIcons.solidGem,
                               iconColor: Colors.red.shade800,
                               iconSize: 20,
                               color: Colors.white,
@@ -265,7 +291,7 @@ class _ProfileState extends ConsumerState<Profile> {
                           const Padding(
                             padding: EdgeInsets.all(2.0),
                             child: Text(
-                              'انفجاري',
+                              'ماسي',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
@@ -301,7 +327,7 @@ class _ProfileState extends ConsumerState<Profile> {
                           const Padding(
                             padding: EdgeInsets.all(2.0),
                             child: Text(
-                              'ناري',
+                              'ذهبي',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
@@ -351,6 +377,20 @@ class _ProfileState extends ConsumerState<Profile> {
                     )),
               ],
             ),
+            const Divider(
+              indent: 8,
+              endIndent: 8,
+            ),
+            Directionality(
+                textDirection: TextDirection.rtl,
+                child: ListTile(
+                  title: const Text('المحفظة'),
+                  leading: const FaIcon(FontAwesomeIcons.wallet),
+                  trailing: Text('${Methods.formatPrice(userData.cash)} د.ع'),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/wallet');
+                  },
+                )),
             const Divider(
               indent: 8,
               endIndent: 8,

@@ -5,7 +5,7 @@ description: A new Flutter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: '>=2.18.4 <3.0.0'
@@ -33,6 +33,7 @@ dependencies:
   flutter_riverpod:
 
   path_provider:
+  flutter_native_timezone:
   font_awesome_flutter: ^10.1.0
   cached_network_image:
   flare_flutter:
@@ -54,6 +55,9 @@ dependencies:
   geolocator:
   url_launcher:
   percent_indicator: ^4.2.2
+  qr_flutter:
+  flutter_barcode_scanner:
+  ticket_widget:
 
 
 dev_dependencies:

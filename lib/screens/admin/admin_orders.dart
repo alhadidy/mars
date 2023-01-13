@@ -120,8 +120,11 @@ class _AdminOrdersState extends State<AdminOrders> {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Text(Methods.formatDate(
-                                          orders[index].time, 'en')),
+                                      Text(
+                                        Methods.formatDate(
+                                            orders[index].time, 'en'),
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
                                       Text(Methods.formatTime(
                                           orders[index].time, 'en')),
                                     ],
@@ -140,54 +143,6 @@ class _AdminOrdersState extends State<AdminOrders> {
                               padding: const EdgeInsets.all(16.0),
                               child: Text('الاسم: ${orders[index].userName}'),
                             ),
-                            SizedBox(
-                              height: 120,
-                              width: double.maxFinite,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: orders[index].items.length,
-                                itemBuilder: (BuildContext context, int i) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Badge(
-                                          badgeContent: Text(orders[index]
-                                              .items[i]
-                                              .quantity
-                                              .toString()),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(20)),
-                                            child: CachedNetworkImage(
-                                                height: 50,
-                                                width: 50,
-                                                fit: BoxFit.cover,
-                                                imageUrl: orders[index]
-                                                    .items[i]
-                                                    .imgUrl),
-                                          ),
-                                        ),
-                                        Text(orders[index].items[i].name),
-                                        Text(
-                                          Methods.formatPrice(
-                                              Methods.roundPriceWithDiscountIQD(
-                                                  price: orders[index]
-                                                      .items[i]
-                                                      .price,
-                                                  discount: orders[index]
-                                                      .items[i]
-                                                      .discount)),
-                                          textDirection: TextDirection.ltr,
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                            const Divider(),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Row(
@@ -274,7 +229,55 @@ class _AdminOrdersState extends State<AdminOrders> {
                                       }),
                                 ],
                               ),
-                            )
+                            ),
+                            const Divider(),
+                            SizedBox(
+                              height: 120,
+                              width: double.maxFinite,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: orders[index].items.length,
+                                itemBuilder: (BuildContext context, int i) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        Badge(
+                                          badgeContent: Text(orders[index]
+                                              .items[i]
+                                              .quantity
+                                              .toString()),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(20)),
+                                            child: CachedNetworkImage(
+                                                height: 50,
+                                                width: 50,
+                                                fit: BoxFit.cover,
+                                                imageUrl: orders[index]
+                                                    .items[i]
+                                                    .imgUrl),
+                                          ),
+                                        ),
+                                        Text(orders[index].items[i].name),
+                                        Text(
+                                          Methods.formatPrice(
+                                              Methods.roundPriceWithDiscountIQD(
+                                                  price: orders[index]
+                                                      .items[i]
+                                                      .price,
+                                                  discount: orders[index]
+                                                      .items[i]
+                                                      .discount)),
+                                          textDirection: TextDirection.ltr,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           ],
                         ),
                       );

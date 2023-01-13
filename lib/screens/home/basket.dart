@@ -107,7 +107,18 @@ class _BasketState extends ConsumerState<Basket>
                             ? const EdgeInsets.only(bottom: 100)
                             : const EdgeInsets.only(bottom: 16),
                         child: ListTile(
-                          title: Text(order[index].name),
+                          title: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(order[index].name),
+                          ),
+                          leading: IconButton(
+                            icon: const FaIcon(FontAwesomeIcons.xmark,
+                                color: Colors.red),
+                            onPressed: () async {
+                              await db.localOrdersDao
+                                  .deleteFromTheOrder(order[index]);
+                            },
+                          ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [

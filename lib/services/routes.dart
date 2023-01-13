@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mars/screens/admin/admin.dart';
 import 'package:mars/screens/admin/admin_categories.dart';
+import 'package:mars/screens/admin/admin_editors.dart';
 import 'package:mars/screens/admin/admin_items.dart';
 import 'package:mars/screens/admin/admin_orders.dart';
+import 'package:mars/screens/admin/admin_points.dart';
 import 'package:mars/screens/admin/admin_promotion.dart';
 import 'package:mars/screens/admin/admin_stores.dart';
 import 'package:mars/screens/admin/category_editor.dart';
+import 'package:mars/screens/admin/generated_cards.dart';
 import 'package:mars/screens/admin/item_editor.dart';
 import 'package:mars/screens/admin/promotion_editor.dart';
 import 'package:mars/screens/home/basket.dart';
@@ -15,6 +18,7 @@ import 'package:mars/screens/home/item_page.dart';
 import 'package:mars/screens/home/profile.dart';
 import 'package:mars/screens/home/promotion_page.dart';
 import 'package:mars/screens/home/stores_page.dart';
+import 'package:mars/screens/home/wallet.dart';
 
 class RoutesHelper {
   static Route<dynamic> goToRoute(RouteSettings settings) {
@@ -44,6 +48,10 @@ class RoutesHelper {
           return ItemPage(
             item: Map<String, dynamic>.from(args)['item'],
           );
+        });
+      case '/adminEditors':
+        return MaterialPageRoute(builder: (_) {
+          return const AdminEditors();
         });
       case '/adminStores':
         return MaterialPageRoute(builder: (_) {
@@ -90,6 +98,10 @@ class RoutesHelper {
         return MaterialPageRoute(builder: (_) {
           return const Profile();
         });
+      case '/wallet':
+        return MaterialPageRoute(builder: (_) {
+          return const Wallet();
+        });
       case '/basket':
         return MaterialPageRoute(builder: (_) {
           return const Basket();
@@ -98,7 +110,14 @@ class RoutesHelper {
         return MaterialPageRoute(builder: (_) {
           return const CompleteOrder();
         });
-
+      case '/adminPoints':
+        return MaterialPageRoute(builder: (_) {
+          return const AdminPoints();
+        });
+      case '/generatedCards':
+        return MaterialPageRoute(builder: (_) {
+          return const GeneratedCards();
+        });
       case '/stores':
         return MaterialPageRoute(builder: (_) {
           return const StoresPage();

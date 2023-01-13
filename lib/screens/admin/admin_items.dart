@@ -53,8 +53,8 @@ class _AdminItemsState extends State<AdminItems> {
                       Text(items[index].category),
                       items[index].sizes.isEmpty
                           ? Container()
-                          : Padding(
-                              padding: const EdgeInsets.only(top: 16),
+                          : const Padding(
+                              padding: EdgeInsets.only(top: 16),
                               child: Text('الاحجام:'),
                             ),
                       Wrap(
@@ -70,7 +70,10 @@ class _AdminItemsState extends State<AdminItems> {
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16, vertical: 16),
-                                child: Text(size.name),
+                                child: Text(
+                                  size.name,
+                                  style: const TextStyle(height: 1.5),
+                                ),
                               ),
                             ),
                           );
