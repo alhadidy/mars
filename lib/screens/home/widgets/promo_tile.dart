@@ -24,10 +24,11 @@ class PromotionTileState extends State<PromotionTile> {
       },
       child: Card(
           clipBehavior: Clip.antiAlias,
-          elevation: 0,
+          elevation: 4,
           margin: EdgeInsets.zero,
           color: Colors.transparent,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(0),
             child: Stack(

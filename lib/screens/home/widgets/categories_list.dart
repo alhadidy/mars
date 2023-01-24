@@ -11,7 +11,7 @@ class CategoriesList extends StatelessWidget {
   const CategoriesList({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return StreamBuilder(
       stream: locator.get<Categories>().getCategories(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -23,24 +23,21 @@ class CategoriesList extends StatelessWidget {
 
         return SizedBox(
           width: MediaQuery.of(context).size.width,
-          height: 200,
+          height: 150,
           child: Column(
             children: [
-              const Directionality(
+              Directionality(
                 textDirection: TextDirection.ltr,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: HomeTabTitle(
-                    title: 'الأقسام',
-                    titleColor: Colors.white,
-                    icon: FontAwesomeIcons.barsStaggered,
-                  ),
+                child: HomeTabTitle(
+                  title: 'الأقسام',
+                  titleColor: Theme.of(context).textTheme.titleLarge!.color!,
+                  icon: FontAwesomeIcons.barsStaggered,
                 ),
               ),
               Expanded(
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1, mainAxisExtent: 120),
+                      crossAxisCount: 1, mainAxisExtent: 100),
                   itemCount: categories.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) {

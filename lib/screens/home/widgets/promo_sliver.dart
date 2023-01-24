@@ -31,19 +31,11 @@ class _PromotionSliverState extends State<PromotionSliver> {
           if (snapshot.connectionState == ConnectionState.waiting ||
               snapshot.hasError ||
               !snapshot.hasData) {
-            return SliverAppBar(
-                expandedHeight: 400,
-                collapsedHeight: 65,
-                backgroundColor: Theme.of(context).primaryColorDark,
-                flexibleSpace: const FlexibleSpaceBar(
-                  centerTitle: true,
-                  title: HomeTabTitle(
-                    title: 'عروض مارس',
-                    titleColor: Colors.white,
-                    icon: FontAwesomeIcons.fireFlameCurved,
-                    center: true,
-                  ),
-                ));
+            return SliverToBoxAdapter(
+              child: Container(
+                height: 275,
+              ),
+            );
           }
 
           promo = snapshot.data;
@@ -54,56 +46,42 @@ class _PromotionSliverState extends State<PromotionSliver> {
             );
           }
 
-          return SliverAppBar(
-              backgroundColor: Theme.of(context).primaryColorDark,
-              expandedHeight: 400,
-              collapsedHeight: 65,
-              flexibleSpace: FlexibleSpaceBar(
-                centerTitle: true,
-                title: ValueListenableBuilder(
-                    valueListenable: valueNotifier,
-                    builder: (BuildContext context, value, child) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          promo != null && promo!.length > 1
-                              ? Flexible(
-                                  child: DotsIndicator(
-                                  reversed: true,
-                                  dotsCount: promo!.length,
-                                  position: value.toDouble(),
-                                  decorator: DotsDecorator(
-                                      size: const Size.square(5),
-                                      activeSize: const Size.square(7),
-                                      activeColor: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      color: Colors.white),
-                                ))
-                              : Container(),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const HomeTabTitle(
-                            title: 'عروض مارس',
-                            titleColor: Colors.white,
-                            icon: FontAwesomeIcons.fireFlameCurved,
-                            center: true,
-                          ),
-                        ],
-                      );
-                    }),
-                titlePadding: const EdgeInsets.only(bottom: 8),
-                collapseMode: CollapseMode.parallax,
-                background: Builder(builder: (context) {
-                  return PromotionList(
+          return SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: Column(
+                children: [
+                  PromotionList(
                     promos: promo!,
                     onChanged: (index, reson) {
                       valueNotifier.value = index;
                     },
-                  );
-                }),
-              ));
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ValueListenableBuilder(
+                        valueListenable: valueNotifier,
+                        builder: (BuildContext context, value, child) {
+                          return DotsIndicator(
+                            reversed: true,
+                            dotsCount: promo!.length,
+                            position: value.toDouble(),
+                            decorator: DotsDecorator(
+                                size: const Size.square(5),
+                                activeSize: const Size.square(10),
+                                activeColor:
+                                    Theme.of(context).colorScheme.secondary,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .secondary
+                                    .withOpacity(0.6)),
+                          );
+                        }),
+                  )
+                ],
+              ),
+            ),
+          );
         });
   }
 }

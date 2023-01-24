@@ -283,7 +283,7 @@ class _ItemEditorState extends State<ItemEditor> {
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(12))),
                   backgroundColor: Theme.of(context).colorScheme.secondary,
-                  foregroundColor: Colors.white),
+                  foregroundColor: Colors.black),
               onPressed: () {
                 showDialog(
                     context: context,

@@ -19,7 +19,7 @@ class ItemTileHorizontal extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Card(
             margin: EdgeInsets.zero,
-            color: Colors.brown[300],
+            color: Colors.grey[200],
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(25))),
             child: Row(
@@ -53,7 +53,7 @@ class ItemTileHorizontal extends StatelessWidget {
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 22,
-                                color: Colors.white),
+                                color: Colors.black),
                           ),
                         ),
                         SizedBox(
@@ -66,23 +66,9 @@ class ItemTileHorizontal extends StatelessWidget {
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: Colors.white),
+                                color: Colors.black87),
                           ),
                         ),
-                        // Container(
-                        //   decoration: BoxDecoration(
-                        //       color: Colors.brown[800],
-                        //       borderRadius:
-                        //           const BorderRadius.all(Radius.circular(12))),
-                        //   child: IconButton(
-                        //       visualDensity: VisualDensity.compact,
-                        //       iconSize: 16,
-                        //       onPressed: () {},
-                        //       icon: FaIcon(
-                        //         FontAwesomeIcons.plus,
-                        //         color: Theme.of(context).colorScheme.secondary,
-                        //       )),
-                        // ),
                       ],
                     ),
                   ),

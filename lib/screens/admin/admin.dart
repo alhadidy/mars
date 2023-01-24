@@ -115,18 +115,18 @@ class _AdminState extends ConsumerState<Admin> {
                 Navigator.pushNamed(context, '/adminOrders');
               },
             ),
-            ListTile(
-              title: const Text('Notifications'),
-              trailing: SizedBox(
-                  height: 30,
-                  width: 30,
-                  child: Center(
-                      child: FaIcon(
-                    FontAwesomeIcons.solidPaperPlane,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ))),
-              onTap: () {},
-            ),
+            // ListTile(
+            //   title: const Text('Notifications'),
+            //   trailing: SizedBox(
+            //       height: 30,
+            //       width: 30,
+            //       child: Center(
+            //           child: FaIcon(
+            //         FontAwesomeIcons.solidPaperPlane,
+            //         color: Theme.of(context).colorScheme.secondary,
+            //       ))),
+            //   onTap: () {},
+            // ),
             ListTile(
               title: const Text('Loyalty Program'),
               trailing: SizedBox(

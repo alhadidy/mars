@@ -18,9 +18,11 @@ class PromotionList extends StatelessWidget {
     return CarouselSlider.builder(
       itemCount: promos.length,
       options: CarouselOptions(
-          height: 400,
-          viewportFraction: 1,
-          enableInfiniteScroll: false,
+          // height: 250,
+
+          enlargeCenterPage: true,
+          viewportFraction: 0.8,
+          enableInfiniteScroll: true,
           reverse: true,
           autoPlay: true,
           onPageChanged: onChanged),

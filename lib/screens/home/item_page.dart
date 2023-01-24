@@ -36,25 +36,30 @@ class _ItemPageState extends ConsumerState<ItemPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            CachedNetworkImage(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.width,
-              fit: BoxFit.cover,
-              imageUrl: widget.item.imgUrl,
-              errorWidget: ((context, url, error) {
-                return Container(
-                  color: Colors.white,
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.width,
-                );
-              }),
-              placeholder: (context, url) {
-                return Container(
-                  color: Colors.white,
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.width,
-                );
-              },
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20)),
+              child: CachedNetworkImage(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.width,
+                fit: BoxFit.cover,
+                imageUrl: widget.item.imgUrl,
+                errorWidget: ((context, url, error) {
+                  return Container(
+                    color: Colors.white,
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.width,
+                  );
+                }),
+                placeholder: (context, url) {
+                  return Container(
+                    color: Colors.white,
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.width,
+                  );
+                },
+              ),
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width,
@@ -133,15 +138,23 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Padding(
-                                        padding: EdgeInsets.only(top: 16),
-                                        child:
-                                            FaIcon(FontAwesomeIcons.mugSaucer),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 16),
+                                        child: FaIcon(
+                                          FontAwesomeIcons.mugSaucer,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                        ),
                                       ),
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(bottom: 8),
-                                        child: Text(s.name),
+                                        child: Text(
+                                          s.name,
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        ),
                                       ),
                                       Padding(
                                         padding:
@@ -149,6 +162,8 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                                         child: Text(
                                           '${Methods.formatPrice(s.price)} د.ع',
                                           textDirection: TextDirection.rtl,
+                                          style: const TextStyle(
+                                              color: Colors.white),
                                         ),
                                       ),
                                     ],

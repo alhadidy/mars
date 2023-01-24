@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:mars/models/transaction.dart' as tr;
 
 import 'package:mars/models/user.dart';
 import 'package:mars/models/user_data.dart';
@@ -44,6 +45,21 @@ class Users {
 
     return userData.map((event) {
       return UserData.fromDoc(event);
+    });
+  }
+
+  Stream<List<tr.Transaction>> watchTransactions(UserModel? _user) {
+    if (_user == null) {
+      return Stream.error('user is null');
+    }
+    CollectionReference ref =
+        firestore.collection('users').doc(_user.uid).collection('transactions');
+
+    Stream<QuerySnapshot> userData =
+        ref.orderBy('timestamp', descending: true).snapshots();
+
+    return userData.map((event) {
+      return event.docs.map((e) => tr.Transaction.fromDoc(e)).toList();
     });
   }
 

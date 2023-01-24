@@ -17,7 +17,7 @@ class ItemTile extends StatelessWidget {
         }),
         child: Card(
           margin: EdgeInsets.zero,
-          color: Colors.brown[300],
+          color: Colors.grey[200],
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(25))),
           child: Column(
@@ -48,7 +48,7 @@ class ItemTile extends StatelessWidget {
                       item.name,
                       textAlign: TextAlign.end,
                       style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white),
+                          fontWeight: FontWeight.bold, color: Colors.black),
                     ),
                   ),
                 ),
@@ -66,7 +66,7 @@ class ItemTile extends StatelessWidget {
                     style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
-                        color: Colors.white),
+                        color: Colors.black87),
                   ),
                 ),
               ),

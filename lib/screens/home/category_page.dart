@@ -26,8 +26,15 @@ class _CategoryPageState extends State<CategoryPage> {
       body: FutureBuilder(
         future: locator.get<Items>().getItemsByCategory(widget.category),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           if (snapshot.data == null) {
-            return Container();
+            return const Center(
+              child: Text('لا توجد نتائج حاليا'),
+            );
           }
 
           List<Item> items = snapshot.data;

@@ -11,6 +11,7 @@ import 'package:mars/models/user.dart';
 import 'package:mars/screens/home/widgets/basket_button.dart';
 import 'package:mars/screens/home/widgets/categories_sliver.dart';
 import 'package:mars/screens/home/widgets/items_sliver.dart';
+import 'package:mars/screens/home/widgets/my_orders_sliver.dart';
 import 'package:mars/screens/home/widgets/promo_sliver.dart';
 import 'package:mars/screens/home/widgets/stores_sliver.dart';
 import 'package:mars/services/methods.dart';
@@ -74,21 +75,42 @@ class _HomeState extends ConsumerState<Home> {
   Widget build(BuildContext context) {
     final UserModel? user = ref.watch(userProvider);
     final Role role = ref.watch(rolesProvider);
+
+    if (user == null) {
+      return Container();
+    }
+
+    DateTime time = DateTime.now();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mars Coffee House'),
+        toolbarHeight: 80,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              time.hour > 11 ? 'Good Evening' : 'Good Morning',
+              style: const TextStyle(fontSize: 14),
+            ),
+            FittedBox(
+              child: Text(
+                user.name.isEmpty ? 'Guest' : user.name,
+                style: const TextStyle(fontSize: 18),
+              ),
+            ),
+          ],
+        ),
         leading: GestureDetector(
           onTap: () {
             Navigator.pushNamed(context, '/profile');
           },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
+          child: Center(
             child: ClipOval(
                 child: CachedNetworkImage(
-              height: 10,
-              width: 10,
+              height: 36,
+              width: 36,
               fit: BoxFit.cover,
-              imageUrl: user!.photoUrl,
+              imageUrl: user.photoUrl,
               errorWidget: ((context, url, error) {
                 return ClipOval(
                     child: Container(
@@ -112,6 +134,7 @@ class _HomeState extends ConsumerState<Home> {
       body: const CustomScrollView(
         slivers: [
           PromotionSliver(),
+          MyOrdersSliver(),
           CategoriesSliver(),
           StoresSliver(),
           ItemsSliver(),

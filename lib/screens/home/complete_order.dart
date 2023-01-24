@@ -177,7 +177,19 @@ class _CompleteOrderState extends ConsumerState<CompleteOrder> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: TextField(
-                      decoration: const InputDecoration(label: Text('الاسم')),
+                      decoration: InputDecoration(
+                        label: const Text('الاسم'),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.primary),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 2,
+                              color: Theme.of(context).colorScheme.primary),
+                        ),
+                      ),
+                      autofocus: true,
                       controller: nameController,
                       onChanged: (value) {
                         setState(() {});
@@ -187,8 +199,18 @@ class _CompleteOrderState extends ConsumerState<CompleteOrder> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: TextField(
-                      decoration:
-                          const InputDecoration(label: Text('رقم الهاتف')),
+                      decoration: InputDecoration(
+                        label: const Text('رقم الهاتف'),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.primary),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 2,
+                              color: Theme.of(context).colorScheme.primary),
+                        ),
+                      ),
                       keyboardType: TextInputType.phone,
                       controller: phoneController,
                       onChanged: (value) {
@@ -201,8 +223,20 @@ class _CompleteOrderState extends ConsumerState<CompleteOrder> {
                       : Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: TextField(
-                            decoration:
-                                const InputDecoration(label: Text('العنوان')),
+                            decoration: InputDecoration(
+                              label: const Text('العنوان'),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 2,
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                              ),
+                            ),
                             controller: addressController,
                             onChanged: (value) {
                               setState(() {});

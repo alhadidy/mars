@@ -27,7 +27,7 @@ class ItemsSliver extends StatelessWidget {
               children: [
                 const HomeTabTitle(
                   title: 'الأكثر شعبية',
-                  titleColor: Colors.white,
+                  titleColor: Colors.black,
                   icon: FontAwesomeIcons.solidStar,
                 ),
                 SizedBox(

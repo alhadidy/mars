@@ -456,7 +456,7 @@ class Methods {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.only(right: 16, left: 16, bottom: 16),
-        backgroundColor: Theme.of(context).bottomAppBarColor,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         duration: const Duration(seconds: 10),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25)),

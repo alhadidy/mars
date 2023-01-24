@@ -162,6 +162,7 @@ class Orders {
     firestoreDB.CollectionReference ref = firestore.collection('orders');
 
     await ref.doc(docId).update({
+      'confirmed': true,
       'delivering': true,
     });
   }

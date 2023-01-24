@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ThemeManager {
   final darkTheme = ThemeData(
@@ -7,22 +6,22 @@ class ThemeManager {
   );
 
   final lightTheme = ThemeData(
-      scaffoldBackgroundColor: Color(0xff082032),
+      scaffoldBackgroundColor: Colors.white,
       primarySwatch: Colors.amber,
       textTheme: const TextTheme(
-          titleLarge: TextStyle(color: Colors.white),
-          titleMedium: TextStyle(color: Colors.white),
-          titleSmall: TextStyle(color: Colors.white)),
+          titleLarge: TextStyle(color: Colors.black),
+          titleMedium: TextStyle(color: Colors.black),
+          titleSmall: TextStyle(color: Colors.black)),
       colorScheme: ColorScheme(
-          brightness: Brightness.dark,
-          primary: Colors.brown,
+          brightness: Brightness.light,
+          primary: const Color(0xff1F3469),
           onPrimary: Colors.white,
-          secondary: Colors.amber.shade700,
+          secondary: const Color(0xffF8CC15),
           onSecondary: Colors.white,
           error: Colors.red,
           onError: Colors.white,
           background: Colors.brown.shade900,
           onBackground: Colors.white,
-          surface: Colors.brown.shade500,
+          surface: Color(0xff1F3469),
           onSurface: Colors.white));
 }

@@ -34,15 +34,23 @@ class OrderTypeTags extends StatelessWidget {
                 child: Container(
                     decoration: BoxDecoration(
                         color: selectedType == type
-                            ? Theme.of(context).colorScheme.background
+                            ? Theme.of(context).colorScheme.secondary
                             : null,
                         border: Border.all(
-                            color: Theme.of(context).colorScheme.background),
+                            color: Theme.of(context).colorScheme.secondary),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(20))),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Center(child: Text(type)),
+                      child: Center(
+                        child: Text(
+                          type,
+                          style: TextStyle(
+                              color: selectedType == type
+                                  ? Colors.black
+                                  : Colors.white),
+                        ),
+                      ),
                     )),
               ),
             );

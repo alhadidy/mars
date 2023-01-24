@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mars/models/link.dart';
 import 'package:mars/screens/auth/widgets/signin_apple_button.dart';
 import 'package:mars/screens/auth/widgets/signin_google_button.dart';
@@ -34,13 +35,11 @@ class SigninState extends ConsumerState<Signin> {
     Link link = ref.watch(linkProvider);
 
     return Scaffold(
-      // backgroundColor: Colors.brown[100],
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: Theme.of(context).primaryColor,
+            statusBarColor: Theme.of(context).colorScheme.primary,
             statusBarIconBrightness: Brightness.light),
-        elevation: 0.0,
         centerTitle: true,
         title: const Text('تسجيل الدخول'),
       ),

@@ -41,7 +41,7 @@ class HomeTabTitle extends StatelessWidget {
               textAlign: TextAlign.end,
               style: GoogleFonts.tajawal(
                 textStyle: TextStyle(
-                    fontSize: 18,
+                    fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: titleColor),
               )),

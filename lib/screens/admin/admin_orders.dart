@@ -168,9 +168,106 @@ class _AdminOrdersState extends State<AdminOrders> {
                                           'المجموع:  ${Methods.formatPrice(orders[index].totalPrice + orders[index].deliveryPrice)} د.ع'),
                                     ],
                                   ),
+                                  orders[index].status ==
+                                              OrderStatus.delivered ||
+                                          orders[index].status ==
+                                              OrderStatus.canceled
+                                      ? Container()
+                                      : RoundIconButton(
+                                          size: 36,
+                                          icon: FontAwesomeIcons.boxesStacked,
+                                          tooltip: 'Change Order State',
+                                          onTap: (() {
+                                            showDialog(
+                                                context: context,
+                                                builder: ((context) {
+                                                  return AlertDialog(
+                                                    contentPadding:
+                                                        EdgeInsets.zero,
+                                                    content: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        orders[index].status !=
+                                                                    OrderStatus
+                                                                        .confirmed &&
+                                                                orders[index]
+                                                                        .status !=
+                                                                    OrderStatus
+                                                                        .delivering
+                                                            ? ListTile(
+                                                                onTap: (() {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                  locator
+                                                                      .get<
+                                                                          Orders>()
+                                                                      .confirmOrder(
+                                                                          orders[index]
+                                                                              .fid);
+                                                                }),
+                                                                title: const Text(
+                                                                    'Order Confirmed'),
+                                                              )
+                                                            : Container(),
+                                                        orders[index].status !=
+                                                                OrderStatus
+                                                                    .delivering
+                                                            ? ListTile(
+                                                                onTap: (() {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                  locator
+                                                                      .get<
+                                                                          Orders>()
+                                                                      .setOrderDelivering(
+                                                                          orders[index]
+                                                                              .fid);
+                                                                }),
+                                                                title: const Text(
+                                                                    'Order Delivering'),
+                                                              )
+                                                            : Container(),
+                                                        ListTile(
+                                                          onTap: (() {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            locator
+                                                                .get<Orders>()
+                                                                .setOrderDelivered(
+                                                                    orders[index]
+                                                                        .fid);
+                                                          }),
+                                                          title: const Text(
+                                                              'Order Delivered'),
+                                                        ),
+                                                        ListTile(
+                                                          onTap: (() {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            locator
+                                                                .get<Orders>()
+                                                                .canceleOrder(
+                                                                    orders[index]
+                                                                        .fid);
+                                                          }),
+                                                          title: const Text(
+                                                              'Order Canceled'),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                }));
+                                          }),
+                                        ),
                                   orders[index].inStore
                                       ? Container()
                                       : RoundIconButton(
+                                          size: 36,
                                           icon: FontAwesomeIcons.mapLocation,
                                           onTap: () {
                                             showDialog(
@@ -219,6 +316,7 @@ class _AdminOrdersState extends State<AdminOrders> {
                                           },
                                         ),
                                   RoundIconButton(
+                                      size: 36,
                                       icon: FontAwesomeIcons.phone,
                                       onTap: () async {
                                         final Uri launchUri = Uri(
@@ -243,10 +341,17 @@ class _AdminOrdersState extends State<AdminOrders> {
                                     child: Column(
                                       children: [
                                         Badge(
-                                          badgeContent: Text(orders[index]
-                                              .items[i]
-                                              .quantity
-                                              .toString()),
+                                          badgeColor: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          badgeContent: Text(
+                                            orders[index]
+                                                .items[i]
+                                                .quantity
+                                                .toString(),
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
                                           child: ClipRRect(
                                             borderRadius:
                                                 const BorderRadius.all(

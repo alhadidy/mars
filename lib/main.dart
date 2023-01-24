@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mars/firebase_options.dart';
 import 'package:mars/screens/home/home.dart';
@@ -14,7 +13,6 @@ import 'package:mars/services/firebase_links.dart';
 import 'package:mars/services/locator.dart';
 import 'package:mars/services/providers.dart';
 import 'package:mars/services/routes.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
@@ -24,12 +22,8 @@ void main() async {
   );
   setupLocator();
   tz.initializeTimeZones();
-  await initializeDateFormatting();
-  final doc = await getApplicationDocumentsDirectory();
-  Directory dbDirectory =
-      await Directory('${doc.path}/Modern Clinic/Database/Hive')
-          .create(recursive: true);
-  Hive.init(dbDirectory.path);
+  initializeDateFormatting();
+  await Hive.initFlutter();
   await Hive.openBox('settings');
 
   runApp(const ProviderScope(child: MyApp()));

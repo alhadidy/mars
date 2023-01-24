@@ -35,7 +35,13 @@ class _GeneratedCardsState extends State<GeneratedCards> {
               child: Text('Network Error'),
             );
           }
+
           List<card.Card> cards = snapshot.data;
+          if (cards.isEmpty) {
+            return const Center(
+              child: Text('No Active Cards Are Available'),
+            );
+          }
           return ListView.builder(
             itemCount: cards.length,
             itemBuilder: (BuildContext context, int index) {

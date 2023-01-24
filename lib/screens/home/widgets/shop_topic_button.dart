@@ -43,24 +43,19 @@ class ShopTopicButton extends StatelessWidget {
                               decoration: BoxDecoration(
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(29)),
-                                color: Colors.brown[600],
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
-                            FaIcon(
-                              icon,
-                              size: 30,
-                              color: Theme.of(context).brightness ==
-                                      Brightness.light
-                                  ? Colors.white
-                                  : Colors.white,
-                            )
+                            FaIcon(icon,
+                                size: 30,
+                                color: Theme.of(context).colorScheme.secondary)
                           ],
                         )
                       : ClipRRect(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(30)),
                           child: Container(
-                            color: Colors.white,
+                            color: Colors.black,
                             child: CachedNetworkImage(
                               height: storyAvatarRadius * 2 + 2,
                               width: storyAvatarRadius * 2 + 2,
@@ -76,16 +71,17 @@ class ShopTopicButton extends StatelessWidget {
                                       decoration: BoxDecoration(
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(29)),
-                                        color: Colors.brown[600],
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
                                     ),
                                     FaIcon(
                                       icon,
                                       size: 30,
-                                      color: Theme.of(context).brightness ==
-                                              Brightness.light
-                                          ? Colors.white
-                                          : Colors.white,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                     )
                                   ],
                                 );
@@ -100,16 +96,17 @@ class ShopTopicButton extends StatelessWidget {
                                       decoration: BoxDecoration(
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(29)),
-                                        color: Colors.brown[600],
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
                                     ),
                                     FaIcon(
                                       icon,
                                       size: 30,
-                                      color: Theme.of(context).brightness ==
-                                              Brightness.light
-                                          ? Colors.white
-                                          : Colors.white,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                     )
                                   ],
                                 );
@@ -126,7 +123,7 @@ class ShopTopicButton extends StatelessWidget {
                         textDirection: TextDirection.rtl,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                            fontSize: 12, color: Colors.white))),
+                            fontSize: 12, color: Colors.black))),
               ),
             ],
           ),

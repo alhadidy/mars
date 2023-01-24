@@ -21,7 +21,7 @@ class SSetting {
             .map((e) => CardPresets(amount: e['amount'], name: e['name']))
             .toList(),
         deliveryPrice: data['deliveryPrice'] ?? 0,
-        dev: data['dev'] ?? true,
+        dev: data['dev'] ?? false,
         freeDeliveryLimit: data['freeDeliveryLimit'] ?? 0);
   }
 }

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class StoresSliver extends StatefulWidget {
-  const StoresSliver({Key? key}) : super(key: key);
+class MyOrdersSliver extends StatefulWidget {
+  const MyOrdersSliver({Key? key}) : super(key: key);
 
   @override
-  State<StoresSliver> createState() => _StoresSliverState();
+  State<MyOrdersSliver> createState() => _MyOrdersSliverState();
 }
 
-class _StoresSliverState extends State<StoresSliver> {
+class _MyOrdersSliverState extends State<MyOrdersSliver> {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -18,7 +18,7 @@ class _StoresSliverState extends State<StoresSliver> {
         height: 250,
         child: GestureDetector(
           onTap: (() {
-            Navigator.pushNamed(context, '/stores');
+            Navigator.pushNamed(context, '/myOrders');
           }),
           child: Padding(
             padding: const EdgeInsets.only(top: 16),
@@ -26,7 +26,7 @@ class _StoresSliverState extends State<StoresSliver> {
               margin: EdgeInsets.zero,
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(0))),
-              color: Colors.blue[900],
+              color: Colors.amber[900],
               child: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -37,7 +37,7 @@ class _StoresSliverState extends State<StoresSliver> {
                       opacity: 1,
                       child: CircleAvatar(
                         radius: 400,
-                        backgroundColor: Colors.blue.shade800,
+                        backgroundColor: Colors.amber.shade800,
                       ),
                     ),
                   ),
@@ -48,7 +48,7 @@ class _StoresSliverState extends State<StoresSliver> {
                       opacity: 1,
                       child: CircleAvatar(
                         radius: 300,
-                        backgroundColor: Colors.blue.shade700,
+                        backgroundColor: Colors.amber.shade700,
                       ),
                     ),
                   ),
@@ -59,7 +59,7 @@ class _StoresSliverState extends State<StoresSliver> {
                       opacity: 1,
                       child: CircleAvatar(
                         radius: 200,
-                        backgroundColor: Colors.blue.shade600,
+                        backgroundColor: Colors.amber.shade600,
                       ),
                     ),
                   ),
@@ -70,7 +70,7 @@ class _StoresSliverState extends State<StoresSliver> {
                       opacity: 1,
                       child: CircleAvatar(
                         radius: 100,
-                        backgroundColor: Colors.blue.shade500,
+                        backgroundColor: Colors.amber.shade500,
                       ),
                     ),
                   ),
@@ -81,13 +81,13 @@ class _StoresSliverState extends State<StoresSliver> {
                       children: [
                         const Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: FaIcon(FontAwesomeIcons.store,
+                          child: FaIcon(FontAwesomeIcons.boxesStacked,
                               color: Colors.white, size: 100),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'فروع مارس',
+                            'طلباتي',
                             style: GoogleFonts.tajawal(
                                 color: Colors.white,
                                 fontSize: 40,

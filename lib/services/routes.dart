@@ -15,6 +15,7 @@ import 'package:mars/screens/home/basket.dart';
 import 'package:mars/screens/home/category_page.dart';
 import 'package:mars/screens/home/complete_order.dart';
 import 'package:mars/screens/home/item_page.dart';
+import 'package:mars/screens/home/my_orders.dart';
 import 'package:mars/screens/home/profile.dart';
 import 'package:mars/screens/home/promotion_page.dart';
 import 'package:mars/screens/home/stores_page.dart';
@@ -121,6 +122,10 @@ class RoutesHelper {
       case '/stores':
         return MaterialPageRoute(builder: (_) {
           return const StoresPage();
+        });
+      case '/myOrders':
+        return MaterialPageRoute(builder: (_) {
+          return const MyOrders();
         });
 
       default:
