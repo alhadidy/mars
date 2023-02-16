@@ -8,6 +8,7 @@ import 'package:mars/services/firestore/orders.dart';
 import 'package:mars/services/firestore/promos.dart';
 import 'package:mars/services/firestore/settings.dart';
 import 'package:mars/services/firestore/stores.dart';
+import 'package:mars/services/firestore/support.dart';
 import 'package:mars/services/firestore/users.dart';
 
 final locator = GetIt.I;
@@ -20,6 +21,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => SSettings());
   locator.registerLazySingleton(() => Promos());
   locator.registerLazySingleton(() => Stores());
+  locator.registerLazySingleton(() => Support());
   locator.registerLazySingleton(() => Orders());
   locator.registerLazySingleton(() => Users());
 }

@@ -116,7 +116,8 @@ class ShopTopicButton extends StatelessWidget {
                         )
                 ],
               ),
-              Expanded(
+              SizedBox(
+                height: 40,
                 child: Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(title,

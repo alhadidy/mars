@@ -26,7 +26,7 @@ class PromotionTileState extends State<PromotionTile> {
           clipBehavior: Clip.antiAlias,
           elevation: 4,
           margin: EdgeInsets.zero,
-          color: Colors.transparent,
+          color: Colors.white,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: ClipRRect(
@@ -44,32 +44,6 @@ class PromotionTileState extends State<PromotionTile> {
                     ));
                   },
                 ),
-                Positioned(
-                    width: MediaQuery.of(context).size.width,
-                    height: 400,
-                    child: Stack(
-                      alignment: Alignment.centerRight,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
-                                  stops: const [
-                                0,
-                                0.3,
-                                1
-                              ],
-                                  colors: [
-                                Colors.black.withAlpha(150),
-                                Colors.black.withAlpha(100),
-                                Colors.black.withAlpha(0),
-                              ])),
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height,
-                        ),
-                      ],
-                    )),
                 Positioned(
                     top: 16,
                     right: 16,

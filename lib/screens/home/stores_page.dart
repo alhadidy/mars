@@ -96,6 +96,7 @@ class _StoresPageState extends State<StoresPage> {
                       _addMarker(
                           stores![0].fid, stores![0].name, stores![0].location);
                     });
+                    
                     return CarouselSlider.builder(
                       carouselController: carouselController,
                       itemCount: stores!.length,

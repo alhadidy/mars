@@ -18,8 +18,6 @@ class PromotionList extends StatelessWidget {
     return CarouselSlider.builder(
       itemCount: promos.length,
       options: CarouselOptions(
-          // height: 250,
-
           enlargeCenterPage: true,
           viewportFraction: 0.8,
           enableInfiniteScroll: true,
@@ -27,7 +25,10 @@ class PromotionList extends StatelessWidget {
           autoPlay: true,
           onPageChanged: onChanged),
       itemBuilder: (context, index, indexs) {
-        return PromotionTile(promo: promos[index], index: index);
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: PromotionTile(promo: promos[index], index: index),
+        );
       },
     );
   }

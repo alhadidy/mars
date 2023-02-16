@@ -75,7 +75,14 @@ class _WalletState extends ConsumerState<Wallet> {
             );
           }
 
-          List<Transaction> transactions = snapshot.data;
+          List<Transaction>? transactions = snapshot.data;
+
+          if (transactions == null || transactions.isEmpty) {
+            return const Center(
+              child: Text('لا توجد نشاطات في المحفظة'),
+            );
+          }
+
           return ListView.separated(
             itemCount: transactions.length,
             separatorBuilder: (context, index) {

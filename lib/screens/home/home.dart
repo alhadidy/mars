@@ -138,6 +138,11 @@ class _HomeState extends ConsumerState<Home> {
           CategoriesSliver(),
           StoresSliver(),
           ItemsSliver(),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 25,
+            ),
+          )
         ],
       ),
     );

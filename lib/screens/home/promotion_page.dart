@@ -29,10 +29,6 @@ class PromoPageState extends ConsumerState<PromoPage> {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          systemOverlayStyle: SystemUiOverlayStyle(
-              statusBarColor: Theme.of(context).primaryColor,
-              statusBarIconBrightness: Brightness.light),
           title: Text(
             widget.promo.name,
             textDirection: TextDirection.rtl,

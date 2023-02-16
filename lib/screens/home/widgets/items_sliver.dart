@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mars/models/item.dart';
 import 'package:mars/screens/home/widgets/home_title.dart';
-import 'package:mars/screens/home/widgets/item_tile.dart';
 import 'package:mars/screens/home/widgets/item_tile_horizontal.dart';
 import 'package:mars/services/firestore/items.dart';
 import 'package:mars/services/locator.dart';
@@ -21,7 +20,7 @@ class ItemsSliver extends StatelessWidget {
           }
           List<Item> items = snapshot.data;
           return SizedBox(
-            height: 300,
+            height: 302,
             width: MediaQuery.of(context).size.width,
             child: Column(
               children: [

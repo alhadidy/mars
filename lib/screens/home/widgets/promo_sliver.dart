@@ -31,10 +31,18 @@ class _PromotionSliverState extends State<PromotionSliver> {
           if (snapshot.connectionState == ConnectionState.waiting ||
               snapshot.hasError ||
               !snapshot.hasData) {
-            return SliverToBoxAdapter(
-              child: Container(
-                height: 275,
-              ),
+            return const SliverToBoxAdapter(
+              child: SizedBox(
+                  height: 275,
+                  child: Center(
+                    child: SizedBox(
+                      height: 36,
+                      width: 36,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                      ),
+                    ),
+                  )),
             );
           }
 

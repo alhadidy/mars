@@ -397,7 +397,7 @@ class _ProfileState extends ConsumerState<Profile> {
               indent: 8,
               endIndent: 8,
             ),
-            user.isAnon
+            user.isAnon || user.role != Roles.user
                 ? Container()
                 : Directionality(
                     textDirection: TextDirection.rtl,
@@ -411,6 +411,24 @@ class _ProfileState extends ConsumerState<Profile> {
                           Text('${Methods.formatPrice(userData.cash)} د.ع'),
                       onTap: () {
                         Navigator.pushNamed(context, '/wallet');
+                      },
+                    )),
+            const Divider(
+              indent: 8,
+              endIndent: 8,
+            ),
+            user.role != Roles.user
+                ? Container()
+                : Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: ListTile(
+                      title: const Text('تواصل مع خدمة العملاء'),
+                      leading: FaIcon(
+                        FontAwesomeIcons.headset,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/support');
                       },
                     )),
             const Divider(
@@ -467,6 +485,9 @@ class _ProfileState extends ConsumerState<Profile> {
                 },
               ),
             ),
+            const SizedBox(
+              height: 36,
+            )
           ],
         ),
       ),

@@ -11,10 +11,20 @@ class CategoriesList extends StatelessWidget {
   const CategoriesList({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return StreamBuilder(
       stream: locator.get<Categories>().getCategories(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SizedBox(
+            height: 200,
+            child: Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+              ),
+            ),
+          );
+        }
         if (snapshot.data == null) {
           return Container();
         }
@@ -23,7 +33,7 @@ class CategoriesList extends StatelessWidget {
 
         return SizedBox(
           width: MediaQuery.of(context).size.width,
-          height: 150,
+          height: 200,
           child: Column(
             children: [
               Directionality(
@@ -34,7 +44,8 @@ class CategoriesList extends StatelessWidget {
                   icon: FontAwesomeIcons.barsStaggered,
                 ),
               ),
-              Expanded(
+              SizedBox(
+                height: 140,
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 1, mainAxisExtent: 100),
