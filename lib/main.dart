@@ -81,7 +81,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           return const Authenticate();
         }
 
-        if (user.phone == '' && !user.isAnon && user.role != Roles.admin) {
+        if (user.phone == '' && !user.isAnon) {
           return const RequestPhone();
         }
 
