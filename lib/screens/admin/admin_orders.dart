@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -102,11 +102,9 @@ class _AdminOrdersState extends State<AdminOrders> {
                                 children: [
                                   Row(
                                     children: [
-                                      CircleAvatar(
+                                      const CircleAvatar(
                                         child: FaIcon(
-                                          orders[index].inStore
-                                              ? FontAwesomeIcons.store
-                                              : FontAwesomeIcons.truck,
+                                          FontAwesomeIcons.truck,
                                           size: 16,
                                         ),
                                       ),
@@ -132,13 +130,10 @@ class _AdminOrdersState extends State<AdminOrders> {
                                 ],
                               ),
                             ),
-                            orders[index].inStore
-                                ? Container()
-                                : Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Text(
-                                        'العنوان: ${orders[index].address}'),
-                                  ),
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text('العنوان: ${orders[index].address}'),
+                            ),
                             Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Text('الاسم: ${orders[index].userName}'),
@@ -157,15 +152,6 @@ class _AdminOrdersState extends State<AdminOrders> {
                                           'قيمة الطلب: ${Methods.formatPrice(orders[index].totalPrice)} د.ع'),
                                       Text(
                                           'كلفة التوصيل: ${Methods.formatPrice(orders[index].deliveryPrice)} د.ع'),
-                                      Container(
-                                        height: 2,
-                                        width: 100,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                      ),
-                                      Text(
-                                          'المجموع:  ${Methods.formatPrice(orders[index].totalPrice + orders[index].deliveryPrice)} د.ع'),
                                     ],
                                   ),
                                   orders[index].status ==
@@ -264,57 +250,46 @@ class _AdminOrdersState extends State<AdminOrders> {
                                                 }));
                                           }),
                                         ),
-                                  orders[index].inStore
-                                      ? Container()
-                                      : RoundIconButton(
-                                          size: 36,
-                                          icon: FontAwesomeIcons.mapLocation,
-                                          onTap: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                final LatLng userMarker =
-                                                    LatLng(
-                                                        orders[index]
-                                                            .location
-                                                            .latitude,
-                                                        orders[index]
-                                                            .location
-                                                            .longitude);
+                                  RoundIconButton(
+                                    size: 36,
+                                    icon: FontAwesomeIcons.mapLocation,
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          final LatLng userMarker = LatLng(
+                                              orders[index].location.latitude,
+                                              orders[index].location.longitude);
 
-                                                return AlertDialog(
-                                                  insetPadding: EdgeInsets.zero,
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  content: SizedBox(
-                                                    height: 500,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    child: GoogleMap(
-                                                      zoomControlsEnabled:
-                                                          false,
-                                                      initialCameraPosition:
-                                                          CameraPosition(
-                                                        target: userMarker,
-                                                        zoom: 18,
-                                                      ),
-                                                      markers: {
-                                                        Marker(
-                                                          markerId:
-                                                              const MarkerId(
-                                                                  'marker'),
-                                                          position: userMarker,
-                                                        ),
-                                                      },
-                                                    ),
+                                          return AlertDialog(
+                                            insetPadding: EdgeInsets.zero,
+                                            contentPadding: EdgeInsets.zero,
+                                            content: SizedBox(
+                                              height: 500,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              child: GoogleMap(
+                                                zoomControlsEnabled: false,
+                                                initialCameraPosition:
+                                                    CameraPosition(
+                                                  target: userMarker,
+                                                  zoom: 18,
+                                                ),
+                                                markers: {
+                                                  Marker(
+                                                    markerId: const MarkerId(
+                                                        'marker'),
+                                                    position: userMarker,
                                                   ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                        ),
+                                                },
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
                                   RoundIconButton(
                                       size: 36,
                                       icon: FontAwesomeIcons.phone,
@@ -328,6 +303,84 @@ class _AdminOrdersState extends State<AdminOrders> {
                                 ],
                               ),
                             ),
+                            orders[index].walletPay
+                                ? Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.amber[600],
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(20))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 4, horizontal: 12),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: const [
+                                              FaIcon(
+                                                FontAwesomeIcons.wallet,
+                                                color: Colors.white,
+                                                size: 16,
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    EdgeInsets.only(right: 8),
+                                                child: Text(
+                                                    'الدفع عن طريق المحفظة',
+                                                    style: TextStyle(
+                                                        color: Colors.white)),
+                                              )
+                                            ],
+                                          ),
+                                          Text(
+                                            'المجموع:  ${Methods.formatPrice(orders[index].totalPrice + orders[index].deliveryPrice)} د.ع',
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    decoration: const BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 4, horizontal: 12),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: const [
+                                              FaIcon(
+                                                FontAwesomeIcons.moneyBills,
+                                                color: Colors.white,
+                                                size: 16,
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    EdgeInsets.only(right: 8),
+                                                child: Text(
+                                                  'الدفع نقداً',
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          Text(
+                                            'المجموع:  ${Methods.formatPrice(orders[index].totalPrice + orders[index].deliveryPrice)} د.ع',
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                             const Divider(),
                             SizedBox(
                               height: 120,
@@ -340,7 +393,7 @@ class _AdminOrdersState extends State<AdminOrders> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
                                       children: [
-                                        Badge(
+                                        badge.Badge(
                                           badgeColor: Theme.of(context)
                                               .colorScheme
                                               .secondary,

@@ -180,42 +180,42 @@ class SigninState extends ConsumerState<Signin> {
             const SizedBox(
               height: 25,
             ),
-            GestureDetector(
-              onTap: () async {
-                String txt = await rootBundle
-                    .loadString('assets/text/terms_and_conditions.txt');
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Card(
-                        child: SingleChildScrollView(
-                          child: Stack(
-                            children: [
-                              IconButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  icon: const FaIcon(FontAwesomeIcons.xmark)),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 50),
-                                child: Text(txt),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    });
-              },
-              child: const Padding(
-                padding: EdgeInsets.only(bottom: 30),
-                child: Text(
-                  'سياسة الخصوصية وأحكام الأستخدام',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.blue),
-                ),
-              ),
-            ),
+            // GestureDetector(
+            //   onTap: () async {
+            //     String txt = await rootBundle
+            //         .loadString('assets/text/terms_and_conditions.txt');
+            //     showDialog(
+            //         context: context,
+            //         builder: (context) {
+            //           return Card(
+            //             child: SingleChildScrollView(
+            //               child: Stack(
+            //                 children: [
+            //                   IconButton(
+            //                       onPressed: () {
+            //                         Navigator.pop(context);
+            //                       },
+            //                       icon: const FaIcon(FontAwesomeIcons.xmark)),
+            //                   Padding(
+            //                     padding: const EdgeInsets.symmetric(
+            //                         horizontal: 8, vertical: 50),
+            //                     child: Text(txt),
+            //                   ),
+            //                 ],
+            //               ),
+            //             ),
+            //           );
+            //         });
+            //   },
+            //   child: const Padding(
+            //     padding: EdgeInsets.only(bottom: 30),
+            //     child: Text(
+            //       'سياسة الخصوصية وأحكام الأستخدام',
+            //       textAlign: TextAlign.center,
+            //       style: TextStyle(color: Colors.blue),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

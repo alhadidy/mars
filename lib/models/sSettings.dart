@@ -3,13 +3,10 @@ import 'package:mars/models/card_presets.dart';
 
 class SSetting {
   SSetting(
-      {required this.freeDeliveryLimit,
-      required this.dev,
-      required this.cards,
-      required this.deliveryPrice});
+      {required this.dev, required this.cards, required this.deliveryPrice});
 
   int deliveryPrice;
-  int freeDeliveryLimit;
+
   bool dev;
   List<CardPresets> cards;
 
@@ -17,11 +14,11 @@ class SSetting {
     Map data = doc.data() as Map;
     List cards = data['cards'] ?? [];
     return SSetting(
-        cards: cards
-            .map((e) => CardPresets(amount: e['amount'], name: e['name']))
-            .toList(),
-        deliveryPrice: data['deliveryPrice'] ?? 0,
-        dev: data['dev'] ?? false,
-        freeDeliveryLimit: data['freeDeliveryLimit'] ?? 0);
+      cards: cards
+          .map((e) => CardPresets(amount: e['amount'], name: e['name']))
+          .toList(),
+      deliveryPrice: data['deliveryPrice'] ?? 0,
+      dev: data['dev'] ?? false,
+    );
   }
 }

@@ -102,10 +102,14 @@ class _ProfileState extends ConsumerState<Profile> {
                     version: QrVersions.auto,
                     size: 300,
                     gapless: false,
-                    foregroundColor: Colors.black,
                     dataModuleStyle: const QrDataModuleStyle(
-                        dataModuleShape: QrDataModuleShape.circle),
-                    eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.circle)),
+                        dataModuleShape: QrDataModuleShape.circle,
+                        color: Colors.black),
+                    eyeStyle: QrEyeStyle(
+                        eyeShape: QrEyeShape.square,
+                        color: user.role == Roles.user
+                            ? Colors.black
+                            : Theme.of(context).colorScheme.secondary)),
                 CircleAvatar(
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   radius: 50,
@@ -245,7 +249,6 @@ class _ProfileState extends ConsumerState<Profile> {
                 ],
               ),
             ),
-
             const Divider(
               height: 16,
               indent: 8,
@@ -276,127 +279,12 @@ class _ProfileState extends ConsumerState<Profile> {
                 },
               ),
             ),
-            // const Padding(
-            //   padding: EdgeInsets.symmetric(vertical: 8),
-            //   child: HomeTabTitle(
-            //       title: 'اجمع النقاط وطور حسابك', titleColor: Colors.black),
-            // ),
-            // Row(
-            //   children: [
-            //     SizedBox(
-            //         width: MediaQuery.of(context).size.width / 3,
-            //         height: MediaQuery.of(context).size.width / 3,
-            //         child: Card(
-            //           shape: const RoundedRectangleBorder(
-            //               borderRadius: BorderRadius.all(Radius.circular(100))),
-            //           color: Theme.of(context).colorScheme.secondary,
-            //           child: Center(
-            //               child: Column(
-            //             mainAxisSize: MainAxisSize.min,
-            //             children: [
-            //               Padding(
-            //                 padding: const EdgeInsets.all(4.0),
-            //                 child: RoundIconButton(
-            //                   icon: FontAwesomeIcons.solidGem,
-            //                   iconColor: Colors.red.shade800,
-            //                   iconSize: 20,
-            //                   color: Colors.white,
-            //                   onTap: null,
-            //                 ),
-            //               ),
-            //               const Padding(
-            //                 padding: EdgeInsets.all(2.0),
-            //                 child: Text(
-            //                   'ماسي',
-            //                   style: TextStyle(
-            //                       fontSize: 16, fontWeight: FontWeight.bold),
-            //                 ),
-            //               ),
-            //               const Padding(
-            //                 padding: EdgeInsets.all(4.0),
-            //                 child: Text('> 2000'),
-            //               ),
-            //             ],
-            //           )),
-            //         )),
-            //     SizedBox(
-            //         width: MediaQuery.of(context).size.width / 3,
-            //         height: MediaQuery.of(context).size.width / 3,
-            //         child: Card(
-            //           shape: const RoundedRectangleBorder(
-            //               borderRadius: BorderRadius.all(Radius.circular(100))),
-            //           color: Theme.of(context).colorScheme.secondary,
-            //           child: Center(
-            //               child: Column(
-            //             mainAxisSize: MainAxisSize.min,
-            //             children: [
-            //               Padding(
-            //                 padding: const EdgeInsets.all(4.0),
-            //                 child: RoundIconButton(
-            //                   icon: FontAwesomeIcons.fireFlameCurved,
-            //                   iconColor: Colors.yellow.shade800,
-            //                   iconSize: 20,
-            //                   color: Colors.black,
-            //                   onTap: null,
-            //                 ),
-            //               ),
-            //               const Padding(
-            //                 padding: EdgeInsets.all(2.0),
-            //                 child: Text(
-            //                   'ذهبي',
-            //                   style: TextStyle(
-            //                       fontSize: 16, fontWeight: FontWeight.bold),
-            //                 ),
-            //               ),
-            //               const Padding(
-            //                 padding: EdgeInsets.all(4.0),
-            //                 child: Text('< 2000'),
-            //               ),
-            //             ],
-            //           )),
-            //         )),
-            //     SizedBox(
-            //         width: MediaQuery.of(context).size.width / 3,
-            //         height: MediaQuery.of(context).size.width / 3,
-            //         child: Card(
-            //           shape: const RoundedRectangleBorder(
-            //               borderRadius: BorderRadius.all(Radius.circular(100))),
-            //           color: Theme.of(context).colorScheme.secondary,
-            //           child: Center(
-            //               child: Column(
-            //             mainAxisSize: MainAxisSize.min,
-            //             children: [
-            //               Padding(
-            //                 padding: const EdgeInsets.all(4.0),
-            //                 child: RoundIconButton(
-            //                   icon: FontAwesomeIcons.solidStar,
-            //                   iconColor: Colors.indigo.shade800,
-            //                   iconSize: 20,
-            //                   color: Colors.black,
-            //                   onTap: null,
-            //                 ),
-            //               ),
-            //               const Padding(
-            //                 padding: EdgeInsets.all(2.0),
-            //                 child: Text(
-            //                   'اساسي',
-            //                   style: TextStyle(
-            //                       fontSize: 16, fontWeight: FontWeight.bold),
-            //                 ),
-            //               ),
-            //               const Padding(
-            //                 padding: EdgeInsets.all(4.0),
-            //                 child: Text('< 1000'),
-            //               ),
-            //             ],
-            //           )),
-            //         )),
-            //   ],
-            // ),
-            const Divider(
-              indent: 8,
-              endIndent: 8,
-            ),
+            user.isAnon || user.role != Roles.user
+                ? Container()
+                : const Divider(
+                    indent: 8,
+                    endIndent: 8,
+                  ),
             user.isAnon || user.role != Roles.user
                 ? Container()
                 : Directionality(
@@ -413,28 +301,30 @@ class _ProfileState extends ConsumerState<Profile> {
                         Navigator.pushNamed(context, '/wallet');
                       },
                     )),
-            const Divider(
-              indent: 8,
-              endIndent: 8,
-            ),
             user.role != Roles.user
                 ? Container()
-                : Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: ListTile(
-                      title: const Text('تواصل مع خدمة العملاء'),
-                      leading: FaIcon(
-                        FontAwesomeIcons.headset,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      onTap: () {
-                        Navigator.pushNamed(context, '/support');
-                      },
-                    )),
-            const Divider(
-              indent: 8,
-              endIndent: 8,
-            ),
+                : const Divider(
+                    indent: 8,
+                    endIndent: 8,
+                  ),
+            // user.role != Roles.user
+            //     ? Container()
+            //     : Directionality(
+            //         textDirection: TextDirection.rtl,
+            //         child: ListTile(
+            //           title: const Text('تواصل مع خدمة العملاء'),
+            //           leading: FaIcon(
+            //             FontAwesomeIcons.headset,
+            //             color: Theme.of(context).colorScheme.secondary,
+            //           ),
+            //           onTap: () {
+            //             Navigator.pushNamed(context, '/support');
+            //           },
+            //         )),
+            // const Divider(
+            //   indent: 8,
+            //   endIndent: 8,
+            // ),
             user.isAnon
                 ? Container()
                 : Directionality(

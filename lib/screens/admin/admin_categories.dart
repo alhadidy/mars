@@ -17,7 +17,7 @@ class _AdminCategoriesState extends State<AdminCategories> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Categories'),
+        title: const Text('Categories'),
         actions: [
           IconButton(
               onPressed: () {

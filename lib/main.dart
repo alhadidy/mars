@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mars/firebase_options.dart';
+import 'package:mars/screens/auth/request_phone.dart';
 import 'package:mars/screens/home/home.dart';
 import 'package:mars/models/user.dart';
 import 'package:mars/screens/auth/auth.dart';
@@ -16,7 +20,8 @@ import 'package:mars/services/routes.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -70,7 +75,17 @@ class _MyAppState extends ConsumerState<MyApp> {
       home: Consumer(builder: (context, ref, child) {
         UserModel? user = ref.watch(userProvider);
 
-        return user == null ? const Authenticate() : const Home();
+        FlutterNativeSplash.remove();
+
+        if (user == null) {
+          return const Authenticate();
+        }
+
+        if (user.phone == '' && !user.isAnon && user.role != Roles.admin) {
+          return const RequestPhone();
+        }
+
+        return const Home();
       }),
     );
   }

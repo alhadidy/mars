@@ -52,9 +52,11 @@ class _WalletState extends ConsumerState<Wallet> {
                     .scanGiftCard(user.uid, barcodeScanRes)
                     .then((value) => Methods.showSnackHome(
                         context: context,
-                        title: 'تمت العملية بنجاح',
+                        title: 'تم التعرف على البطاقة',
+                        tip: 'جاري معالجة الطلب',
                         icon: FontAwesomeIcons.checkDouble))
                     .catchError((err) {
+                  print(err);
                   Methods.showSnackHome(
                       context: context,
                       title: 'لم تتم اضافة البطاقة',
@@ -106,6 +108,7 @@ class _WalletState extends ConsumerState<Wallet> {
                     : transactions[index].type == 'withdrawal'
                         ? RoundIconButton(
                             size: 36,
+                            color: Colors.red.shade900,
                             iconSize: 18,
                             onTap: () {},
                             icon: FontAwesomeIcons.solidCircleUp,

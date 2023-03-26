@@ -27,7 +27,7 @@ class Order {
     required this.city,
     required this.status,
     required this.cashed,
-    required this.inStore,
+    required this.walletPay,
   });
 
   String fid;
@@ -53,7 +53,7 @@ class Order {
   String city;
   OrderStatus status;
   bool cashed;
-  bool inStore;
+  bool walletPay;
 
   factory Order.fromDoc(DocumentSnapshot doc) {
     Map docData = doc.data() as Map;
@@ -80,14 +80,14 @@ class Order {
       deliveryPrice: docData['deliveryPrice'] ?? 0,
       totalPrice: docData['totalPrice'] ?? 0,
       deliverBy: docData['deliverBy'] ?? '',
-      userId: docData['user_id'] ?? '',
+      userId: docData['userId'] ?? '',
       userName: docData['userName'] ?? '',
       storeId: docData['storeId'],
       storeLocation: docData['storeLocation'],
       storeName: docData['storeName'] ?? '',
       orderNum: docData['orderNum'] ?? '',
       cashed: docData['cashed'] ?? false,
-      inStore: docData['inStore'],
+      walletPay: docData['walletPay'],
       items: items.map((e) {
         return OrderItem(
           fid: e['fid'] ?? '',

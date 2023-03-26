@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -93,6 +95,7 @@ class AuthService {
         isAnon: user.isAnonymous,
         name: user.displayName ?? '',
         photoUrl: user.photoURL ?? '',
+        phone: user.phoneNumber ?? '',
         email: user.email ?? '',
         accessLevel: accessLevel,
         role: role,
@@ -104,6 +107,7 @@ class AuthService {
       isAnon: user.isAnonymous,
       name: user.providerData[0].displayName ?? '',
       photoUrl: user.providerData[0].photoURL ?? '',
+      phone: user.phoneNumber ?? '',
       email: user.email ?? '',
       accessLevel: accessLevel,
       role: role,

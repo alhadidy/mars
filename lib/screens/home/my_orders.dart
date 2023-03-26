@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,7 +41,7 @@ class _MyOrdersState extends ConsumerState<MyOrders> {
                   );
                 }
 
-                if (!snapshot.hasData) {
+                if (!snapshot.hasData || (snapshot.data as List).isEmpty) {
                   return const Center(
                     child: Text('لا توجد طلبات حالية'),
                   );
@@ -120,7 +120,7 @@ class _MyOrdersState extends ConsumerState<MyOrders> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     children: [
-                                      Badge(
+                                      badge.Badge(
                                         badgeColor: Theme.of(context)
                                             .colorScheme
                                             .secondary,
@@ -172,14 +172,86 @@ class _MyOrdersState extends ConsumerState<MyOrders> {
                                     'قيمة الطلب: ${Methods.formatPrice(orders[index].totalPrice)} د.ع'),
                                 Text(
                                     'كلفة التوصيل: ${Methods.formatPrice(orders[index].deliveryPrice)} د.ع'),
-                                Container(
-                                  height: 2,
-                                  width: 100,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
-                                Text(
-                                    'المجموع:  ${Methods.formatPrice(orders[index].totalPrice + orders[index].deliveryPrice)} د.ع'),
+                                orders[index].walletPay
+                                    ? Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.amber[600],
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(20))),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4, horizontal: 12),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: const [
+                                                  FaIcon(
+                                                    FontAwesomeIcons.wallet,
+                                                    color: Colors.white,
+                                                    size: 16,
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 8),
+                                                    child: Text(
+                                                        'الدفع عن طريق المحفظة',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white)),
+                                                  )
+                                                ],
+                                              ),
+                                              Text(
+                                                'المجموع:  ${Methods.formatPrice(orders[index].totalPrice + orders[index].deliveryPrice)} د.ع',
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        decoration: const BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20))),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4, horizontal: 12),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: const [
+                                                  FaIcon(
+                                                    FontAwesomeIcons.moneyBills,
+                                                    color: Colors.white,
+                                                    size: 16,
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 8),
+                                                    child: Text(
+                                                      'الدفع نقداً',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              Text(
+                                                'المجموع:  ${Methods.formatPrice(orders[index].totalPrice + orders[index].deliveryPrice)} د.ع',
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      )
                               ],
                             ),
                           )

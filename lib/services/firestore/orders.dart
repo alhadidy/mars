@@ -25,15 +25,14 @@ class Orders {
     required String deliverBy,
     required int deliveryPrice,
     required int totalPrice,
-    required bool inStore,
+    required bool walletPay,
   }) async {
     firestoreDB.CollectionReference ref = firestore.collection('orders');
     await ref.add({
-      'inStore': inStore,
       'location': location,
       'address': address,
       'city': city,
-      'user_id': userId,
+      'userId': userId,
       'userName': userName,
       'storeId': storeId,
       'storeName': storeName,
@@ -59,6 +58,7 @@ class Orders {
       'totalPrice': totalPrice,
       'orderNum': Methods.getRandomNumber(length: 8),
       'cashed': false,
+      'walletPay': walletPay,
     });
   }
 
@@ -67,7 +67,7 @@ class Orders {
 
     Stream<firestoreDB.QuerySnapshot> orders = ref
         .orderBy('timestamp', descending: true)
-        .where('user_id', isEqualTo: uid)
+        .where('userId', isEqualTo: uid)
         .snapshots();
 
     return orders.map((event) {

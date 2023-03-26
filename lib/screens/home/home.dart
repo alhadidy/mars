@@ -9,11 +9,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mars/models/link.dart';
 import 'package:mars/models/user.dart';
 import 'package:mars/screens/home/widgets/basket_button.dart';
+import 'package:mars/screens/home/widgets/calendar_sliver.dart';
 import 'package:mars/screens/home/widgets/categories_sliver.dart';
 import 'package:mars/screens/home/widgets/items_sliver.dart';
-import 'package:mars/screens/home/widgets/my_orders_sliver.dart';
 import 'package:mars/screens/home/widgets/promo_sliver.dart';
-import 'package:mars/screens/home/widgets/stores_sliver.dart';
+import 'package:mars/screens/home/widgets/shops_orders_sliver.dart';
 import 'package:mars/services/methods.dart';
 import 'package:mars/services/notifications.dart';
 import 'package:mars/services/providers.dart';
@@ -53,6 +53,7 @@ class _HomeState extends ConsumerState<Home> {
     NotificationsApi.onNotificationsClick.stream.listen((payload) {
       _handleNotificationClicked(payload);
     });
+
     super.initState();
   }
 
@@ -134,9 +135,9 @@ class _HomeState extends ConsumerState<Home> {
       body: const CustomScrollView(
         slivers: [
           PromotionSliver(),
-          MyOrdersSliver(),
           CategoriesSliver(),
-          StoresSliver(),
+          CalendarSliver(),
+          ShopsOrdersSliver(),
           ItemsSliver(),
           SliverToBoxAdapter(
             child: SizedBox(

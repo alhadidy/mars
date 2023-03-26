@@ -17,7 +17,7 @@ class LinkService {
     appStoreId: '898898',
   );
   String uriPrefix = 'https://mars.page.link/';
-  String deepLink = 'https://marscoffeehouse.com/';
+  String deepLink = 'https://mars-coffee.web.app/';
   static const String imgUrl =
       "https://firebasestorage.googleapis.com/v0/b/mars-coffee.appspot.com/o/public%2Flogo.jpg?alt=media&token=f1596111-7f2f-4141-a633-03f77f8cb693";
 

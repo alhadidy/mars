@@ -5,6 +5,7 @@ class UserModel {
   final String name;
   final String email;
   final String photoUrl;
+  final String phone;
   final bool isAnon;
   final Roles role;
   final int accessLevel;
@@ -14,6 +15,7 @@ class UserModel {
       required this.name,
       required this.email,
       required this.photoUrl,
+      required this.phone,
       required this.isAnon,
       this.accessLevel = 0,
       this.role = Roles.user});
@@ -23,6 +25,7 @@ class UserModel {
       String? name,
       String? sp,
       String? photoUrl,
+      String? phone,
       String? email,
       bool? isAnon,
       int? accessLevel,
@@ -31,6 +34,7 @@ class UserModel {
         uid: uid ?? this.uid,
         name: name ?? this.name,
         photoUrl: photoUrl ?? this.photoUrl,
+        phone: phone ?? this.phone,
         email: email ?? this.email,
         isAnon: isAnon ?? this.isAnon,
         role: role ?? this.role,

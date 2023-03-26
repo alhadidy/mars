@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,29 +36,32 @@ class _ItemPageState extends ConsumerState<ItemPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20)),
-              child: CachedNetworkImage(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.width,
-                fit: BoxFit.cover,
-                imageUrl: widget.item.imgUrl,
-                errorWidget: ((context, url, error) {
-                  return Container(
-                    color: Colors.white,
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.width,
-                  );
-                }),
-                placeholder: (context, url) {
-                  return Container(
-                    color: Colors.white,
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.width,
-                  );
-                },
+            Container(
+              color: Colors.amber,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(200),
+                    bottomRight: Radius.circular(0)),
+                child: CachedNetworkImage(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.width,
+                  fit: BoxFit.cover,
+                  imageUrl: widget.item.imgUrl,
+                  errorWidget: ((context, url, error) {
+                    return Container(
+                      color: Colors.white,
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.width,
+                    );
+                  }),
+                  placeholder: (context, url) {
+                    return Container(
+                      color: Colors.white,
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.width,
+                    );
+                  },
+                ),
               ),
             ),
             SizedBox(
@@ -97,12 +100,12 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: Stack(
                           children: [
-                            Badge(
+                            badge.Badge(
                               badgeColor:
                                   Theme.of(context).colorScheme.secondary,
                               animationDuration:
                                   const Duration(milliseconds: 100),
-                              animationType: BadgeAnimationType.scale,
+                              animationType: badge.BadgeAnimationType.scale,
                               showBadge: order != null,
                               badgeContent: order == null
                                   ? Container()
@@ -176,11 +179,12 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                                     width: 0,
                                   )
                                 : SizedBox(
-                                    width: 20,
+                                    width: 40,
                                     height: 116,
                                     child: Align(
                                       alignment: Alignment.bottomRight,
                                       child: RoundIconButton(
+                                          size: 40,
                                           color: Colors.red,
                                           icon: FontAwesomeIcons.minus,
                                           onTap: () {

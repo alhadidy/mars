@@ -40,6 +40,16 @@ class Methods {
 
   static initFCM(context) async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    
     messaging.subscribeToTopic('allUsers');
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
@@ -55,20 +65,33 @@ class Methods {
   static void showConfirmDialog(
       BuildContext context, String header, Function() confirm) {
     AlertDialog alert = AlertDialog(
-      title: Directionality(
+      title: const Directionality(
+        textDirection: TextDirection.rtl,
+        child: Text(
+          'يرجى الإنتباه',
+          style: TextStyle(color: Colors.red),
+        ),
+      ),
+      content: Directionality(
           textDirection: TextDirection.rtl,
           child: Text(
             header,
             style: const TextStyle(height: 1.5),
           )),
       actions: [
-        IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const FaIcon(FontAwesomeIcons.xmark)),
-        IconButton(
-            onPressed: confirm, icon: const FaIcon(FontAwesomeIcons.check))
+        TextButton(
+          child: const Text('إلغاء'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        TextButton(
+          child: const Text(
+            'تأكيد حذف الحساب',
+            style: TextStyle(color: Colors.red),
+          ),
+          onPressed: confirm,
+        )
       ],
     );
     showDialog(
@@ -288,7 +311,7 @@ class Methods {
     String formattedDate;
     date == null
         ? formattedDate = ''
-        : formattedDate = intl.DateFormat('MMMd', 'en').format(date);
+        : formattedDate = intl.DateFormat('MMMd', 'ar').format(date);
 
     return formattedDate;
   }

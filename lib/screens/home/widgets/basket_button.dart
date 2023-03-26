@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -21,23 +21,28 @@ class BasketButton extends ConsumerWidget {
         } else {
           count = snapshot.data;
         }
-        return Badge(
-          ignorePointer: true,
-          badgeContent: Text(
-            count.toString(),
-            style: const TextStyle(color: Colors.white),
-          ),
-          showBadge: count != 0 ? true : false,
-          badgeColor: Theme.of(context).colorScheme.secondary,
-          position: BadgePosition.topStart(top: 0, start: 0),
-          animationType: BadgeAnimationType.scale,
-          animationDuration: const Duration(milliseconds: 250),
-          child: IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/basket');
-            },
-            icon: const FaIcon(FontAwesomeIcons.bagShopping),
-            color: Colors.white,
+        return Center(
+          child: SizedBox(
+            height: kToolbarHeight,
+            child: badge.Badge(
+              ignorePointer: true,
+              badgeContent: Text(
+                count.toString(),
+                style: const TextStyle(color: Colors.white),
+              ),
+              showBadge: count != 0 ? true : false,
+              badgeColor: Theme.of(context).colorScheme.secondary,
+              position: badge.BadgePosition.topStart(top: 0, start: 0),
+              animationType: badge.BadgeAnimationType.scale,
+              animationDuration: const Duration(milliseconds: 250),
+              child: IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/basket');
+                },
+                icon: const FaIcon(FontAwesomeIcons.bagShopping),
+                color: Colors.white,
+              ),
+            ),
           ),
         );
       },

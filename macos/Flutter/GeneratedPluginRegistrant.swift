@@ -16,7 +16,7 @@ import flutter_local_notifications
 import flutter_native_timezone
 import geolocator_apple
 import package_info
-import path_provider_macos
+import path_provider_foundation
 import share_plus
 import sign_in_with_apple
 import sqflite

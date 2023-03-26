@@ -29,20 +29,20 @@ class _AdminState extends ConsumerState<Admin> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ListTile(
-              title: const Text('Stores'),
-              trailing: SizedBox(
-                  height: 30,
-                  width: 30,
-                  child: Center(
-                      child: FaIcon(
-                    FontAwesomeIcons.store,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ))),
-              onTap: () {
-                Navigator.pushNamed(context, '/adminStores');
-              },
-            ),
+            // ListTile(
+            //   title: const Text('Stores'),
+            //   trailing: SizedBox(
+            //       height: 30,
+            //       width: 30,
+            //       child: Center(
+            //           child: FaIcon(
+            //         FontAwesomeIcons.store,
+            //         color: Theme.of(context).colorScheme.secondary,
+            //       ))),
+            //   onTap: () {
+            //     Navigator.pushNamed(context, '/adminStores');
+            //   },
+            // ),
             ListTile(
               title: const Text('Categories'),
               trailing: SizedBox(
@@ -115,20 +115,20 @@ class _AdminState extends ConsumerState<Admin> {
                 Navigator.pushNamed(context, '/adminOrders');
               },
             ),
-            ListTile(
-              title: const Text('Support'),
-              trailing: SizedBox(
-                  height: 30,
-                  width: 30,
-                  child: Center(
-                      child: FaIcon(
-                    FontAwesomeIcons.headset,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ))),
-              onTap: () {
-                Navigator.pushNamed(context, '/adminSupport');
-              },
-            ),
+            // ListTile(
+            //   title: const Text('Support'),
+            //   trailing: SizedBox(
+            //       height: 30,
+            //       width: 30,
+            //       child: Center(
+            //           child: FaIcon(
+            //         FontAwesomeIcons.headset,
+            //         color: Theme.of(context).colorScheme.secondary,
+            //       ))),
+            //   onTap: () {
+            //     Navigator.pushNamed(context, '/adminSupport');
+            //   },
+            // ),
             // ListTile(
             //   title: const Text('Notifications'),
             //   trailing: SizedBox(
@@ -153,6 +153,20 @@ class _AdminState extends ConsumerState<Admin> {
                   ))),
               onTap: () {
                 Navigator.pushNamed(context, '/adminPoints');
+              },
+            ),
+            ListTile(
+              title: const Text('Payments'),
+              trailing: SizedBox(
+                  height: 30,
+                  width: 30,
+                  child: Center(
+                      child: FaIcon(
+                    FontAwesomeIcons.moneyBillTransfer,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ))),
+              onTap: () {
+                Navigator.pushNamed(context, '/adminPayments');
               },
             ),
           ],

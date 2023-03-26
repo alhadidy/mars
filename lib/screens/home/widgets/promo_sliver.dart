@@ -1,8 +1,6 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mars/models/promo.dart';
-import 'package:mars/screens/home/widgets/home_title.dart';
 import 'package:mars/screens/home/widgets/promo_list.dart';
 import 'package:mars/services/firestore/promos.dart';
 import 'package:mars/services/locator.dart';

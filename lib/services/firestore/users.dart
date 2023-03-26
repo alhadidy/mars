@@ -30,9 +30,11 @@ class Users {
         .doc(userId)
         .collection('cards')
         .doc(cardId)
-        .set({
-      'time': FieldValue.serverTimestamp(),
-    });
+        .set(
+      {
+        'time': FieldValue.serverTimestamp(),
+      },
+    );
   }
 
   Stream<UserData> watchUserData(UserModel? _user) {

@@ -46,6 +46,34 @@ class _AdminItemsState extends State<AdminItems> {
                     Navigator.pushNamed(context, '/itemEditor',
                         arguments: {'item': items[index]});
                   },
+                  onLongPress: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            contentPadding: EdgeInsets.zero,
+                            content: ListTile(
+                              title: const Text(
+                                'Delete Item',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                              trailing: const FaIcon(
+                                FontAwesomeIcons.trash,
+                                color: Colors.red,
+                              ),
+                              onTap: () async {
+                                Methods.showLoaderDialog(context);
+
+                                await locator
+                                    .get<Items>()
+                                    .deleteItem(items[index].fid);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                            ),
+                          );
+                        });
+                  },
                   title: Text(items[index].name),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,7 +90,7 @@ class _AdminItemsState extends State<AdminItems> {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
-                              height: 50,
+                              height: 60,
                               decoration: BoxDecoration(
                                   border: Border.all(color: Colors.amber),
                                   borderRadius: const BorderRadius.all(

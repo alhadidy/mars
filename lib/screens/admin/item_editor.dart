@@ -232,7 +232,7 @@ class _ItemEditorState extends State<ItemEditor> {
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(16)),
                             color: selectedCategory == categories[index].name
-                                ? Colors.brown
+                                ? Colors.amber
                                 : null,
                           ),
                           width: 120,
@@ -390,8 +390,13 @@ class _ItemEditorState extends State<ItemEditor> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(size.price.toString()),
-                        Text('${size.discount.toString()}%-'),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text('${size.discount.toString()}%-'),
+                            Text(size.price.toString()),
+                          ],
+                        ),
                         const SizedBox(
                           width: 50,
                           child: Divider(

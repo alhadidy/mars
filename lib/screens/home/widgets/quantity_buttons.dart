@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,32 +16,50 @@ class QuantityButtons extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          CircleAvatar(
-            radius: 23,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            child: IconButton(
-                onPressed: () async {
-                  AppDatabase db = ref.read(dbProvider);
-                  await db.localOrdersDao.increaseQuantity(oldOrder);
-                },
-                color: Colors.white,
-                icon: const FaIcon(FontAwesomeIcons.plus)),
+          InkWell(
+            onTap: () async {
+              AppDatabase db = ref.read(dbProvider);
+              await db.localOrdersDao.increaseQuantity(oldOrder);
+            },
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
+            child: Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: const BorderRadius.all(Radius.circular(20))),
+              child: const Center(
+                child: FaIcon(
+                  FontAwesomeIcons.plus,
+                  color: Colors.white,
+                ),
+              ),
+            ),
           ),
           Text(
             oldOrder.quantity.toString(),
             textAlign: TextAlign.center,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
-          CircleAvatar(
-            radius: 23,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            child: IconButton(
-                onPressed: () async {
-                  AppDatabase db = ref.read(dbProvider);
-                  await db.localOrdersDao.decreaseQuantity(oldOrder);
-                },
-                color: Colors.white,
-                icon: const FaIcon(FontAwesomeIcons.minus)),
+          InkWell(
+            onTap: () async {
+              AppDatabase db = ref.read(dbProvider);
+              await db.localOrdersDao.decreaseQuantity(oldOrder);
+            },
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            child: Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              child: const Center(
+                child: FaIcon(
+                  FontAwesomeIcons.minus,
+                  color: Colors.white,
+                ),
+              ),
+            ),
           ),
         ],
       ),

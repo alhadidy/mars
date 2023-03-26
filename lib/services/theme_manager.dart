@@ -22,6 +22,8 @@ class ThemeManager {
           onError: Colors.white,
           background: Colors.brown.shade900,
           onBackground: Colors.white,
-          surface: Color(0xff1F3469),
-          onSurface: Colors.white));
+          surface: Colors.white,
+          onSurface: Colors.black),
+      timePickerTheme:
+          const TimePickerThemeData(dialHandColor: Color(0xff1F3469)));
 }
