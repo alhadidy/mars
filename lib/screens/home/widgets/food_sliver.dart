@@ -6,14 +6,14 @@ import 'package:mars/screens/home/widgets/item_tile_horizontal.dart';
 import 'package:mars/services/firestore/items.dart';
 import 'package:mars/services/locator.dart';
 
-class ItemsSliver extends StatelessWidget {
-  const ItemsSliver({Key? key}) : super(key: key);
+class FoodSliver extends StatelessWidget {
+  const FoodSliver({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: StreamBuilder(
-        stream: locator.get<Items>().getBestSellerItems(),
+        stream: locator.get<Items>().getBestSellerFood(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null) {
             return Container();
@@ -25,20 +25,27 @@ class ItemsSliver extends StatelessWidget {
             child: Column(
               children: [
                 const HomeTabTitle(
-                  title: 'الأكثر شعبية',
+                  title: 'المعجنات المميزة',
                   titleColor: Colors.black,
-                  icon: FontAwesomeIcons.solidStar,
+                  icon: FontAwesomeIcons.cookieBite,
                 ),
                 SizedBox(
-                  height: 250,
-                  child: ListView.builder(
-                    reverse: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: items.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ItemTileHorizontal(item: items[index]);
-                    },
-                  ),
+                  height: 225,
+                  child: items.isEmpty
+                      ? const Center(
+                          child: Text(
+                            'قريباً',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        )
+                      : ListView.builder(
+                          reverse: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: items.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ItemTileHorizontal(item: items[index]);
+                          },
+                        ),
                 ),
               ],
             ),

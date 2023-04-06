@@ -1,35 +1,24 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:mars/models/promo.dart';
 import 'package:mars/screens/home/widgets/promo_tile.dart';
 
-typedef OnChangeCallback = void Function(
-    int index, CarouselPageChangedReason reason);
-
 class PromotionList extends StatelessWidget {
   final List<Promo> promos;
-  final OnChangeCallback onChanged;
 
-  const PromotionList(
-      {super.key, required this.promos, required this.onChanged});
+  const PromotionList({super.key, required this.promos});
 
   @override
   Widget build(BuildContext context) {
-    return CarouselSlider.builder(
-      itemCount: promos.length,
-      options: CarouselOptions(
-          enlargeCenterPage: true,
-          viewportFraction: 0.8,
-          enableInfiniteScroll: true,
-          reverse: true,
-          autoPlay: true,
-          onPageChanged: onChanged),
-      itemBuilder: (context, index, indexs) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: PromotionTile(promo: promos[index], index: index),
+    return SliverList(
+      delegate: SliverChildBuilderDelegate((context, index) {
+        return SizedBox(
+          height: 250,
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: PromotionTile(promo: promos[index], index: index),
+          ),
         );
-      },
+      }, childCount: promos.length),
     );
   }
 }

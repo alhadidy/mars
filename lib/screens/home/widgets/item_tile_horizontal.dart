@@ -8,72 +8,58 @@ class ItemTileHorizontal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         Navigator.pushNamed(context, '/itemPage', arguments: {'item': item});
       },
       child: SizedBox(
-        width: MediaQuery.of(context).size.width,
+        width: 166,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Card(
-            margin: EdgeInsets.zero,
-            color: Colors.grey[200],
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(25))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 2 - 16,
-                  height: 250,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 0),
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(20)),
-                      child: CachedNetworkImage(
-                          fit: BoxFit.cover, imageUrl: item.imgUrl),
-                    ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: 150,
+                height: 150,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 0),
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                        fit: BoxFit.cover, imageUrl: item.imgUrl),
                   ),
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 2 - 16,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        FittedBox(
-                          child: Text(
-                            item.name,
-                            textAlign: TextAlign.right,
-                            textDirection: TextDirection.rtl,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22,
-                                color: Colors.black),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 150,
-                          child: Text(
-                            item.desc,
-                            textDirection: TextDirection.rtl,
-                            overflow: TextOverflow.fade,
-                            textAlign: TextAlign.right,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.black87),
-                          ),
-                        ),
-                      ],
+              ),
+              Column(
+                children: [
+                  SizedBox(
+                    width: 166,
+                    child: Text(
+                      item.name,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.black),
                     ),
                   ),
-                ),
-              ],
-            ),
+                  SizedBox(
+                    width: 166,
+                    child: Text(
+                      item.category,
+                      textDirection: TextDirection.rtl,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.black87),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

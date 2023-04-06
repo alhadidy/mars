@@ -209,7 +209,7 @@ class _CompleteOrderState extends ConsumerState<CompleteOrder> {
                                     Padding(
                                       padding: EdgeInsets.only(top: 8.0),
                                       child: Text(
-                                        '+250 نقطة',
+                                        '+25 نقطة',
                                       ),
                                     ),
                                   ],

@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mars/models/item.dart';
 
 class ItemTile extends StatelessWidget {
@@ -11,67 +10,53 @@ class ItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: GestureDetector(
+      child: InkWell(
         onTap: (() {
           Navigator.pushNamed(context, '/itemPage', arguments: {'item': item});
         }),
-        child: Card(
-          margin: EdgeInsets.zero,
-          color: Colors.grey[200],
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(25))),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(25)),
-                  child: CachedNetworkImage(
-                      width: double.maxFinite,
-                      height: 160,
-                      fit: BoxFit.cover,
-                      imageUrl: item.imgUrl),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: ClipOval(
+                child: CachedNetworkImage(
+                    width: 150,
+                    height: 150,
+                    fit: BoxFit.cover,
+                    imageUrl: item.imgUrl),
+              ),
+            ),
+            SizedBox(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                ),
+                child: Text(
+                  item.name,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.black),
                 ),
               ),
-              SizedBox(
-                height: 30,
-                width: double.maxFinite,
-                child: FittedBox(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                    ),
-                    child: Text(
-                      item.name,
-                      textAlign: TextAlign.end,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                    ),
-                  ),
-                ),
+            ),
+            SizedBox(
+              child: Text(
+                item.category,
+                textDirection: TextDirection.rtl,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: Colors.black87),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: SizedBox(
-                  height: 60,
-                  child: Text(
-                    item.desc,
-                    textDirection: TextDirection.rtl,
-                    overflow: TextOverflow.fade,
-                    textAlign: TextAlign.right,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: Colors.black87),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

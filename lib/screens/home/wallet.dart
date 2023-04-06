@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mars/models/transaction.dart';
 import 'package:mars/models/user.dart';
@@ -80,8 +81,29 @@ class _WalletState extends ConsumerState<Wallet> {
           List<Transaction>? transactions = snapshot.data;
 
           if (transactions == null || transactions.isEmpty) {
-            return const Center(
-              child: Text('لا توجد نشاطات في المحفظة'),
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'لا توجد نشاطات في المحفظة',
+                    style: GoogleFonts.tajawal(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: SizedBox(
+                      width: 250,
+                      child: Text(
+                        'اضغط على الزر الموجود في اعلى اليمين من اجل اضافة رصيد الى المحفظة',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.tajawal(fontSize: 14, height: 1.5),
+                      ),
+                    ),
+                  ),
+                  const FaIcon(FontAwesomeIcons.qrcode)
+                ],
+              ),
             );
           }
 

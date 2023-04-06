@@ -1,13 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:mars/models/item.dart';
 import 'package:mars/models/promo.dart';
-import 'package:mars/services/firestore/items.dart';
-import 'package:mars/services/locator.dart';
 
 class PromoPage extends ConsumerStatefulWidget {
   final Promo promo;
@@ -24,9 +19,6 @@ class PromoPageState extends ConsumerState<PromoPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final user = ref.watch(userProvider);
-    // final role = ref.watch(rolesProvider).role;
-
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -34,22 +26,6 @@ class PromoPageState extends ConsumerState<PromoPage> {
             textDirection: TextDirection.rtl,
           ),
           centerTitle: true,
-          actions: [
-            // role == Roles.admin
-            //     ? IconButton(
-            //         tooltip: 'تعديل',
-            //         icon: const FaIcon(
-            //           FontAwesomeIcons.pencilRuler,
-            //           size: 20,
-            //           color: Colors.white,
-            //         ),
-            //         onPressed: () {
-            //           Navigator.of(context).pushNamed('/promotionDetails',
-            //               arguments: widget.promo);
-            //         },
-            //       )
-            //     : Container(),
-          ],
         ),
         body: Stack(
           children: [
@@ -76,7 +52,6 @@ class PromoPageState extends ConsumerState<PromoPage> {
                             textDirection: TextDirection.rtl,
                             maxLines: 2,
                             style: const TextStyle(
-                                color: Colors.white,
                                 fontSize: 24,
                                 height: 1,
                                 fontWeight: FontWeight.bold),
@@ -120,7 +95,6 @@ class PromoPageState extends ConsumerState<PromoPage> {
                       widget.promo.body,
                       textDirection: TextDirection.rtl,
                       style: const TextStyle(
-                        color: Colors.white,
                         fontSize: 16,
                         height: 1.2,
                       ),
@@ -142,7 +116,6 @@ class PromoPageState extends ConsumerState<PromoPage> {
                                     widget.promo.subbody,
                                     textDirection: TextDirection.rtl,
                                     style: const TextStyle(
-                                        color: Colors.white,
                                         fontSize: 12,
                                         height: 1,
                                         fontWeight: FontWeight.bold),
@@ -171,47 +144,7 @@ class PromoPageState extends ConsumerState<PromoPage> {
                 ],
               ),
             ),
-            Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: actionBuilder(widget.promo.actionType)),
           ],
         ));
-  }
-
-  Widget actionBuilder(ActionType actionType) {
-    switch (actionType) {
-      case ActionType.itemPage:
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-          child: SizedBox(
-              width: double.infinity,
-              height: 45,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                ),
-                onPressed: () async {
-                  Item item =
-                      await locator.get<Items>().getItem(widget.promo.itemId);
-                  Navigator.of(context).pushNamed('/itemPage', arguments: item);
-                },
-                child: Text('المزيد من التفاصيل',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.tajawal(
-                        color: Colors.white,
-                        height: 2,
-                        fontWeight: FontWeight.bold)
-                    // style: TextStyle(color: Colors.white),
-                    ),
-              )),
-        );
-
-      default:
-        return Container();
-    }
   }
 }

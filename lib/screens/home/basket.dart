@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mars/drift/drift.dart';
 import 'package:mars/models/sSettings.dart';
+import 'package:mars/models/user.dart';
 import 'package:mars/screens/home/widgets/quantity_buttons.dart';
 import 'package:mars/services/methods.dart';
 import 'package:mars/services/providers.dart';
@@ -30,6 +31,13 @@ class _BasketState extends ConsumerState<Basket>
   Widget build(BuildContext context) {
     AppDatabase db = ref.watch(dbProvider);
     SSetting? settings = ref.watch(shopSettingsProvider);
+    UserModel? user = ref.watch(userProvider);
+
+    if (user == null) {
+      return Scaffold(
+        appBar: AppBar(),
+      );
+    }
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -150,48 +158,67 @@ class _BasketState extends ConsumerState<Basket>
                           width: MediaQuery.of(context).size.width,
                           child: Padding(
                               padding: const EdgeInsets.all(16.0),
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)))),
-                                  onPressed: () {
-                                    Navigator.pushNamed(
-                                        context, '/completeOrder');
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const Text(
-                                          'تأكيد الطلب',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16),
+                              child: user.isAnon
+                                  ? ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)))),
+                                      onPressed: () {
+                                        Navigator.pushNamed(
+                                            context, '/profile');
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'تسجيل الدخول',
+                                          style: GoogleFonts.tajawal(height: 2),
                                         ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                      ))
+                                  : ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)))),
+                                      onPressed: () {
+                                        Navigator.pushNamed(
+                                            context, '/completeOrder');
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            Text(
-                                              '${Methods.formatPrice(total)} د.ع',
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.bold),
+                                            const Text(
+                                              'تأكيد الطلب',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16),
                                             ),
-                                            settings == null ||
-                                                    settings.deliveryPrice == 0
-                                                ? Container()
-                                                : Text(
-                                                    ' + ${Methods.formatPrice(settings.deliveryPrice)} د.ع اجور التوصيل',
-                                                    style: const TextStyle(
-                                                        fontSize: 10),
-                                                  ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  '${Methods.formatPrice(total)} د.ع',
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                settings == null ||
+                                                        settings.deliveryPrice ==
+                                                            0
+                                                    ? Container()
+                                                    : Text(
+                                                        ' + ${Methods.formatPrice(settings.deliveryPrice)} د.ع اجور التوصيل',
+                                                        style: const TextStyle(
+                                                            fontSize: 10),
+                                                      ),
+                                              ],
+                                            ),
                                           ],
                                         ),
-                                      ],
-                                    ),
-                                  ))),
+                                      ))),
                         ),
                       );
                     },

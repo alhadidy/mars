@@ -37,6 +37,18 @@ class Items {
     Stream<QuerySnapshot> snapshot = firestore
         .collection('items')
         .where('bestSeller', isEqualTo: true)
+        .where('bestSellerCategory', isEqualTo: 'مرطبات')
+        .snapshots();
+
+    return snapshot
+        .map((event) => event.docs.map((e) => Item.fromDoc(e)).toList());
+  }
+
+  Stream<List<Item>> getBestSellerFood() {
+    Stream<QuerySnapshot> snapshot = firestore
+        .collection('items')
+        .where('bestSeller', isEqualTo: true)
+        .where('bestSellerCategory', isEqualTo: 'معجنات')
         .snapshots();
 
     return snapshot

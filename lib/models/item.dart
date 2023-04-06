@@ -9,9 +9,10 @@ class Item {
   final String imgUrl;
   final String desc;
   final bool bestSeller;
+  final String bestSellerCategory;
 
   Item(this.fid, this.name, this.category, this.sizes, this.imgUrl, this.desc,
-      this.bestSeller);
+      this.bestSeller, this.bestSellerCategory);
 
   factory Item.fromDoc(DocumentSnapshot doc) {
     Map data = doc.data() as Map;
@@ -26,6 +27,7 @@ class Item {
       data['imgUrl'] ?? '',
       data['desc'] ?? '',
       data['bestSeller'] ?? false,
+      data['bestSellerCategory'] ?? '',
     );
   }
 }

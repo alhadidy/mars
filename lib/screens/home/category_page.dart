@@ -40,7 +40,7 @@ class _CategoryPageState extends State<CategoryPage> {
           List<Item> items = snapshot.data;
           return GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, mainAxisExtent: 300),
+                crossAxisCount: 2, mainAxisExtent: 225),
             itemCount: items.length,
             itemBuilder: (BuildContext context, int index) {
               return ItemTile(item: items[index]);

@@ -93,61 +93,42 @@ class _ProfileState extends ConsumerState<Profile> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                QrImage(
-                    errorCorrectionLevel: QrErrorCorrectLevel.H,
-                    data: user.uid,
-                    version: QrVersions.auto,
-                    size: 300,
-                    gapless: false,
-                    dataModuleStyle: const QrDataModuleStyle(
-                        dataModuleShape: QrDataModuleShape.circle,
-                        color: Colors.black),
-                    eyeStyle: QrEyeStyle(
-                        eyeShape: QrEyeShape.square,
-                        color: user.role == Roles.user
-                            ? Colors.black
-                            : Theme.of(context).colorScheme.secondary)),
-                CircleAvatar(
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  radius: 50,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: user.isAnon
-                        ? const CircleAvatar(
+            CircleAvatar(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              radius: 50,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: user.isAnon
+                    ? const CircleAvatar(
+                        radius: 50,
+                        child: FaIcon(
+                          FontAwesomeIcons.userSecret,
+                          color: Colors.black,
+                          size: 45,
+                        ))
+                    : CachedNetworkImage(
+                        placeholder: (context, url) {
+                          return const CircleAvatar(
                             radius: 50,
-                            child: FaIcon(
-                              FontAwesomeIcons.userSecret,
-                              color: Colors.black,
-                              size: 45,
-                            ))
-                        : CachedNetworkImage(
-                            placeholder: (context, url) {
-                              return const CircleAvatar(
-                                radius: 50,
-                              );
-                            },
-                            errorWidget: ((context, url, error) {
-                              return const CircleAvatar(
-                                radius: 50,
-                              );
-                            }),
-                            imageUrl: user.photoUrl,
-                            imageBuilder: (context, imageProvider) => Container(
-                              width: 100.0,
-                              height: 100.0,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: imageProvider, fit: BoxFit.cover),
-                              ),
-                            ),
+                          );
+                        },
+                        errorWidget: ((context, url, error) {
+                          return const CircleAvatar(
+                            radius: 50,
+                          );
+                        }),
+                        imageUrl: user.photoUrl,
+                        imageBuilder: (context, imageProvider) => Container(
+                          width: 100.0,
+                          height: 100.0,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover),
                           ),
-                  ),
-                ),
-              ],
+                        ),
+                      ),
+              ),
             ),
             Text(user.isAnon ? "لم تقم بتسجيل الدخول" : user.name,
                 textAlign: TextAlign.center,
@@ -205,50 +186,50 @@ class _ProfileState extends ConsumerState<Profile> {
                     });
                   })
                 : Container(),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
-              child: HomeTabTitle(
-                  title: 'اجمع النقاط وطور حسابك', titleColor: Colors.black),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 8),
-                          child: RoundIconButton(
-                            onTap: () {},
-                            icon: accountRankIcon,
-                            iconSize: 18,
-                            size: 30,
-                            color: accountRankColor,
-                          )),
-                      Text(
-                        Methods.formatPrice(userData.points),
-                        style:
-                            const TextStyle(fontSize: 35, color: Colors.black),
-                      ),
-                    ],
-                  ),
-                  CircularPercentIndicator(
-                    radius: 80.0,
-                    lineWidth: 6.0,
-                    backgroundWidth: 4,
-                    animation: true,
-                    animationDuration: 1500,
-                    animateFromLastPercent: true,
-                    percent: percent,
-                    circularStrokeCap: CircularStrokeCap.round,
-                    progressColor: accountRankColor,
-                  ),
-                ],
-              ),
-            ),
+            // const Padding(
+            //   padding: EdgeInsets.symmetric(vertical: 8),
+            //   child: HomeTabTitle(
+            //       title: 'اجمع النقاط وطور حسابك', titleColor: Colors.black),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Stack(
+            //     alignment: Alignment.center,
+            //     children: [
+            //       Column(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: [
+            //           Padding(
+            //               padding: const EdgeInsets.symmetric(
+            //                   vertical: 8, horizontal: 8),
+            //               child: RoundIconButton(
+            //                 onTap: () {},
+            //                 icon: accountRankIcon,
+            //                 iconSize: 18,
+            //                 size: 30,
+            //                 color: accountRankColor,
+            //               )),
+            //           Text(
+            //             Methods.formatPrice(userData.points),
+            //             style:
+            //                 const TextStyle(fontSize: 35, color: Colors.black),
+            //           ),
+            //         ],
+            //       ),
+            //       CircularPercentIndicator(
+            //         radius: 80.0,
+            //         lineWidth: 6.0,
+            //         backgroundWidth: 4,
+            //         animation: true,
+            //         animationDuration: 1500,
+            //         animateFromLastPercent: true,
+            //         percent: percent,
+            //         circularStrokeCap: CircularStrokeCap.round,
+            //         progressColor: accountRankColor,
+            //       ),
+            //     ],
+            //   ),
+            // ),
             const Divider(
               height: 16,
               indent: 8,
@@ -279,13 +260,13 @@ class _ProfileState extends ConsumerState<Profile> {
                 },
               ),
             ),
-            user.isAnon || user.role != Roles.user
+            user.isAnon
                 ? Container()
                 : const Divider(
                     indent: 8,
                     endIndent: 8,
                   ),
-            user.isAnon || user.role != Roles.user
+            user.isAnon
                 ? Container()
                 : Directionality(
                     textDirection: TextDirection.rtl,

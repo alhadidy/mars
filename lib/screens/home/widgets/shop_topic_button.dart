@@ -46,9 +46,10 @@ class ShopTopicButton extends StatelessWidget {
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
-                            FaIcon(icon,
-                                size: 30,
-                                color: Theme.of(context).colorScheme.secondary)
+                            Image.asset(
+                              'assets/imgs/logo_trans_croped.png',
+                              height: storyAvatarRadius * 2,
+                            )
                           ],
                         )
                       : ClipRRect(
@@ -76,12 +77,9 @@ class ShopTopicButton extends StatelessWidget {
                                             .primary,
                                       ),
                                     ),
-                                    FaIcon(
-                                      icon,
-                                      size: 30,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
+                                    Image.asset(
+                                      'assets/imgs/logo_trans_croped.png',
+                                      height: storyAvatarRadius * 2,
                                     )
                                   ],
                                 );
@@ -101,12 +99,9 @@ class ShopTopicButton extends StatelessWidget {
                                             .primary,
                                       ),
                                     ),
-                                    FaIcon(
-                                      icon,
-                                      size: 30,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
+                                    Image.asset(
+                                      'assets/imgs/logo_trans_croped.png',
+                                      height: storyAvatarRadius * 2,
                                     )
                                   ],
                                 );

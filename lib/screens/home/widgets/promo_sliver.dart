@@ -14,7 +14,6 @@ class PromotionSliver extends StatefulWidget {
 
 class _PromotionSliverState extends State<PromotionSliver> {
   List<Promo>? promo;
-  ValueNotifier valueNotifier = ValueNotifier(0);
 
   @override
   void initState() {
@@ -52,41 +51,9 @@ class _PromotionSliverState extends State<PromotionSliver> {
             );
           }
 
-          return SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: Column(
-                children: [
-                  PromotionList(
-                    promos: promo!,
-                    onChanged: (index, reson) {
-                      valueNotifier.value = index;
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ValueListenableBuilder(
-                        valueListenable: valueNotifier,
-                        builder: (BuildContext context, value, child) {
-                          return DotsIndicator(
-                            reversed: true,
-                            dotsCount: promo!.length,
-                            position: value.toDouble(),
-                            decorator: DotsDecorator(
-                                size: const Size.square(5),
-                                activeSize: const Size.square(10),
-                                activeColor:
-                                    Theme.of(context).colorScheme.secondary,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondary
-                                    .withOpacity(0.6)),
-                          );
-                        }),
-                  )
-                ],
-              ),
-            ),
+          return PromotionList(
+            promos: promo!,
+           
           );
         });
   }
