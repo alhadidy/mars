@@ -79,6 +79,7 @@ flutter_icons:
   android: true
   ios: true
   image_path: "assets/imgs/logo_trans_croped.png"
+  image_path_ios: "assets/imgs/logo_dark.png"
   adaptive_icon_background: "#1F3469"
   adaptive_icon_foreground: "assets/imgs/logo_trans_croped.png"
   min_sdk_android: 21
