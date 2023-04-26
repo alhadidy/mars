@@ -24,10 +24,13 @@ class FoodSliver extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             child: Column(
               children: [
-                const HomeTabTitle(
-                  title: 'المعجنات المميزة',
-                  titleColor: Colors.black,
-                  icon: FontAwesomeIcons.cookieBite,
+                const Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: HomeTabTitle(
+                    title: 'المعجنات المميزة',
+                    titleColor: Colors.black,
+                    icon: FontAwesomeIcons.cookieBite,
+                  ),
                 ),
                 SizedBox(
                   height: 225,
@@ -39,7 +42,6 @@ class FoodSliver extends StatelessWidget {
                           ),
                         )
                       : ListView.builder(
-                          reverse: true,
                           scrollDirection: Axis.horizontal,
                           itemCount: items.length,
                           itemBuilder: (BuildContext context, int index) {

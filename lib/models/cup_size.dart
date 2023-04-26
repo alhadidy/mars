@@ -1,7 +1,7 @@
-class Size {
+class CupSize {
   final String name;
   final int price;
   final int discount;
 
-  Size(this.name, this.price, this.discount);
+  CupSize(this.name, this.price, this.discount);
 }

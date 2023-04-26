@@ -10,11 +10,12 @@ import 'package:mars/models/link.dart';
 import 'package:mars/models/user.dart';
 import 'package:mars/screens/home/gifts.dart';
 import 'package:mars/screens/home/home_header_sliver.dart';
+import 'package:mars/screens/home/orders_page.dart';
 import 'package:mars/screens/home/scan.dart';
 import 'package:mars/screens/home/stores_page.dart';
 import 'package:mars/screens/home/widgets/basket_button.dart';
 import 'package:mars/screens/home/widgets/calendar_sliver.dart';
-import 'package:mars/screens/home/widgets/categories_sliver.dart';
+
 import 'package:mars/screens/home/widgets/drinks_sliver.dart';
 import 'package:mars/screens/home/widgets/food_sliver.dart';
 import 'package:mars/screens/home/widgets/promo_sliver.dart';
@@ -73,25 +74,10 @@ class _HomeState extends ConsumerState<Home> {
             },
           ),
           const PromotionSliver(),
-          const CalendarSliver(),
-          const ShopsOrdersSliver(),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 25,
-            ),
-          )
         ],
       ),
       const Scan(),
-      const CustomScrollView(
-        slivers: [
-          CategoriesSliver(),
-          SliverToBoxAdapter(child: Divider()),
-          DrinksSliver(),
-          SliverToBoxAdapter(child: Divider()),
-          FoodSliver(),
-        ],
-      ),
+      const OrdersPage(),
       const Gifts(),
       const StoresPage(),
     ];
@@ -100,24 +86,27 @@ class _HomeState extends ConsumerState<Home> {
   }
 
   handleLinks() {
-    Link link = ref.watch(linkProvider);
-
-    if (link.page != null) {
-      if (link.page == '/invite') {
-        ref.read(linkProvider.notifier).resetLink();
+    ref.listen<Link>(linkProvider, (Link? oldLink, Link newLink) async {
+      if (newLink.page != null) {
+        if (newLink.page == '/invite') {
+          ref.read(linkProvider.notifier).resetLink();
+        } else {
+          await Navigator.pushNamed(context, newLink.page ?? '',
+              arguments: newLink.arg);
+          ref.read(linkProvider.notifier).resetLink();
+        }
       } else {
-        Navigator.pushNamed(context, link.page ?? '', arguments: link.arg);
-        ref.read(linkProvider.notifier).resetLink();
+        Methods.showSnackHome(
+            title: newLink.title, tip: newLink.tip, context: context);
       }
-    } else {
-      Methods.showSnackHome(title: link.title, tip: link.tip, context: context);
-    }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final UserModel? user = ref.watch(userProvider);
     final Role role = ref.watch(rolesProvider);
+    handleLinks();
 
     if (user == null) {
       return Container();

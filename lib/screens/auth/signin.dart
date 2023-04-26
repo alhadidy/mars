@@ -35,188 +35,168 @@ class SigninState extends ConsumerState<Signin> {
     Link link = ref.watch(linkProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: Theme.of(context).colorScheme.primary,
-            statusBarIconBrightness: Brightness.light),
-        centerTitle: true,
-        title: const Text('تسجيل الدخول'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.width,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Image.asset(
-                      'assets/imgs/login.png',
-                    ),
+      body: SafeArea(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Center(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: Image.asset(
+                          'assets/imgs/logo.jpg',
+                          height: 150,
+                        ),
+                      ),
+                      const Text(
+                        'MARS',
+                        style: TextStyle(fontSize: 40),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ),
-            link.page == "/invite"
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FaIcon(
-                          FontAwesomeIcons.solidEnvelopeOpen,
-                          color: Theme.of(context).textTheme.headline2!.color,
+              error != null
+                  ? const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: FaIcon(FontAwesomeIcons.exclamationCircle),
+                    )
+                  : Container(),
+              error != null
+                  ? Text(
+                      error ?? '',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.tajawal(height: 1.5),
+                    )
+                  : Container(),
+              SignInGoogleButton(loading, (err) {
+                if (mounted) {
+                  setState(() {
+                    error = err;
+                  });
+                }
+              }, (loadingChanged) {
+                if (mounted) {
+                  setState(() {
+                    loading = loadingChanged;
+                  });
+                }
+              }),
+              SignInAppleButton(loading, (err) {
+                if (mounted) {
+                  setState(() {
+                    error = err;
+                  });
+                }
+              }, (loadingChanged) {
+                if (mounted) {
+                  setState(() {
+                    loading = loadingChanged;
+                  });
+                }
+              }),
+              Stack(
+                children: [
+                  Image.asset(
+                    'assets/imgs/shape.png',
+                    width: MediaQuery.of(context).size.width,
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 50,
+                    left: 50,
+                    child: Column(
+                      children: [
+                        link.page == "/invite"
+                            ? Text(
+                                'عن طريق دعوة',
+                                style: GoogleFonts.tajawal(
+                                    height: 2.5, color: Colors.white),
+                              )
+                            : Container(),
+                        const SizedBox(
+                          height: 25,
                         ),
-                      ),
-                      Text(
-                        'عن طريق دعوة',
-                        style: GoogleFonts.tajawal(height: 2.5),
-                      ),
-                    ],
-                  )
-                : Container(),
-            error != null
-                ? const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: FaIcon(FontAwesomeIcons.exclamationCircle),
-                  )
-                : Container(),
-            error != null
-                ? Text(
-                    error ?? '',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.tajawal(height: 1.5),
-                  )
-                : Container(),
-            SignInGoogleButton(loading, (err) {
-              if (mounted) {
-                setState(() {
-                  error = err;
-                });
-              }
-            }, (loadingChanged) {
-              if (mounted) {
-                setState(() {
-                  loading = loadingChanged;
-                });
-              }
-            }),
-            SignInAppleButton(loading, (err) {
-              if (mounted) {
-                setState(() {
-                  error = err;
-                });
-              }
-            }, (loadingChanged) {
-              if (mounted) {
-                setState(() {
-                  loading = loadingChanged;
-                });
-              }
-            }),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  side: BorderSide(
-                      color: Theme.of(context).textTheme.bodyText1!.color!),
-                  primary: Theme.of(context).scaffoldBackgroundColor,
-                ),
-                onPressed: loading == null
-                    ? () async {
-                        setState(() {
-                          loading = 'skip';
-                        });
-                        dynamic result = await _auth.siginInAnonymous();
-
-                        if (result == null) {
-                          setState(() {
-                            error =
-                                'حدثت مشكلة أثناء تسجيل الدخول \n الرجاء المحاولة مرة أخرى';
-                            loading = null;
-                          });
-                          debugPrint('error signing in');
-                        } else {
-                          debugPrint('signed in');
-                          debugPrint(result);
-                        }
-                      }
-                    : null,
-                child: loading == 'skip'
-                    ? Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: const [
-                            SizedBox(
-                              width: 28,
-                              height: 28,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                              ),
+                        Text(
+                          'جميع الحقوق محفوظة لصالح Mars Coffee House',
+                          textDirection: TextDirection.rtl,
+                          style: GoogleFonts.tajawal(color: Colors.white),
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 18, vertical: 8),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              side: BorderSide(color: Colors.white),
                             ),
-                          ],
+                            onPressed: loading == null
+                                ? () async {
+                                    setState(() {
+                                      loading = 'skip';
+                                    });
+                                    dynamic result =
+                                        await _auth.siginInAnonymous();
+
+                                    if (result == null) {
+                                      setState(() {
+                                        error =
+                                            'حدثت مشكلة أثناء تسجيل الدخول \n الرجاء المحاولة مرة أخرى';
+                                        loading = null;
+                                      });
+                                      debugPrint('error signing in');
+                                    } else {
+                                      debugPrint('signed in');
+                                      debugPrint(result);
+                                    }
+                                  }
+                                : null,
+                            child: loading == 'skip'
+                                ? Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: const [
+                                        SizedBox(
+                                          width: 28,
+                                          height: 28,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'تخطي تسجيل الدخول',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                          ),
                         ),
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'تخطي تسجيل الدخول',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color:
-                                  Theme.of(context).textTheme.bodyText1!.color),
-                        ),
-                      ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            // GestureDetector(
-            //   onTap: () async {
-            //     String txt = await rootBundle
-            //         .loadString('assets/text/terms_and_conditions.txt');
-            //     showDialog(
-            //         context: context,
-            //         builder: (context) {
-            //           return Card(
-            //             child: SingleChildScrollView(
-            //               child: Stack(
-            //                 children: [
-            //                   IconButton(
-            //                       onPressed: () {
-            //                         Navigator.pop(context);
-            //                       },
-            //                       icon: const FaIcon(FontAwesomeIcons.xmark)),
-            //                   Padding(
-            //                     padding: const EdgeInsets.symmetric(
-            //                         horizontal: 8, vertical: 50),
-            //                     child: Text(txt),
-            //                   ),
-            //                 ],
-            //               ),
-            //             ),
-            //           );
-            //         });
-            //   },
-            //   child: const Padding(
-            //     padding: EdgeInsets.only(bottom: 30),
-            //     child: Text(
-            //       'سياسة الخصوصية وأحكام الأستخدام',
-            //       textAlign: TextAlign.center,
-            //       style: TextStyle(color: Colors.blue),
-            //     ),
-            //   ),
-            // ),
-          ],
+            ],
+          ),
         ),
       ),
     );

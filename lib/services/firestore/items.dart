@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:mars/models/addon.dart';
 import 'package:mars/models/item.dart';
-import 'package:mars/models/size.dart';
+import 'package:mars/models/cup_size.dart';
 import 'package:mars/services/methods.dart';
 import 'package:path/path.dart' as p;
 
@@ -21,7 +22,7 @@ class Items {
 
   Future<Item> getItem(String id) async {
     DocumentSnapshot snapshot =
-        await firestore.collection('item').doc(id).get();
+        await firestore.collection('items').doc(id).get();
 
     return Item.fromDoc(snapshot);
   }
@@ -63,7 +64,8 @@ class Items {
     required String name,
     required String desc,
     required String category,
-    required List<Size> sizes,
+    required List<CupSize> sizes,
+    List<Addon>? addons,
     required File? image,
     bool bestSeller = false,
   }) async {
@@ -88,6 +90,12 @@ class Items {
                     'discount': size.discount
                   })
               .toList(),
+          'addons': addons
+              ?.map((addon) => {
+                    'name': addon.name,
+                    'price': addon.price,
+                  })
+              .toList(),
           'imgUrl': url,
           'bestSeller': bestSeller
         });
@@ -104,6 +112,12 @@ class Items {
                   'discount': size.discount
                 })
             .toList(),
+        'addons': addons
+            ?.map((addon) => {
+                  'name': addon.name,
+                  'price': addon.price,
+                })
+            .toList(),
         'bestSeller': bestSeller
       });
     }
@@ -116,7 +130,8 @@ class Items {
     required String category,
     required File? image,
     bool updateImage = false,
-    required List<Size> sizes,
+    required List<CupSize> sizes,
+    List<Addon>? addons,
     required bool bestSeller,
   }) async {
     if (updateImage && image != null) {
@@ -140,6 +155,12 @@ class Items {
                     'discount': size.discount
                   })
               .toList(),
+          'addons': addons
+              ?.map((addon) => {
+                    'name': addon.name,
+                    'price': addon.price,
+                  })
+              .toList(),
           'imgUrl': url,
           'bestSeller': bestSeller
         });
@@ -154,6 +175,12 @@ class Items {
                   'name': size.name,
                   'price': size.price,
                   'discount': size.discount
+                })
+            .toList(),
+        'addons': addons
+            ?.map((addon) => {
+                  'name': addon.name,
+                  'price': addon.price,
                 })
             .toList(),
         'bestSeller': bestSeller

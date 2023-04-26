@@ -5,6 +5,7 @@ class OrderItem {
     required this.imgUrl,
     required this.price,
     required this.discount,
+    required this.addons,
     required this.quantity,
   });
 
@@ -13,5 +14,6 @@ class OrderItem {
   String imgUrl;
   int price;
   int discount;
+  List addons;
   int quantity;
 }

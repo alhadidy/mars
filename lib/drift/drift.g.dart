@@ -3,235 +3,6 @@
 part of 'drift.dart';
 
 // ignore_for_file: type=lint
-class LocalOrder extends DataClass implements Insertable<LocalOrder> {
-  final int? id;
-  final String fid;
-  final String name;
-  final String imgurl;
-  final int quantity;
-  final int price;
-  final int discount;
-  const LocalOrder(
-      {this.id,
-      required this.fid,
-      required this.name,
-      required this.imgurl,
-      required this.quantity,
-      required this.price,
-      required this.discount});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
-    map['fid'] = Variable<String>(fid);
-    map['name'] = Variable<String>(name);
-    map['imgurl'] = Variable<String>(imgurl);
-    map['quantity'] = Variable<int>(quantity);
-    map['price'] = Variable<int>(price);
-    map['discount'] = Variable<int>(discount);
-    return map;
-  }
-
-  LocalOrdersCompanion toCompanion(bool nullToAbsent) {
-    return LocalOrdersCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      fid: Value(fid),
-      name: Value(name),
-      imgurl: Value(imgurl),
-      quantity: Value(quantity),
-      price: Value(price),
-      discount: Value(discount),
-    );
-  }
-
-  factory LocalOrder.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return LocalOrder(
-      id: serializer.fromJson<int?>(json['id']),
-      fid: serializer.fromJson<String>(json['fid']),
-      name: serializer.fromJson<String>(json['name']),
-      imgurl: serializer.fromJson<String>(json['imgurl']),
-      quantity: serializer.fromJson<int>(json['quantity']),
-      price: serializer.fromJson<int>(json['price']),
-      discount: serializer.fromJson<int>(json['discount']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<int?>(id),
-      'fid': serializer.toJson<String>(fid),
-      'name': serializer.toJson<String>(name),
-      'imgurl': serializer.toJson<String>(imgurl),
-      'quantity': serializer.toJson<int>(quantity),
-      'price': serializer.toJson<int>(price),
-      'discount': serializer.toJson<int>(discount),
-    };
-  }
-
-  LocalOrder copyWith(
-          {Value<int?> id = const Value.absent(),
-          String? fid,
-          String? name,
-          String? imgurl,
-          int? quantity,
-          int? price,
-          int? discount}) =>
-      LocalOrder(
-        id: id.present ? id.value : this.id,
-        fid: fid ?? this.fid,
-        name: name ?? this.name,
-        imgurl: imgurl ?? this.imgurl,
-        quantity: quantity ?? this.quantity,
-        price: price ?? this.price,
-        discount: discount ?? this.discount,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('LocalOrder(')
-          ..write('id: $id, ')
-          ..write('fid: $fid, ')
-          ..write('name: $name, ')
-          ..write('imgurl: $imgurl, ')
-          ..write('quantity: $quantity, ')
-          ..write('price: $price, ')
-          ..write('discount: $discount')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(id, fid, name, imgurl, quantity, price, discount);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is LocalOrder &&
-          other.id == this.id &&
-          other.fid == this.fid &&
-          other.name == this.name &&
-          other.imgurl == this.imgurl &&
-          other.quantity == this.quantity &&
-          other.price == this.price &&
-          other.discount == this.discount);
-}
-
-class LocalOrdersCompanion extends UpdateCompanion<LocalOrder> {
-  final Value<int?> id;
-  final Value<String> fid;
-  final Value<String> name;
-  final Value<String> imgurl;
-  final Value<int> quantity;
-  final Value<int> price;
-  final Value<int> discount;
-  const LocalOrdersCompanion({
-    this.id = const Value.absent(),
-    this.fid = const Value.absent(),
-    this.name = const Value.absent(),
-    this.imgurl = const Value.absent(),
-    this.quantity = const Value.absent(),
-    this.price = const Value.absent(),
-    this.discount = const Value.absent(),
-  });
-  LocalOrdersCompanion.insert({
-    this.id = const Value.absent(),
-    required String fid,
-    required String name,
-    required String imgurl,
-    required int quantity,
-    required int price,
-    required int discount,
-  })  : fid = Value(fid),
-        name = Value(name),
-        imgurl = Value(imgurl),
-        quantity = Value(quantity),
-        price = Value(price),
-        discount = Value(discount);
-  static Insertable<LocalOrder> custom({
-    Expression<int>? id,
-    Expression<String>? fid,
-    Expression<String>? name,
-    Expression<String>? imgurl,
-    Expression<int>? quantity,
-    Expression<int>? price,
-    Expression<int>? discount,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (fid != null) 'fid': fid,
-      if (name != null) 'name': name,
-      if (imgurl != null) 'imgurl': imgurl,
-      if (quantity != null) 'quantity': quantity,
-      if (price != null) 'price': price,
-      if (discount != null) 'discount': discount,
-    });
-  }
-
-  LocalOrdersCompanion copyWith(
-      {Value<int?>? id,
-      Value<String>? fid,
-      Value<String>? name,
-      Value<String>? imgurl,
-      Value<int>? quantity,
-      Value<int>? price,
-      Value<int>? discount}) {
-    return LocalOrdersCompanion(
-      id: id ?? this.id,
-      fid: fid ?? this.fid,
-      name: name ?? this.name,
-      imgurl: imgurl ?? this.imgurl,
-      quantity: quantity ?? this.quantity,
-      price: price ?? this.price,
-      discount: discount ?? this.discount,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (fid.present) {
-      map['fid'] = Variable<String>(fid.value);
-    }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
-    }
-    if (imgurl.present) {
-      map['imgurl'] = Variable<String>(imgurl.value);
-    }
-    if (quantity.present) {
-      map['quantity'] = Variable<int>(quantity.value);
-    }
-    if (price.present) {
-      map['price'] = Variable<int>(price.value);
-    }
-    if (discount.present) {
-      map['discount'] = Variable<int>(discount.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('LocalOrdersCompanion(')
-          ..write('id: $id, ')
-          ..write('fid: $fid, ')
-          ..write('name: $name, ')
-          ..write('imgurl: $imgurl, ')
-          ..write('quantity: $quantity, ')
-          ..write('price: $price, ')
-          ..write('discount: $discount')
-          ..write(')'))
-        .toString();
-  }
-}
-
 class $LocalOrdersTable extends LocalOrders
     with TableInfo<$LocalOrdersTable, LocalOrder> {
   @override
@@ -262,6 +33,12 @@ class $LocalOrdersTable extends LocalOrders
   late final GeneratedColumn<String> imgurl = GeneratedColumn<String>(
       'imgurl', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _detailsMeta =
+      const VerificationMeta('details');
+  @override
+  late final GeneratedColumn<String> details = GeneratedColumn<String>(
+      'details', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _quantityMeta =
       const VerificationMeta('quantity');
   @override
@@ -281,7 +58,7 @@ class $LocalOrdersTable extends LocalOrders
       type: DriftSqlType.int, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, fid, name, imgurl, quantity, price, discount];
+      [id, fid, name, imgurl, details, quantity, price, discount];
   @override
   String get aliasedName => _alias ?? 'local_orders';
   @override
@@ -311,6 +88,10 @@ class $LocalOrdersTable extends LocalOrders
           imgurl.isAcceptableOrUnknown(data['imgurl']!, _imgurlMeta));
     } else if (isInserting) {
       context.missing(_imgurlMeta);
+    }
+    if (data.containsKey('details')) {
+      context.handle(_detailsMeta,
+          details.isAcceptableOrUnknown(data['details']!, _detailsMeta));
     }
     if (data.containsKey('quantity')) {
       context.handle(_quantityMeta,
@@ -347,6 +128,8 @@ class $LocalOrdersTable extends LocalOrders
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       imgurl: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}imgurl'])!,
+      details: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}details']),
       quantity: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}quantity'])!,
       price: attachedDatabase.typeMapping
@@ -359,6 +142,260 @@ class $LocalOrdersTable extends LocalOrders
   @override
   $LocalOrdersTable createAlias(String alias) {
     return $LocalOrdersTable(attachedDatabase, alias);
+  }
+}
+
+class LocalOrder extends DataClass implements Insertable<LocalOrder> {
+  final int? id;
+  final String fid;
+  final String name;
+  final String imgurl;
+  final String? details;
+  final int quantity;
+  final int price;
+  final int discount;
+  const LocalOrder(
+      {this.id,
+      required this.fid,
+      required this.name,
+      required this.imgurl,
+      this.details,
+      required this.quantity,
+      required this.price,
+      required this.discount});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    map['fid'] = Variable<String>(fid);
+    map['name'] = Variable<String>(name);
+    map['imgurl'] = Variable<String>(imgurl);
+    if (!nullToAbsent || details != null) {
+      map['details'] = Variable<String>(details);
+    }
+    map['quantity'] = Variable<int>(quantity);
+    map['price'] = Variable<int>(price);
+    map['discount'] = Variable<int>(discount);
+    return map;
+  }
+
+  LocalOrdersCompanion toCompanion(bool nullToAbsent) {
+    return LocalOrdersCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      fid: Value(fid),
+      name: Value(name),
+      imgurl: Value(imgurl),
+      details: details == null && nullToAbsent
+          ? const Value.absent()
+          : Value(details),
+      quantity: Value(quantity),
+      price: Value(price),
+      discount: Value(discount),
+    );
+  }
+
+  factory LocalOrder.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return LocalOrder(
+      id: serializer.fromJson<int?>(json['id']),
+      fid: serializer.fromJson<String>(json['fid']),
+      name: serializer.fromJson<String>(json['name']),
+      imgurl: serializer.fromJson<String>(json['imgurl']),
+      details: serializer.fromJson<String?>(json['details']),
+      quantity: serializer.fromJson<int>(json['quantity']),
+      price: serializer.fromJson<int>(json['price']),
+      discount: serializer.fromJson<int>(json['discount']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int?>(id),
+      'fid': serializer.toJson<String>(fid),
+      'name': serializer.toJson<String>(name),
+      'imgurl': serializer.toJson<String>(imgurl),
+      'details': serializer.toJson<String?>(details),
+      'quantity': serializer.toJson<int>(quantity),
+      'price': serializer.toJson<int>(price),
+      'discount': serializer.toJson<int>(discount),
+    };
+  }
+
+  LocalOrder copyWith(
+          {Value<int?> id = const Value.absent(),
+          String? fid,
+          String? name,
+          String? imgurl,
+          Value<String?> details = const Value.absent(),
+          int? quantity,
+          int? price,
+          int? discount}) =>
+      LocalOrder(
+        id: id.present ? id.value : this.id,
+        fid: fid ?? this.fid,
+        name: name ?? this.name,
+        imgurl: imgurl ?? this.imgurl,
+        details: details.present ? details.value : this.details,
+        quantity: quantity ?? this.quantity,
+        price: price ?? this.price,
+        discount: discount ?? this.discount,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('LocalOrder(')
+          ..write('id: $id, ')
+          ..write('fid: $fid, ')
+          ..write('name: $name, ')
+          ..write('imgurl: $imgurl, ')
+          ..write('details: $details, ')
+          ..write('quantity: $quantity, ')
+          ..write('price: $price, ')
+          ..write('discount: $discount')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, fid, name, imgurl, details, quantity, price, discount);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is LocalOrder &&
+          other.id == this.id &&
+          other.fid == this.fid &&
+          other.name == this.name &&
+          other.imgurl == this.imgurl &&
+          other.details == this.details &&
+          other.quantity == this.quantity &&
+          other.price == this.price &&
+          other.discount == this.discount);
+}
+
+class LocalOrdersCompanion extends UpdateCompanion<LocalOrder> {
+  final Value<int?> id;
+  final Value<String> fid;
+  final Value<String> name;
+  final Value<String> imgurl;
+  final Value<String?> details;
+  final Value<int> quantity;
+  final Value<int> price;
+  final Value<int> discount;
+  const LocalOrdersCompanion({
+    this.id = const Value.absent(),
+    this.fid = const Value.absent(),
+    this.name = const Value.absent(),
+    this.imgurl = const Value.absent(),
+    this.details = const Value.absent(),
+    this.quantity = const Value.absent(),
+    this.price = const Value.absent(),
+    this.discount = const Value.absent(),
+  });
+  LocalOrdersCompanion.insert({
+    this.id = const Value.absent(),
+    required String fid,
+    required String name,
+    required String imgurl,
+    this.details = const Value.absent(),
+    required int quantity,
+    required int price,
+    required int discount,
+  })  : fid = Value(fid),
+        name = Value(name),
+        imgurl = Value(imgurl),
+        quantity = Value(quantity),
+        price = Value(price),
+        discount = Value(discount);
+  static Insertable<LocalOrder> custom({
+    Expression<int>? id,
+    Expression<String>? fid,
+    Expression<String>? name,
+    Expression<String>? imgurl,
+    Expression<String>? details,
+    Expression<int>? quantity,
+    Expression<int>? price,
+    Expression<int>? discount,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (fid != null) 'fid': fid,
+      if (name != null) 'name': name,
+      if (imgurl != null) 'imgurl': imgurl,
+      if (details != null) 'details': details,
+      if (quantity != null) 'quantity': quantity,
+      if (price != null) 'price': price,
+      if (discount != null) 'discount': discount,
+    });
+  }
+
+  LocalOrdersCompanion copyWith(
+      {Value<int?>? id,
+      Value<String>? fid,
+      Value<String>? name,
+      Value<String>? imgurl,
+      Value<String?>? details,
+      Value<int>? quantity,
+      Value<int>? price,
+      Value<int>? discount}) {
+    return LocalOrdersCompanion(
+      id: id ?? this.id,
+      fid: fid ?? this.fid,
+      name: name ?? this.name,
+      imgurl: imgurl ?? this.imgurl,
+      details: details ?? this.details,
+      quantity: quantity ?? this.quantity,
+      price: price ?? this.price,
+      discount: discount ?? this.discount,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (fid.present) {
+      map['fid'] = Variable<String>(fid.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (imgurl.present) {
+      map['imgurl'] = Variable<String>(imgurl.value);
+    }
+    if (details.present) {
+      map['details'] = Variable<String>(details.value);
+    }
+    if (quantity.present) {
+      map['quantity'] = Variable<int>(quantity.value);
+    }
+    if (price.present) {
+      map['price'] = Variable<int>(price.value);
+    }
+    if (discount.present) {
+      map['discount'] = Variable<int>(discount.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LocalOrdersCompanion(')
+          ..write('id: $id, ')
+          ..write('fid: $fid, ')
+          ..write('name: $name, ')
+          ..write('imgurl: $imgurl, ')
+          ..write('details: $details, ')
+          ..write('quantity: $quantity, ')
+          ..write('price: $price, ')
+          ..write('discount: $discount')
+          ..write(')'))
+        .toString();
   }
 }
 

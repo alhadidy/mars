@@ -2,6 +2,7 @@ import 'package:badges/badges.dart' as badge;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mars/screens/admin/widgets.dart/orders_type_tags.dart';
 import 'package:mars/screens/home/widgets/round_icon_button.dart';
@@ -91,6 +92,12 @@ class _AdminOrdersState extends State<AdminOrders> {
                     itemCount: orders.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Card(
+                        elevation: 8,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                                bottomRight: Radius.circular(20),
+                                topLeft: Radius.circular(10))),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -137,6 +144,79 @@ class _AdminOrdersState extends State<AdminOrders> {
                             Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Text('الاسم: ${orders[index].userName}'),
+                            ),
+                            const Divider(),
+                            SizedBox(
+                              width: double.maxFinite,
+                              child: Column(
+                                children: orders[index].items.map((item) {
+                                  return Column(
+                                    children: [
+                                      ListTile(
+                                        title: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              item.name,
+                                              style: GoogleFonts.tajawal(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              '${Methods.formatPrice(item.price)} د.ع',
+                                              style: GoogleFonts.tajawal(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                        leading: ClipOval(
+                                          child: CachedNetworkImage(
+                                            imageUrl: item.imgUrl,
+                                            errorWidget: (context, url, error) {
+                                              return Image.asset(
+                                                  'assets/imgs/logo_dark.png');
+                                            },
+                                          ),
+                                        ),
+                                        subtitle: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.grey[200],
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(20))),
+                                          margin:
+                                              const EdgeInsets.only(top: 16),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              item.addons.isEmpty
+                                                  ? Container()
+                                                  : const Padding(
+                                                      padding: EdgeInsets.only(
+                                                          top: 16, right: 16),
+                                                      child: Text('الإضافات:'),
+                                                    ),
+                                              Column(
+                                                children:
+                                                    item.addons.map((addon) {
+                                                  return ListTile(
+                                                    dense: true,
+                                                    title: Text(addon['name']),
+                                                    trailing: Text(
+                                                        '${Methods.formatPrice(addon['price'])} د.ع'),
+                                                  );
+                                                }).toList(),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const Divider()
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -381,61 +461,6 @@ class _AdminOrdersState extends State<AdminOrders> {
                                       ),
                                     ),
                                   ),
-                            const Divider(),
-                            SizedBox(
-                              height: 120,
-                              width: double.maxFinite,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: orders[index].items.length,
-                                itemBuilder: (BuildContext context, int i) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        badge.Badge(
-                                          badgeColor: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                          badgeContent: Text(
-                                            orders[index]
-                                                .items[i]
-                                                .quantity
-                                                .toString(),
-                                            style: const TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(20)),
-                                            child: CachedNetworkImage(
-                                                height: 50,
-                                                width: 50,
-                                                fit: BoxFit.cover,
-                                                imageUrl: orders[index]
-                                                    .items[i]
-                                                    .imgUrl),
-                                          ),
-                                        ),
-                                        Text(orders[index].items[i].name),
-                                        Text(
-                                          Methods.formatPrice(
-                                              Methods.roundPriceWithDiscountIQD(
-                                                  price: orders[index]
-                                                      .items[i]
-                                                      .price,
-                                                  discount: orders[index]
-                                                      .items[i]
-                                                      .discount)),
-                                          textDirection: TextDirection.ltr,
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
                           ],
                         ),
                       );

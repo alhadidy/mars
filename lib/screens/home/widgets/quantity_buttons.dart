@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,49 +15,51 @@ class QuantityButtons extends ConsumerWidget {
       width: double.infinity,
       height: 50,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           InkWell(
             onTap: () async {
               AppDatabase db = ref.read(dbProvider);
-              await db.localOrdersDao.increaseQuantity(oldOrder);
+              db.localOrdersDao
+                  .insertInTheOrder(oldOrder.copyWith(id: const Value(null)));
             },
             borderRadius: const BorderRadius.all(Radius.circular(20)),
             child: Container(
-              width: 50,
-              height: 50,
+              width: 25,
+              height: 25,
               decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: const BorderRadius.all(Radius.circular(20))),
-              child: const Center(
+                  border:
+                      Border.all(color: Theme.of(context).colorScheme.primary),
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+              child: Center(
                 child: FaIcon(
                   FontAwesomeIcons.plus,
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 12,
                 ),
               ),
             ),
           ),
-          Text(
-            oldOrder.quantity.toString(),
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          const SizedBox(
+            width: 16,
           ),
           InkWell(
             onTap: () async {
               AppDatabase db = ref.read(dbProvider);
-              await db.localOrdersDao.decreaseQuantity(oldOrder);
+              await db.localOrdersDao.deleteFromTheOrder(oldOrder);
             },
-            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
             child: Container(
-              width: 50,
-              height: 50,
+              width: 25,
+              height: 25,
               decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
+                  border: Border.all(color: Colors.red),
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
               child: const Center(
                 child: FaIcon(
-                  FontAwesomeIcons.minus,
-                  color: Colors.white,
+                  FontAwesomeIcons.xmark,
+                  color: Colors.red,
+                  size: 12,
                 ),
               ),
             ),

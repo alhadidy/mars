@@ -6,7 +6,8 @@ import 'package:mars/drift/drift.dart';
 import 'package:mars/services/providers.dart';
 
 class BasketButton extends ConsumerWidget {
-  const BasketButton({Key? key}) : super(key: key);
+  final bool dark;
+  const BasketButton({Key? key, this.dark = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,7 +29,7 @@ class BasketButton extends ConsumerWidget {
               ignorePointer: true,
               badgeContent: Text(
                 count.toString(),
-                style: const TextStyle(color: Colors.white),
+                style: TextStyle(color: dark ? Colors.black : Colors.white),
               ),
               showBadge: count != 0 ? true : false,
               badgeColor: Theme.of(context).colorScheme.secondary,
@@ -40,7 +41,7 @@ class BasketButton extends ConsumerWidget {
                   Navigator.pushNamed(context, '/basket');
                 },
                 icon: const FaIcon(FontAwesomeIcons.bagShopping),
-                color: Colors.white,
+                color: dark ? Colors.black : Colors.white,
               ),
             ),
           ),

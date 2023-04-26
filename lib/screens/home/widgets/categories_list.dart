@@ -31,39 +31,18 @@ class CategoriesList extends StatelessWidget {
 
         List<Category> categories = snapshot.data;
 
-        return SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: 200,
-          child: Column(
-            children: [
-              Directionality(
-                textDirection: TextDirection.ltr,
-                child: HomeTabTitle(
-                  title: 'الأقسام',
-                  titleColor: Theme.of(context).textTheme.titleLarge!.color!,
-                  icon: FontAwesomeIcons.barsStaggered,
-                ),
-              ),
-              SizedBox(
-                height: 140,
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1, mainAxisExtent: 100),
-                  itemCount: categories.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ShopTopicButton(
-                      title: categories[index].name,
-                      img: categories[index].imgUrl,
-                      icon: FontAwesomeIcons.mugHot,
-                      route: '/categoryPage',
-                      arg: {'category': categories[index].name},
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
+        return ListView.builder(
+          itemCount: categories.length,
+          scrollDirection: Axis.vertical,
+          itemBuilder: (BuildContext context, int index) {
+            return ShopTopicButton(
+              title: categories[index].name,
+              img: categories[index].imgUrl,
+              icon: FontAwesomeIcons.mugHot,
+              route: '/categoryPage',
+              arg: {'category': categories[index].name},
+            );
+          },
         );
       },
     );

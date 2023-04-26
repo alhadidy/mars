@@ -329,6 +329,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  dotted_line:
+    dependency: "direct main"
+    description:
+      name: dotted_line
+      sha256: "453e6d0ec4fe923ae00469dbc2973b9e9b11ef1c71abcded003d05af0a219d23"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   drift:
     dependency: "direct main"
     description:
@@ -1061,14 +1069,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
-  otp_text_field:
-    dependency: "direct main"
-    description:
-      name: otp_text_field
-      sha256: "340b1ed135e1abe9fac0aaebe1c4e48147d95a3e29ecb03ae45ad63a7c28d65d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.3"
   package_config:
     dependency: transitive
     description:
@@ -1165,6 +1165,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.0"
+  pin_code_fields:
+    dependency: "direct main"
+    description:
+      name: pin_code_fields
+      sha256: c8652519d14688f3fe2a8288d86910a46aa0b9046d728f292d3bf6067c31b4c7
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.4.0"
   platform:
     dependency: transitive
     description:
@@ -1273,18 +1281,18 @@ packages:
     dependency: "direct main"
     description:
       name: share_plus
-      sha256: "8c6892037b1824e2d7e8f59d54b3105932899008642e6372e5079c6939b4b625"
+      sha256: "692261968a494e47323dcc8bc66d8d52e81bc27cb4b808e4e8d7e8079d4cc01a"
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.1"
+    version: "6.3.2"
   share_plus_platform_interface:
     dependency: transitive
     description:
       name: share_plus_platform_interface
-      sha256: "82ddd4ab9260c295e6e39612d4ff00390b9a7a21f1bb1da771e2f232d80ab8a1"
+      sha256: "0c6e61471bd71b04a138b8b588fa388e66d8b005e6f2deda63371c5c505a0981"
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.0"
+    version: "3.2.1"
   shelf:
     dependency: transitive
     description:

@@ -45,6 +45,7 @@ class Orders {
                 'name': e.name,
                 'imgUrl': e.imgUrl,
                 'price': e.price,
+                'addons': e.addons,
                 'quantity': e.quantity,
                 'discount': e.discount,
               })

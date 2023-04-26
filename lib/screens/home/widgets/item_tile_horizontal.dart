@@ -19,14 +19,17 @@ class ItemTileHorizontal extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                width: 150,
-                height: 150,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 0),
-                  child: ClipOval(
-                    child: CachedNetworkImage(
-                        fit: BoxFit.cover, imageUrl: item.imgUrl),
+              Hero(
+                tag: item.fid,
+                child: SizedBox(
+                  width: 150,
+                  height: 150,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 0),
+                    child: ClipOval(
+                      child: CachedNetworkImage(
+                          fit: BoxFit.cover, imageUrl: item.imgUrl),
+                    ),
                   ),
                 ),
               ),

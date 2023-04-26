@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mars/models/item.dart';
 
 class ItemTile extends StatelessWidget {
@@ -20,12 +21,15 @@ class ItemTile extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(0.0),
-              child: ClipOval(
-                child: CachedNetworkImage(
-                    width: 150,
-                    height: 150,
-                    fit: BoxFit.cover,
-                    imageUrl: item.imgUrl),
+              child: Hero(
+                tag: item.fid,
+                child: ClipOval(
+                  child: CachedNetworkImage(
+                      width: 150,
+                      height: 150,
+                      fit: BoxFit.cover,
+                      imageUrl: item.imgUrl),
+                ),
               ),
             ),
             SizedBox(
@@ -37,7 +41,8 @@ class ItemTile extends StatelessWidget {
                   item.name,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
+                      fontFamily: GoogleFonts.tajawal().fontFamily,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                       color: Colors.black),
@@ -50,7 +55,8 @@ class ItemTile extends StatelessWidget {
                 textDirection: TextDirection.rtl,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
+                    fontFamily: GoogleFonts.tajawal().fontFamily,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                     color: Colors.black87),

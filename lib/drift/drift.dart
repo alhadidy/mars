@@ -1,6 +1,9 @@
+import 'dart:isolate';
+
 import 'package:drift/drift.dart';
 import 'dart:io';
 import 'package:drift/native.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mars/services/methods.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -13,6 +16,7 @@ class LocalOrders extends Table {
   TextColumn get fid => text()();
   TextColumn get name => text()();
   TextColumn get imgurl => text()();
+  TextColumn get details => text().nullable()();
   IntColumn get quantity => integer()();
   IntColumn get price => integer()();
   IntColumn get discount => integer()();
@@ -27,13 +31,23 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
+        Isolate.spawn((message) {}, 'message');
+      },
+      onUpgrade: (Migrator m, int from, int to) async {
+        if (from < 2) {
+          m.addColumn(
+            localOrders,
+            GeneratedColumn('details', 'localOrders', true,
+                type: DriftSqlType.string),
+          );
+        }
       },
     );
   }
@@ -122,12 +136,13 @@ class LocalOrdersDao extends DatabaseAccessor<AppDatabase>
         .watchSingle();
   }
 
-  Future<LocalOrder> searchInOrderFuture(String name) {
+  Future<LocalOrder?> searchInOrderFuture(String name) {
     return (select(localOrders)
           ..where((tbl) {
             return tbl.name.equals(name);
-          }))
-        .getSingle();
+          })
+          ..limit(1))
+        .getSingleOrNull();
   }
 
   Future<List<LocalOrder>> getTheOrder() {
@@ -140,32 +155,32 @@ class LocalOrdersDao extends DatabaseAccessor<AppDatabase>
 
   Future insertInTheOrder(LocalOrder order) => into(localOrders).insert(order);
 
-  Future increaseQuantity(LocalOrder oldOrder) {
-    LocalOrder order = LocalOrder(
-        id: oldOrder.id,
-        fid: oldOrder.fid,
-        name: oldOrder.name,
-        imgurl: oldOrder.imgurl,
-        price: oldOrder.price,
-        discount: oldOrder.discount,
-        quantity: oldOrder.quantity + 1);
-    return update(localOrders).replace(order);
-  }
+  // Future increaseQuantity(LocalOrder oldOrder) {
+  //   LocalOrder order = LocalOrder(
+  //       id: oldOrder.id,
+  //       fid: oldOrder.fid,
+  //       name: oldOrder.name,
+  //       imgurl: oldOrder.imgurl,
+  //       price: oldOrder.price,
+  //       discount: oldOrder.discount,
+  //       quantity: oldOrder.quantity + 1);
+  //   return update(localOrders).replace(order);
+  // }
 
-  Future decreaseQuantity(LocalOrder oldOrder) {
-    if (oldOrder.quantity == 1) {
-      return delete(localOrders).delete(oldOrder);
-    }
-    LocalOrder order = LocalOrder(
-        id: oldOrder.id,
-        fid: oldOrder.fid,
-        name: oldOrder.name,
-        imgurl: oldOrder.imgurl,
-        price: oldOrder.price,
-        discount: oldOrder.discount,
-        quantity: oldOrder.quantity - 1);
-    return update(localOrders).replace(order);
-  }
+  // Future decreaseQuantity(LocalOrder oldOrder) {
+  //   if (oldOrder.quantity == 1) {
+  //     return delete(localOrders).delete(oldOrder);
+  //   }
+  //   LocalOrder order = LocalOrder(
+  //       id: oldOrder.id,
+  //       fid: oldOrder.fid,
+  //       name: oldOrder.name,
+  //       imgurl: oldOrder.imgurl,
+  //       price: oldOrder.price,
+  //       discount: oldOrder.discount,
+  //       quantity: oldOrder.quantity - 1);
+  //   return update(localOrders).replace(order);
+  // }
 
   Future deleteFromTheOrder(LocalOrder order) {
     return (delete(localOrders)..where((tbl) => tbl.id.equals(order.id!))).go();

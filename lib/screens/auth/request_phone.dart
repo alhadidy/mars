@@ -4,13 +4,14 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mars/models/user.dart';
 import 'package:mars/services/providers.dart';
-import 'package:otp_text_field/otp_text_field.dart';
-import 'package:otp_text_field/style.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 class RequestPhone extends ConsumerStatefulWidget {
   const RequestPhone({Key? key}) : super(key: key);
@@ -22,8 +23,8 @@ class RequestPhone extends ConsumerStatefulWidget {
 class _RequestPhoneState extends ConsumerState<RequestPhone> {
   PhoneNumber? phone;
   bool phoneValidated = false;
-  OtpFieldController otpFieldController = OtpFieldController();
-  TextEditingController phoneController = TextEditingController();
+  late TextEditingController otpFieldController;
+  late TextEditingController phoneController;
   bool waitingTheCode = false;
   final int countDownDuration = 60;
   late int countDown;
@@ -35,12 +36,15 @@ class _RequestPhoneState extends ConsumerState<RequestPhone> {
   @override
   void dispose() {
     phoneController.dispose();
+    otpFieldController.dispose();
 
     super.dispose();
   }
 
   @override
   void initState() {
+    otpFieldController = TextEditingController();
+    phoneController = TextEditingController();
     countDown = countDownDuration;
     super.initState();
   }
@@ -54,67 +58,73 @@ class _RequestPhoneState extends ConsumerState<RequestPhone> {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
-            color: Theme.of(context).colorScheme.secondary,
-            child: waitingTheCode
-                ? Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 0.0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
-                              borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(35),
-                                  bottomRight: Radius.circular(35))),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 50, bottom: 30),
-                            child: Image.asset(
-                              'assets/imgs/logo_trans.png',
-                              width: MediaQuery.of(context).size.height / 5,
-                              height: MediaQuery.of(context).size.height / 5,
-                            ),
-                          ),
+          Positioned(
+            bottom: -100,
+            left: -100,
+            child: Opacity(
+                opacity: 0.6,
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  height: 400,
+                  width: 400,
+                  child: Image.asset(
+                    'assets/imgs/logo_trans_croped.png',
+                  ),
+                )),
+          ),
+          waitingTheCode
+              ? Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 0.0),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 30),
+                        child: Image.asset(
+                          'assets/imgs/logo.jpg',
+                          width: MediaQuery.of(context).size.height / 5,
+                          height: MediaQuery.of(context).size.height / 5,
                         ),
                       ),
-                      Expanded(
-                          child: Container(
-                        decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(35),
-                                topRight: Radius.circular(35))),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text(
-                                errorMsg ?? '',
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.tajawal(
-                                    fontSize: 18, color: Colors.red),
-                              ),
+                    ),
+                    Expanded(
+                        child: Container(
+                      decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(35),
+                              topRight: Radius.circular(35))),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              errorMsg ?? '',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.tajawal(
+                                  fontSize: 18, color: Colors.red),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text(
-                                'قم بإدخال رمز التحقق',
-                                style: GoogleFonts.tajawal(fontSize: 24),
-                              ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              'قم بإدخال رمز التحقق',
+                              style: GoogleFonts.tajawal(fontSize: 24),
                             ),
-                            OTPTextField(
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: PinCodeTextField(
+                              appContext: context,
+                              onChanged: (value) {},
                               controller: otpFieldController,
+                              autoDisposeControllers: false,
                               length: 6,
-                              width: MediaQuery.of(context).size.width,
-                              fieldWidth: 50,
-                              style: const TextStyle(fontSize: 17),
-                              textFieldAlignment: MainAxisAlignment.spaceAround,
-                              fieldStyle: FieldStyle.box,
-                              otpFieldStyle: OtpFieldStyle(
-                                  focusBorderColor:
-                                      Theme.of(context).colorScheme.secondary),
+                              keyboardType: TextInputType.number,
+                              autoFocus: true,
                               onCompleted: (pin) async {
                                 if (_verificationId == null) {
                                   return;
@@ -152,237 +162,175 @@ class _RequestPhoneState extends ConsumerState<RequestPhone> {
                                 }
                               },
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                children: [
-                                  Text(countDown.toString()),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      if (countDown != 0) {
-                                        return;
-                                      }
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              children: [
+                                Text(countDown.toString()),
+                                GestureDetector(
+                                  onTap: () async {
+                                    if (countDown != 0) {
+                                      return;
+                                    }
 
-                                      otpFieldController.clear();
+                                    otpFieldController.clear();
 
-                                      await verifyPhoneNumber();
+                                    await verifyPhoneNumber();
 
+                                    setState(() {
+                                      errorMsg = null;
+                                      countDown = countDownDuration;
+                                    });
+                                    timer = Timer.periodic(
+                                        const Duration(seconds: 1), (timer) {
                                       setState(() {
-                                        errorMsg = null;
-                                        countDown = countDownDuration;
+                                        countDown--;
                                       });
-                                      timer = Timer.periodic(
-                                          const Duration(seconds: 1), (timer) {
-                                        setState(() {
-                                          countDown--;
-                                        });
-                                        if (countDown == 0) {
-                                          timer.cancel();
-                                        }
-                                      });
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8),
-                                      child: Text(
-                                        'اعادة الارسال',
-                                        style: TextStyle(
-                                          color: countDown == 0
-                                              ? Colors.blue
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                          decoration: countDown == 0
-                                              ? TextDecoration.underline
-                                              : null,
-                                        ),
+                                      if (countDown == 0) {
+                                        timer.cancel();
+                                      }
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: Text(
+                                      'اعادة الارسال',
+                                      style: TextStyle(
+                                        color: countDown == 0
+                                            ? Colors.blue
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                        decoration: countDown == 0
+                                            ? TextDecoration.underline
+                                            : null,
                                       ),
                                     ),
                                   ),
-                                ],
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    )),
+                    Container(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                if (countDown != 0) {
+                                  return;
+                                }
+                                timer?.cancel();
+                                phoneController.clear();
+                                otpFieldController.clear();
+                                setState(() {
+                                  phone = null;
+                                  waitingTheCode = false;
+                                  errorMsg = null;
+                                });
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child: Text(
+                                  'تغيير رقم الهاتف',
+                                  style: TextStyle(
+                                    color: countDown == 0
+                                        ? Colors.blue
+                                        : Theme.of(context).colorScheme.primary,
+                                    decoration: countDown == 0
+                                        ? TextDecoration.underline
+                                        : null,
+                                  ),
+                                ),
                               ),
-                            )
+                            ),
+                            Text(phone?.phoneNumber ?? ''),
                           ],
                         ),
-                      )),
-                      Container(
-                        color: Colors.white,
-                        child: Padding(
+                      ),
+                    )
+                  ],
+                )
+              : Column(
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  if (countDown != 0) {
-                                    return;
-                                  }
-                                  timer?.cancel();
-                                  phoneController.clear();
-
-                                  otpFieldController.clear();
-                                  phone = null;
-                                  setState(() {
-                                    waitingTheCode = false;
-                                    errorMsg = null;
-                                  });
-                                },
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 8),
-                                  child: Text(
-                                    'تغيير رقم الهاتف',
-                                    style: TextStyle(
-                                      color: countDown == 0
-                                          ? Colors.blue
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                      decoration: countDown == 0
-                                          ? TextDecoration.underline
-                                          : null,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Text(phone?.phoneNumber ?? ''),
-                            ],
+                          child: Text(
+                            errorMsg ?? '',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.tajawal(
+                                fontSize: 18, color: Colors.red),
                           ),
                         ),
-                      )
-                    ],
-                  )
-                : Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 0.0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
-                              borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(35),
-                                  bottomRight: Radius.circular(35))),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 50, bottom: 30),
-                            child: Image.asset(
-                              'assets/imgs/logo_trans.png',
-                              width: MediaQuery.of(context).size.height / 5,
-                              height: MediaQuery.of(context).size.height / 5,
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            'قم بإدخال رقم الهاتف',
+                            style: GoogleFonts.tajawal(fontSize: 24),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            'سوف نقوم بإرسال رمز التحقق الى هذا الرقم من أجل إتمام عملية إضافة رقم الهاتف',
+                            textDirection: TextDirection.rtl,
+                            style: GoogleFonts.tajawal(),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: InternationalPhoneNumberInput(
+                            keyboardType: TextInputType.number,
+                            textFieldController: phoneController,
+                            onInputChanged: (value) {
+                              setState(() {
+                                phone = value;
+                              });
+                            },
+                            onInputValidated: (value) {
+                              setState(() {
+                                phoneValidated = value;
+                              });
+                            },
+                            countries: const ['IQ'],
+                            locale: 'ar',
+                            autoValidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            errorMessage: 'رقم الهاتف غير صالح',
+                            autoFocus: true,
+                            textStyle:
+                                const TextStyle(fontSize: 20, letterSpacing: 4),
+                            textAlign: TextAlign.center,
+                            inputDecoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.grey[100],
+                              border: UnderlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0)),
                             ),
+                            selectorConfig: const SelectorConfig(
+                                useEmoji: true,
+                                leadingPadding: 16,
+                                setSelectorButtonAsPrefixIcon: true,
+                                selectorType:
+                                    PhoneInputSelectorType.BOTTOM_SHEET),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(35),
-                                  topRight: Radius.circular(35))),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Text(
-                                  errorMsg ?? '',
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.tajawal(
-                                      fontSize: 18, color: Colors.red),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Text(
-                                  'قم بإدخال رقم الهاتف',
-                                  style: GoogleFonts.tajawal(fontSize: 24),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InternationalPhoneNumberInput(
-                                  keyboardType: TextInputType.number,
-                                  textFieldController: phoneController,
-                                  onInputChanged: (value) {
-                                    setState(() {
-                                      phone = value;
-                                    });
-                                  },
-                                  onInputValidated: (value) {
-                                    setState(() {
-                                      phoneValidated = value;
-                                    });
-                                  },
-                                  countries: const ['IQ'],
-                                  locale: 'ar',
-                                  autoValidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  errorMessage: 'رقم الهاتف غير صالح',
-                                  autoFocus: true,
-                                  textStyle: const TextStyle(
-                                      fontSize: 20, letterSpacing: 4),
-                                  textAlign: TextAlign.center,
-                                  inputDecoration: InputDecoration(
-                                    filled: true,
-                                    border: UnderlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0)),
-                                  ),
-                                  selectorConfig: const SelectorConfig(
-                                      useEmoji: true,
-                                      leadingPadding: 16,
-                                      setSelectorButtonAsPrefixIcon: true,
-                                      selectorType:
-                                          PhoneInputSelectorType.BOTTOM_SHEET),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        color: Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: ElevatedButton(
-                              onPressed: !phoneValidated
-                                  ? null
-                                  : () async {
-                                      setState(() {
-                                        waitingTheCode = true;
-                                        countDown = countDownDuration;
-                                      });
-
-                                      timer = Timer.periodic(
-                                          const Duration(seconds: 1), (timer) {
-                                        setState(() {
-                                          countDown--;
-                                        });
-                                        if (countDown == 0) {
-                                          timer.cancel();
-                                        }
-                                      });
-
-                                      await Future.delayed(
-                                          const Duration(seconds: 1));
-                                      otpFieldController.setFocus(0);
-
-                                      await verifyPhoneNumber();
-                                    },
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Text(
-                                  'التحقق من الرقم',
-                                  style: GoogleFonts.tajawal(),
-                                ),
-                              )),
-                        ),
-                      )
-                    ],
-                  ),
-          ),
+                      ],
+                    ),
+                  ],
+                ),
           Positioned(
             top: 50,
             left: 16,
@@ -412,7 +360,53 @@ class _RequestPhoneState extends ConsumerState<RequestPhone> {
                 )),
               ),
             ),
-          )
+          ),
+          !waitingTheCode
+              ? Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: CircleAvatar(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      child: IconButton(
+                        icon: const FaIcon(
+                          FontAwesomeIcons.chevronRight,
+                          color: Colors.white,
+                        ),
+                        onPressed: !phoneValidated
+                            ? null
+                            : () async {
+                                if (phoneController.text.isEmpty) {
+                                  return;
+                                }
+                                setState(() {
+                                  waitingTheCode = true;
+                                  countDown = countDownDuration;
+                                });
+
+                                timer = Timer.periodic(
+                                    const Duration(seconds: 1), (timer) {
+                                  setState(() {
+                                    countDown--;
+                                  });
+                                  if (countDown == 0) {
+                                    timer.cancel();
+                                  }
+                                });
+
+                                await verifyPhoneNumber();
+                              },
+                        style: ElevatedButton.styleFrom(
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)))),
+                        tooltip: 'التحقق من الرقم',
+                      ),
+                    ),
+                  ),
+                )
+              : Container()
         ],
       ),
     );

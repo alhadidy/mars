@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,16 +7,10 @@ import 'package:mars/models/user.dart';
 import 'package:mars/models/user_data.dart';
 import 'package:mars/screens/auth/widgets/signin_apple_button.dart';
 import 'package:mars/screens/auth/widgets/signin_google_button.dart';
-import 'package:mars/screens/home/widgets/home_title.dart';
-import 'package:mars/screens/home/widgets/round_icon_button.dart';
 import 'package:mars/services/auth_service.dart';
 import 'package:mars/services/firebase_links.dart';
-import 'package:mars/services/firestore/users.dart';
-import 'package:mars/services/locator.dart';
 import 'package:mars/services/methods.dart';
 import 'package:mars/services/providers.dart';
-import 'package:percent_indicator/percent_indicator.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 class Profile extends ConsumerStatefulWidget {
@@ -70,7 +63,10 @@ class _ProfileState extends ConsumerState<Profile> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('الملف الشخصي'),
+        title: Text(
+          'الملف الشخصي',
+          style: GoogleFonts.tajawal(),
+        ),
         actions: [
           user.isAnon
               ? Container()

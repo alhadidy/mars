@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:mars/models/fav.dart';
+import 'package:mars/models/item.dart';
 import 'package:mars/models/transaction.dart' as tr;
 
 import 'package:mars/models/user.dart';
@@ -35,6 +37,55 @@ class Users {
         'time': FieldValue.serverTimestamp(),
       },
     );
+  }
+
+  Future addFav(String userId, Item item) {
+    return firestore
+        .collection('users')
+        .doc(userId)
+        .collection('favs')
+        .doc(item.fid)
+        .set(
+      {
+        'name': item.name,
+        'imgUrl': item.imgUrl,
+        'category': item.category,
+      },
+    );
+  }
+
+  Future removeFav(String userId, String favId) {
+    return firestore
+        .collection('users')
+        .doc(userId)
+        .collection('favs')
+        .doc(favId)
+        .delete();
+  }
+
+  Stream<List<Fav>> watchUserFavs(String userId) {
+    CollectionReference ref =
+        firestore.collection('users').doc(userId).collection('favs');
+
+    Stream<QuerySnapshot> favs = ref.snapshots();
+
+    return favs.map((event) {
+      return event.docs.map((e) => Fav.fromDoc(e)).toList();
+    });
+  }
+
+  Stream<Fav?> watchUserFav(String userId, String favId) {
+    DocumentReference ref =
+        firestore.collection('users').doc(userId).collection('favs').doc(favId);
+
+    Stream<DocumentSnapshot> fav = ref.snapshots();
+
+    return fav.map((event) {
+      if (event.exists) {
+        return Fav.fromDoc(event);
+      }
+      return null;
+    });
   }
 
   Stream<UserData> watchUserData(UserModel? _user) {

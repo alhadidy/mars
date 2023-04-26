@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mars/drift/drift.dart';
 import 'package:mars/models/order_item.dart';
@@ -34,11 +37,8 @@ class _CompleteOrderState extends ConsumerState<CompleteOrder> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
 
-  late Future getStores;
-
   @override
   void initState() {
-    getStores = locator.get<Stores>().getStores();
     UserModel? user = ref.read(userProvider);
     if (user != null) {
       nameController.text = user.name;
@@ -66,7 +66,10 @@ class _CompleteOrderState extends ConsumerState<CompleteOrder> {
     if (user == null || settings == null) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('اكمال الطلب'),
+          title: Text(
+            'اكمال الطلب',
+            style: GoogleFonts.tajawal(),
+          ),
           centerTitle: true,
         ),
         body: const Center(
@@ -87,7 +90,10 @@ class _CompleteOrderState extends ConsumerState<CompleteOrder> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('اكمال الطلب'),
+        title: Text(
+          'اكمال الطلب',
+          style: GoogleFonts.tajawal(),
+        ),
       ),
       body: Stack(
         children: [
@@ -255,6 +261,7 @@ class _CompleteOrderState extends ConsumerState<CompleteOrder> {
                                   await db.localOrdersDao.getOrderTotalFuture();
                               List<LocalOrder> order =
                                   await db.localOrdersDao.getTheOrder();
+
                               Methods.showLoaderDialog(context);
                               await locator.get<Orders>().addOrder(
                                   walletPay: walletPay,
@@ -276,12 +283,22 @@ class _CompleteOrderState extends ConsumerState<CompleteOrder> {
                                   city: 'كركوك',
                                   phone: phoneController.text,
                                   items: order.map((orderItem) {
+                                    List addons = [];
+                                    if (orderItem.details != null) {
+                                      Map details =
+                                          json.decode(orderItem.details!);
+                                      if (details.containsKey('addons')) {
+                                        addons = details['addons'];
+                                      }
+                                    }
+
                                     return OrderItem(
                                         fid: orderItem.fid,
                                         name: orderItem.name,
                                         imgUrl: orderItem.imgurl,
                                         price: orderItem.price,
                                         discount: orderItem.discount,
+                                        addons: addons,
                                         quantity: orderItem.quantity);
                                   }).toList(),
                                   confirmed: false,

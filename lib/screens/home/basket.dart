@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,6 +12,7 @@ import 'package:mars/screens/home/widgets/quantity_buttons.dart';
 import 'package:mars/services/methods.dart';
 import 'package:mars/services/providers.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:dotted_line/dotted_line.dart';
 
 class Basket extends ConsumerStatefulWidget {
   const Basket({super.key});
@@ -41,8 +45,9 @@ class _BasketState extends ConsumerState<Basket>
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text(
+          title: Text(
             'سلة المشتريات',
+            style: GoogleFonts.tajawal(),
             textAlign: TextAlign.center,
           ),
           actions: [
@@ -70,22 +75,23 @@ class _BasketState extends ConsumerState<Basket>
                 showTrashButton.value = false;
               });
 
-              return SingleChildScrollView(
+              return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 50,
                       ),
                       child: Image.asset(
-                        'assets/imgs/addToCart.png',
-                        height: 500,
+                        'assets/imgs/cups.png',
+                        height: 150,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 20),
-                      child: Text('سلة المشتريات فارغة حاليا',
+                      child: Text('سلة المشتريات فارغة حالياً',
                           textAlign: TextAlign.center,
                           style: GoogleFonts.tajawal(
                             textStyle: const TextStyle(
@@ -108,121 +114,251 @@ class _BasketState extends ConsumerState<Basket>
               textDirection: TextDirection.rtl,
               child: Stack(
                 children: [
-                  ListView.builder(
-                    itemCount: order.length,
+                  ListView.separated(
+                    separatorBuilder: (context, index) {
+                      return const Divider(
+                        color: Colors.black54,
+                      );
+                    },
+                    itemCount: order.length + 1,
                     itemBuilder: (BuildContext context, int index) {
+                      if (index == order.length) {
+                        return SizedBox(
+                          height: 200,
+                          child: StreamBuilder(
+                            stream: db.localOrdersDao.getOrderTotal(),
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
+                              if (snapshot.data == null) {
+                                return Container();
+                              }
+                              int total = snapshot.data;
+                              return Align(
+                                alignment: Alignment.bottomCenter,
+                                child: SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              1.5,
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                '${Methods.formatPrice(total)} د.ع ',
+                                                style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              const Expanded(
+                                                  child: DottedLine(
+                                                lineThickness: 2,
+                                                dashRadius: 5,
+                                                dashLength: 2,
+                                              )),
+                                              const Text(
+                                                ' قيمة الطلب',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8),
+                                          child: SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                1.5,
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  '${Methods.formatPrice(settings == null || settings.deliveryPrice == 0 ? 0 : settings.deliveryPrice)} د.ع ',
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                const Expanded(
+                                                    child: DottedLine(
+                                                  lineThickness: 2,
+                                                  dashRadius: 5,
+                                                  dashLength: 2,
+                                                )),
+                                                const Text(
+                                                  ' اجور التوصيل',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              1.5,
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                '${Methods.formatPrice(settings == null || settings.deliveryPrice == 0 ? total : total + settings.deliveryPrice)} د.ع ',
+                                                style: const TextStyle(
+                                                    fontSize: 24,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              const Expanded(
+                                                  child: DottedLine(
+                                                lineThickness: 2,
+                                                dashRadius: 5,
+                                                dashLength: 2,
+                                              )),
+                                              const Text(
+                                                ' المجموع',
+                                                style: TextStyle(
+                                                    fontSize: 24,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      }
+                      String? details = order[index].details;
+                      Map detailsMap = {};
+                      List<dynamic> addons = [];
+                      if (details != null) {
+                        detailsMap = json.decode(details);
+                        if (detailsMap.containsKey('addons')) {
+                          addons = detailsMap['addons'];
+                        }
+                      }
+
                       return Padding(
                         padding: index + 1 == order.length
-                            ? const EdgeInsets.only(bottom: 100)
+                            ? const EdgeInsets.only(bottom: 16)
                             : const EdgeInsets.only(bottom: 16),
                         child: ListTile(
                           title: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(order[index].name),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  order[index].name,
+                                  style: GoogleFonts.tajawal(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                    '${Methods.formatPrice((Methods.roundPriceWithDiscountIQD(price: order[index].price, discount: order[index].discount) * order[index].quantity))} د.ع')
+                              ],
+                            ),
                           ),
-                          leading: IconButton(
-                            icon: const FaIcon(FontAwesomeIcons.xmark,
-                                color: Colors.red),
-                            onPressed: () async {
-                              await db.localOrdersDao
-                                  .deleteFromTheOrder(order[index]);
-                            },
+                          leading: ClipOval(
+                            child: CachedNetworkImage(
+                              imageUrl: order[index].imgurl,
+                              errorWidget: (context, url, error) {
+                                return Image.asset('assets/imgs/logo_dark.png');
+                              },
+                            ),
                           ),
                           subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                    '${Methods.formatPrice((Methods.roundPriceWithDiscountIQD(price: order[index].price, discount: order[index].discount) * order[index].quantity))} د.ع'),
+                              addons.isEmpty
+                                  ? Container()
+                                  : const Text(
+                                      ':الإضافات',
+                                      textDirection: TextDirection.ltr,
+                                    ),
+                              Column(
+                                children: addons
+                                    .map((e) => Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(e['name']),
+                                            Text(
+                                              '${Methods.formatPrice(e['price'])} د.ع',
+                                              textDirection: TextDirection.rtl,
+                                            ),
+                                          ],
+                                        ))
+                                    .toList(),
                               ),
-                              SizedBox(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  child: QuantityButtons(order[index]))
+                              QuantityButtons(order[index])
                             ],
                           ),
                         ),
                       );
                     },
                   ),
-                  StreamBuilder(
-                    stream: db.localOrdersDao.getOrderTotal(),
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (snapshot.data == null) {
-                        return Container();
-                      }
-                      int total = snapshot.data;
-                      return Align(
-                        alignment: Alignment.bottomCenter,
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: user.isAnon
-                                  ? ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20)))),
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                            context, '/profile');
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'تسجيل الدخول',
-                                          style: GoogleFonts.tajawal(height: 2),
-                                        ),
-                                      ))
-                                  : ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20)))),
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                            context, '/completeOrder');
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const Text(
-                                              'تأكيد الطلب',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  '${Methods.formatPrice(total)} د.ع',
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                settings == null ||
-                                                        settings.deliveryPrice ==
-                                                            0
-                                                    ? Container()
-                                                    : Text(
-                                                        ' + ${Methods.formatPrice(settings.deliveryPrice)} د.ع اجور التوصيل',
-                                                        style: const TextStyle(
-                                                            fontSize: 10),
-                                                      ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ))),
-                        ),
-                      );
-                    },
-                  ),
+                  Positioned(
+                    bottom: 16,
+                    right: 16,
+                    child: user.isAnon
+                        ? ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)))),
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/profile');
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'تسجيل الدخول',
+                                style: GoogleFonts.tajawal(height: 2),
+                              ),
+                            ))
+                        : StreamBuilder(
+                            stream: db.localOrdersDao.getOrderTotal(),
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
+                              if (snapshot.data == null) {
+                                return Container();
+                              }
+                              int total = snapshot.data;
+                              return ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)))),
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                        context, '/completeOrder');
+                                  },
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    child: Text(
+                                      'تأكيد الطلب ${Methods.formatPrice(settings == null || settings.deliveryPrice == 0 ? total : total + settings.deliveryPrice)} د.ع ',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                  ));
+                            }),
+                  )
                 ],
               ),
             );

@@ -33,7 +33,10 @@ class _WalletState extends ConsumerState<Wallet> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('المحفظة'),
+        title: Text(
+          'المحفظة',
+          style: GoogleFonts.tajawal(),
+        ),
         centerTitle: true,
         actions: [
           Center(

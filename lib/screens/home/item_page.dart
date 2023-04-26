@@ -1,14 +1,24 @@
+import 'dart:convert';
+
 import 'package:badges/badges.dart' as badge;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mars/drift/drift.dart';
+import 'package:mars/models/addon.dart';
 import 'package:mars/models/item.dart';
+import 'package:mars/models/cup_size.dart';
+import 'package:mars/models/user.dart';
 import 'package:mars/screens/home/widgets/basket_button.dart';
 import 'package:mars/screens/home/widgets/round_icon_button.dart';
+import 'package:mars/services/firebase_links.dart';
+import 'package:mars/services/firestore/users.dart';
+import 'package:mars/services/locator.dart';
 import 'package:mars/services/methods.dart';
 import 'package:mars/services/providers.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ItemPage extends ConsumerStatefulWidget {
   final Item item;
@@ -19,189 +29,362 @@ class ItemPage extends ConsumerStatefulWidget {
 }
 
 class _ItemPageState extends ConsumerState<ItemPage> {
+  CupSize? selectedSize;
+  List<Addon> selectedAddons = [];
   @override
   void initState() {
+    if (widget.item.sizes.isNotEmpty) {
+      selectedSize = widget.item.sizes[0];
+    }
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final AppDatabase db = ref.watch(dbProvider);
+    final UserModel? user = ref.watch(userProvider);
+
+    if (user == null) {
+      return Scaffold(
+        appBar: AppBar(),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text(widget.item.name),
-        actions: const [BasketButton()],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              color: Colors.amber,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(200),
-                    bottomRight: Radius.circular(0)),
-                child: CachedNetworkImage(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.width,
-                  fit: BoxFit.cover,
-                  imageUrl: widget.item.imgUrl,
-                  errorWidget: ((context, url, error) {
-                    return Container(
-                      color: Colors.white,
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.width,
-                    );
-                  }),
-                  placeholder: (context, url) {
-                    return Container(
-                      color: Colors.white,
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.width,
-                    );
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const FaIcon(FontAwesomeIcons.chevronLeft,
+                color: Colors.black)),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                Methods.showLoaderDialog(context);
+                String url = await LinkService().createDynamicLink(
+                    title: 'Mars Coffee House',
+                    desc:
+                        'اطلب ${widget.item.name} من كوفي مارس عن طريق الرابط التالي',
+                    imgUrl: widget.item.imgUrl,
+                    page: 'item',
+                    pageId: widget.item.fid);
+                Navigator.pop(context);
+
+                try {
+                  Share.share(url);
+                } catch (e) {
+                  print(e);
+                }
+              },
+              icon: const FaIcon(
+                FontAwesomeIcons.shareNodes,
+                color: Colors.black54,
+              )),
+          StreamBuilder<dynamic>(
+            stream:
+                locator.get<Users>().watchUserFav(user.uid, widget.item.fid),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              return IconButton(
+                  onPressed: () {
+                    snapshot.data == null
+                        ? locator.get<Users>().addFav(user.uid, widget.item)
+                        : locator
+                            .get<Users>()
+                            .removeFav(user.uid, widget.item.fid);
                   },
-                ),
-              ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  widget.item.name,
-                  textDirection: TextDirection.rtl,
-                  style: const TextStyle(fontSize: 20),
-                ),
-              ),
-            ),
-            const Divider(
-              indent: 16,
-              endIndent: 16,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                widget.item.desc,
-                textDirection: TextDirection.rtl,
-                style: const TextStyle(fontSize: 18),
-              ),
-            ),
-            const Text('الرجاء اختيار الحجم'),
-            Wrap(
-                alignment: WrapAlignment.center,
-                children: widget.item.sizes.map((s) {
-                  return StreamBuilder(
-                    stream: db.localOrdersDao
-                        .searchInOrder('${widget.item.name} - ${s.name}'),
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      LocalOrder? order = snapshot.data;
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Stack(
-                          children: [
-                            badge.Badge(
-                              badgeColor:
-                                  Theme.of(context).colorScheme.secondary,
-                              animationDuration:
-                                  const Duration(milliseconds: 100),
-                              animationType: badge.BadgeAnimationType.scale,
-                              showBadge: order != null,
-                              badgeContent: order == null
-                                  ? Container()
-                                  : Text(order.quantity.toString()),
-                              child: GestureDetector(
-                                onTap: (() async {
-                                  if (order != null && order.quantity > 0) {
-                                    await db.localOrdersDao
-                                        .increaseQuantity(order);
-                                  } else {
-                                    await db.localOrdersDao.insertInTheOrder(
-                                        LocalOrder(
-                                            id: null,
-                                            fid: widget.item.fid,
-                                            name:
-                                                '${widget.item.name} - ${s.name}',
-                                            imgurl: widget.item.imgUrl,
-                                            quantity: 1,
-                                            price: s.price,
-                                            discount: s.discount));
-                                  }
-                                }),
-                                child: Container(
-                                  width: 100,
-                                  height: 110,
-                                  decoration: BoxDecoration(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(16))),
-                                  child: Center(
-                                      child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 16),
-                                        child: FaIcon(
-                                          FontAwesomeIcons.mugSaucer,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                        ),
+                  icon: FaIcon(
+                    snapshot.data != null
+                        ? FontAwesomeIcons.solidHeart
+                        : FontAwesomeIcons.heart,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ));
+            },
+          ),
+        ],
+      ),
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  Hero(
+                    tag: widget.item.fid,
+                    child: ClipOval(
+                      child: CachedNetworkImage(
+                        width: MediaQuery.of(context).size.width / 2,
+                        height: MediaQuery.of(context).size.width / 2,
+                        fit: BoxFit.cover,
+                        imageUrl: widget.item.imgUrl,
+                        errorWidget: ((context, url, error) {
+                          return Container(
+                            color: Theme.of(context).colorScheme.primary,
+                            width: MediaQuery.of(context).size.width / 2,
+                            height: MediaQuery.of(context).size.width / 2,
+                          );
+                        }),
+                        placeholder: (context, url) {
+                          return Container(
+                            color: Theme.of(context).colorScheme.primary,
+                            width: MediaQuery.of(context).size.width / 2,
+                            height: MediaQuery.of(context).size.width / 2,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          Text(
+                            widget.item.name,
+                            textDirection: TextDirection.rtl,
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.tajawal(
+                                fontSize: 22, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            widget.item.category,
+                            textDirection: TextDirection.rtl,
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.tajawal(fontSize: 18, height: 2),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Divider(
+                    indent: 16,
+                    endIndent: 16,
+                  ),
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: Text(
+                          'الأحجام المتوفرة',
+                          textDirection: TextDirection.rtl,
+                          style: GoogleFonts.tajawal(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                      )),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Container(
+                      height: 4,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .secondary
+                              .withOpacity(0.5),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(20))),
+                    ),
+                  ),
+                  widget.item.sizes.isEmpty
+                      ? Container(
+                          height: 100,
+                          margin: EdgeInsets.all(16),
+                          color: Colors.grey[100],
+                          child: const Center(
+                            child: Text('هذا المنتج غير متوفر حاليا'),
+                          ),
+                        )
+                      : Container(),
+                  Wrap(
+                      alignment: WrapAlignment.center,
+                      children: widget.item.sizes.map((s) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: InkWell(
+                            highlightColor: Colors.amber.withOpacity(0.2),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(20)),
+                            onTap: (() async {
+                              setState(() {
+                                selectedSize = s;
+                              });
+                            }),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 60,
+                                    width: 60,
+                                    decoration: BoxDecoration(
+                                        color: selectedSize?.name == s.name
+                                            ? Colors.amber.withOpacity(0.3)
+                                            : null,
+                                        border: Border.all(
+                                            width: 2,
+                                            color: selectedSize?.name == s.name
+                                                ? Colors.amber
+                                                : Colors.transparent),
+                                        shape: BoxShape.circle),
+                                    child: Center(
+                                      child: Image.asset(
+                                        'assets/imgs/cup.png',
+                                        height: 40,
                                       ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 8),
-                                        child: Text(
-                                          s.name,
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 8),
-                                        child: Text(
-                                          '${Methods.formatPrice(s.price)} د.ع',
-                                          textDirection: TextDirection.rtl,
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                    ],
-                                  )),
-                                ),
+                                    ),
+                                  ),
+                                  Text(
+                                    s.name,
+                                    style: GoogleFonts.tajawal(
+                                        height: 2, fontWeight: FontWeight.bold),
+                                  )
+                                ],
                               ),
                             ),
-                            order == null
-                                ? Container(
-                                    width: 0,
-                                  )
-                                : SizedBox(
-                                    width: 40,
-                                    height: 116,
-                                    child: Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: RoundIconButton(
-                                          size: 40,
-                                          color: Colors.red,
-                                          icon: FontAwesomeIcons.minus,
-                                          onTap: () {
-                                            db.localOrdersDao
-                                                .decreaseQuantity(order);
-                                          }),
-                                    ),
-                                  )
-                          ],
+                          ),
+                        );
+                      }).toList()),
+                  widget.item.addons.isEmpty
+                      ? Container()
+                      : SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 16.0),
+                            child: Text(
+                              'إصنع مشروبك الخاص',
+                              textDirection: TextDirection.rtl,
+                              style: GoogleFonts.tajawal(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                          )),
+                  widget.item.addons.isEmpty
+                      ? Container()
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                          child: Container(
+                            height: 4,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .secondary
+                                    .withOpacity(0.5),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(20))),
+                          ),
+                        ),
+                  Column(
+                    children: widget.item.addons.map((addon) {
+                      return Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: CheckboxListTile(
+                          value: selectedAddons.contains(addon),
+                          onChanged: (value) {
+                            setState(() {
+                              if (!selectedAddons.contains(addon)) {
+                                selectedAddons.add(addon);
+                              } else {
+                                selectedAddons.remove(addon);
+                              }
+                            });
+                          },
+                          title: Text(
+                            addon.name,
+                            style: GoogleFonts.tajawal(
+                                fontWeight: FontWeight.bold),
+                          ),
+                          secondary: Text(
+                            '${Methods.formatPrice(addon.price)} د.ع',
+                          ),
                         ),
                       );
-                    },
-                  );
-                }).toList()),
-            const SizedBox(
-              height: 50,
-            )
+                    }).toList(),
+                  ),
+                  widget.item.desc.isEmpty
+                      ? Container()
+                      : Container(
+                          color: Theme.of(context).colorScheme.primary,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  widget.item.desc,
+                                  textDirection: TextDirection.rtl,
+                                  style: GoogleFonts.tajawal(
+                                      color: Colors.white, height: 2),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 100,
+                              )
+                            ],
+                          ),
+                        ),
+                ],
+              ),
+            ),
+            Positioned(
+                bottom: 8,
+                right: 0,
+                left: 0,
+                child: CircleAvatar(
+                  backgroundColor: Colors.indigo[700],
+                  radius: 28,
+                  child: const BasketButton(),
+                )),
+            Positioned(
+                bottom: 8,
+                right: 8,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.indigo[700],
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(30)))),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'إضافة الى السلة',
+                      style: GoogleFonts.tajawal(
+                          height: 2.5, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  onPressed: selectedSize == null
+                      ? null
+                      : () async {
+                          int price = selectedSize!.price;
+                          Map details = {};
+                          details['addons'] = selectedAddons.map((e) {
+                            price += e.price;
+                            return {'name': e.name, 'price': e.price};
+                          }).toList();
+
+                          LocalOrder? order = await db.localOrdersDao
+                              .searchInOrderFuture(widget.item.name +
+                                  ' - ' +
+                                  selectedSize!.name);
+                          // if (order == null) {
+                          db.localOrdersDao.insertInTheOrder(LocalOrder(
+                              details: json.encode(details),
+                              fid: widget.item.fid,
+                              name:
+                                  widget.item.name + ' - ' + selectedSize!.name,
+                              imgurl: widget.item.imgUrl,
+                              quantity: 1,
+                              price: price,
+                              discount: selectedSize!.discount));
+                          // }
+                          // else {
+                          //   db.localOrdersDao.increaseQuantity(order);
+                          // }
+                        },
+                )),
           ],
         ),
       ),

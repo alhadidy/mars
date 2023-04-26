@@ -90,13 +90,13 @@ class Order {
       walletPay: docData['walletPay'],
       items: items.map((e) {
         return OrderItem(
-          fid: e['fid'] ?? '',
-          name: e['name'] ?? '',
-          imgUrl: e['imgUrl'] ?? '',
-          price: e['price'] ?? 0.0,
-          quantity: e['quantity'] ?? 1,
-          discount: e['discount'],
-        );
+            fid: e['fid'] ?? '',
+            name: e['name'] ?? '',
+            imgUrl: e['imgUrl'] ?? '',
+            price: e['price'] ?? 0.0,
+            quantity: e['quantity'] ?? 1,
+            discount: e['discount'],
+            addons: e['addons'] ?? []);
       }).toList(),
     );
   }

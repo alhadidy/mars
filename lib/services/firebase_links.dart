@@ -61,7 +61,7 @@ class LinkService {
 
     dynamicLinks.onLink.listen((PendingDynamicLinkData dynamicLink) async {
       final Uri deepLink = dynamicLink.link;
-      print(deepLink);
+      print(deepLink.path);
 
       switch (deepLink.path) {
         case '/item':
