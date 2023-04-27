@@ -139,13 +139,18 @@ class _MyOrdersState extends ConsumerState<MyOrders> {
                                             ),
                                           ],
                                         ),
-                                        leading: ClipOval(
-                                          child: CachedNetworkImage(
-                                            imageUrl: item.imgUrl,
-                                            errorWidget: (context, url, error) {
-                                              return Image.asset(
-                                                  'assets/imgs/logo_dark.png');
-                                            },
+                                        leading: SizedBox(
+                                          width: 50,
+                                          height: 50,
+                                          child: ClipOval(
+                                            child: CachedNetworkImage(
+                                              imageUrl: item.imgUrl,
+                                              errorWidget:
+                                                  (context, url, error) {
+                                                return Image.asset(
+                                                    'assets/imgs/logo_dark.png');
+                                              },
+                                            ),
                                           ),
                                         ),
                                         subtitle: Container(
