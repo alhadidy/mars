@@ -148,15 +148,14 @@ class _IntroState extends State<Intro> {
                                     widget.onSkip();
                                   },
                                   style: TextButton.styleFrom(
-                                      primary: Colors.transparent,
-                                      textStyle:
+                                      foregroundColor: Colors.transparent, textStyle:
                                           const TextStyle(color: Colors.white)),
                                   child: Text(
                                     'تخطي',
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .textTheme
-                                          .bodyText1!
+                                          .bodyLarge!
                                           .color,
                                     ),
                                   ),

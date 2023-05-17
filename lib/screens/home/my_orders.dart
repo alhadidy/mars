@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart' as badge;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,7 +46,10 @@ class _MyOrdersState extends ConsumerState<MyOrders> {
               }
 
               List<Order> orders = snapshot.data;
-              return ListView.builder(
+              return ListView.separated(
+                separatorBuilder: (context, index) {
+                  return const Divider();
+                },
                 itemCount: orders.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Directionality(
@@ -106,10 +108,16 @@ class _MyOrdersState extends ConsumerState<MyOrders> {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Text(Methods.formatDate(
-                                          orders[index].time, 'en')),
-                                      Text(Methods.formatTime(
-                                          orders[index].time, 'en')),
+                                      Text(
+                                        Methods.formatDate(
+                                            orders[index].time, 'en'),
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                      Text(
+                                        Methods.formatTime(
+                                            orders[index].time, 'en'),
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
                                     ],
                                   )
                                 ],
@@ -135,6 +143,7 @@ class _MyOrdersState extends ConsumerState<MyOrders> {
                                             Text(
                                               '${Methods.formatPrice(item.price)} د.ع',
                                               style: GoogleFonts.tajawal(
+                                                  fontSize: 14,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ],
@@ -197,19 +206,21 @@ class _MyOrdersState extends ConsumerState<MyOrders> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(right: 8),
+                                  padding:
+                                      const EdgeInsets.only(right: 8, top: 8),
                                   child: Text(
                                       'قيمة الطلب: ${Methods.formatPrice(orders[index].totalPrice)} د.ع'),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(right: 8),
+                                  padding: const EdgeInsets.only(
+                                      right: 8, bottom: 8),
                                   child: Text(
                                       'كلفة التوصيل: ${Methods.formatPrice(orders[index].deliveryPrice)} د.ع'),
                                 ),
                                 orders[index].walletPay
                                     ? Container(
                                         decoration: BoxDecoration(
-                                            color: Colors.amber[600],
+                                            color: Colors.amber[700],
                                             borderRadius:
                                                 const BorderRadius.all(
                                                     Radius.circular(20))),
@@ -220,8 +231,8 @@ class _MyOrdersState extends ConsumerState<MyOrders> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Row(
-                                                children: const [
+                                              const Row(
+                                                children: [
                                                   FaIcon(
                                                     FontAwesomeIcons.wallet,
                                                     color: Colors.white,
@@ -259,8 +270,8 @@ class _MyOrdersState extends ConsumerState<MyOrders> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Row(
-                                                children: const [
+                                              const Row(
+                                                children: [
                                                   FaIcon(
                                                     FontAwesomeIcons.moneyBills,
                                                     color: Colors.white,

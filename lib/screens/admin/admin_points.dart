@@ -169,6 +169,14 @@ class _AdminPointsState extends ConsumerState<AdminPoints> {
               Navigator.pushNamed(context, '/generatedCards');
             }),
           ),
+          ListTile(
+            title: const Text('Reward Points',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            trailing: const FaIcon(FontAwesomeIcons.coins),
+            onTap: (() {
+              Navigator.pushNamed(context, '/rewardPoints');
+            }),
+          ),
         ],
       )),
     );

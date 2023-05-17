@@ -13,7 +13,6 @@ import 'package:mars/models/store.dart';
 import 'package:mars/models/user.dart';
 import 'package:mars/models/user_data.dart';
 import 'package:mars/services/firestore/orders.dart';
-import 'package:mars/services/firestore/stores.dart';
 import 'package:mars/services/locator.dart';
 import 'package:mars/services/methods.dart';
 import 'package:mars/services/providers.dart';
@@ -44,6 +43,10 @@ class _CompleteOrderState extends ConsumerState<CompleteOrder> {
       nameController.text = user.name;
       phoneController.text = user.phone;
     }
+
+    UserData userData = ref.read(userDataProvider);
+
+    addressController.text = userData.info?.address ?? '';
 
     super.initState();
   }
@@ -206,8 +209,8 @@ class _CompleteOrderState extends ConsumerState<CompleteOrder> {
                               }
                               return ListTile(
                                 title: const Text('الدفع عن طريق المحفظة'),
-                                subtitle: Row(
-                                  children: const [
+                                subtitle: const Row(
+                                  children: [
                                     FaIcon(
                                       FontAwesomeIcons.solidStar,
                                       color: Colors.green,

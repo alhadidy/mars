@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mars/drift/drift.dart';
@@ -48,7 +46,7 @@ final userDataProvider = StateProvider<UserData>((ref) {
       return value;
     },
     orElse: (() {
-      return UserData([], 0, 0);
+      return UserData([], 0, 0, null);
     }),
   );
 }); // user data
@@ -64,12 +62,15 @@ final linkProvider = StateNotifierProvider<LinkManager, Link>((ref) {
 final shopSettingsStreamProvider = StreamProvider<SSetting>(
     (ref) => locator.get<SSettings>().getShopSettings());
 
-final shopSettingsProvider = StateProvider<SSetting?>((ref) {
+final shopSettingsProvider = StateProvider<SSetting>((ref) {
   AsyncValue<SSetting> stream = ref.watch(shopSettingsStreamProvider);
-  return stream.whenOrNull(data: (value) {
-    print(value);
-    return value;
-  });
+  return stream.maybeWhen(
+    data: (value) {
+      return value;
+    },
+    orElse: () =>
+        SSetting(dev: false, cards: [], deliveryPrice: 0, rewardAmount: 0),
+  );
 });
 
 // roles data

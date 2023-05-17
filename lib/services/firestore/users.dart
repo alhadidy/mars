@@ -6,6 +6,7 @@ import 'package:mars/models/transaction.dart' as tr;
 
 import 'package:mars/models/user.dart';
 import 'package:mars/models/user_data.dart';
+import 'package:mars/models/user_info.dart';
 
 class Users {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -90,7 +91,7 @@ class Users {
 
   Stream<UserData> watchUserData(UserModel? _user) {
     if (_user == null) {
-      return Stream.value(UserData([], 0, 0));
+      return Stream.value(UserData([], 0, 0, null));
     }
     DocumentReference ref = firestore.collection('users').doc(_user.uid);
 
@@ -124,6 +125,18 @@ class Users {
 
     await ref.set({
       'tags': itemTags,
+    }, SetOptions(merge: true));
+  }
+
+  Future<void> setUserInfos(String userId, UserInfo info) async {
+    DocumentReference ref = firestore.collection('users').doc(userId);
+
+    return await ref.set({
+      'info': {
+        'birth': Timestamp.fromDate(info.birth),
+        'gender': info.gender,
+        'address': info.address
+      },
     }, SetOptions(merge: true));
   }
 

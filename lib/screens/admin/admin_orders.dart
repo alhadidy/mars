@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart' as badge;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -33,6 +32,7 @@ class _AdminOrdersState extends State<AdminOrders> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[300],
       appBar: AppBar(
         elevation: 0,
         title: const Text('Orders'),
@@ -88,7 +88,10 @@ class _AdminOrdersState extends State<AdminOrders> {
                 List<Order> orders = snapshot.data;
                 return Directionality(
                   textDirection: TextDirection.rtl,
-                  child: ListView.builder(
+                  child: ListView.separated(
+                    separatorBuilder: (context, index) {
+                      return const Divider();
+                    },
                     itemCount: orders.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Card(
@@ -149,78 +152,142 @@ class _AdminOrdersState extends State<AdminOrders> {
                             SizedBox(
                               width: double.maxFinite,
                               child: Column(
-                                children: orders[index].items.map((item) {
-                                  return Column(
-                                    children: [
-                                      ListTile(
-                                        title: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                children: orders[index]
+                                    .items
+                                    .asMap()
+                                    .map((i, item) {
+                                      return MapEntry(
+                                        i,
+                                        Column(
                                           children: [
-                                            Text(
-                                              item.name,
-                                              style: GoogleFonts.tajawal(
-                                                  fontWeight: FontWeight.bold),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 25),
+                                                  child: SizedBox(
+                                                      width: 30,
+                                                      child: Center(
+                                                          child: Text(
+                                                        '#' +
+                                                            (i + 1).toString(),
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ))),
+                                                ),
+                                                Expanded(
+                                                  child: ListTile(
+                                                    contentPadding:
+                                                        EdgeInsets.zero,
+                                                    title: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          item.name,
+                                                          style: GoogleFonts
+                                                              .tajawal(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 8),
+                                                          child: Text(
+                                                            '${Methods.formatPrice(item.price)} د.ع',
+                                                            style: GoogleFonts
+                                                                .tajawal(
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    leading: SizedBox(
+                                                      width: 50,
+                                                      height: 50,
+                                                      child: ClipOval(
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl: item.imgUrl,
+                                                          errorWidget: (context,
+                                                              url, error) {
+                                                            return Image.asset(
+                                                                'assets/imgs/logo_dark.png');
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    subtitle: Container(
+                                                      decoration: BoxDecoration(
+                                                          color:
+                                                              Colors.grey[200],
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                      .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          20))),
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              top: 16),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          item.addons.isEmpty
+                                                              ? Container()
+                                                              : const Padding(
+                                                                  padding: EdgeInsets
+                                                                      .only(
+                                                                          top:
+                                                                              16,
+                                                                          right:
+                                                                              16),
+                                                                  child: Text(
+                                                                      'الإضافات:'),
+                                                                ),
+                                                          Column(
+                                                            children: item
+                                                                .addons
+                                                                .map((addon) {
+                                                              return ListTile(
+                                                                dense: true,
+                                                                title: Text(
+                                                                    addon[
+                                                                        'name']),
+                                                                trailing: Text(
+                                                                    '${Methods.formatPrice(addon['price'])} د.ع'),
+                                                              );
+                                                            }).toList(),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            Text(
-                                              '${Methods.formatPrice(item.price)} د.ع',
-                                              style: GoogleFonts.tajawal(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
+                                            const Divider()
                                           ],
                                         ),
-                                        leading: SizedBox(
-                                          width: 50,
-                                          height: 50,
-                                          child: ClipOval(
-                                            child: CachedNetworkImage(
-                                              imageUrl: item.imgUrl,
-                                              errorWidget:
-                                                  (context, url, error) {
-                                                return Image.asset(
-                                                    'assets/imgs/logo_dark.png');
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                        subtitle: Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.grey[200],
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(20))),
-                                          margin:
-                                              const EdgeInsets.only(top: 16),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              item.addons.isEmpty
-                                                  ? Container()
-                                                  : const Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 16, right: 16),
-                                                      child: Text('الإضافات:'),
-                                                    ),
-                                              Column(
-                                                children:
-                                                    item.addons.map((addon) {
-                                                  return ListTile(
-                                                    dense: true,
-                                                    title: Text(addon['name']),
-                                                    trailing: Text(
-                                                        '${Methods.formatPrice(addon['price'])} د.ع'),
-                                                  );
-                                                }).toList(),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      const Divider()
-                                    ],
-                                  );
-                                }).toList(),
+                                      );
+                                    })
+                                    .values
+                                    .toList(),
                               ),
                             ),
                             Padding(
@@ -391,7 +458,7 @@ class _AdminOrdersState extends State<AdminOrders> {
                             orders[index].walletPay
                                 ? Container(
                                     decoration: BoxDecoration(
-                                        color: Colors.amber[600],
+                                        color: Colors.amber[700],
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(20))),
                                     child: Padding(
@@ -401,8 +468,8 @@ class _AdminOrdersState extends State<AdminOrders> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Row(
-                                            children: const [
+                                          const Row(
+                                            children: [
                                               FaIcon(
                                                 FontAwesomeIcons.wallet,
                                                 color: Colors.white,
@@ -439,8 +506,8 @@ class _AdminOrdersState extends State<AdminOrders> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Row(
-                                            children: const [
+                                          const Row(
+                                            children: [
                                               FaIcon(
                                                 FontAwesomeIcons.moneyBills,
                                                 color: Colors.white,

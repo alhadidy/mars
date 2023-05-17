@@ -65,7 +65,7 @@ class _HomeHeaderSliverState extends ConsumerState<HomeHeaderSliver> {
                 child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: StarsStepper(
-                        steps: [200, 400, 600, 800, 1000],
+                        steps: const [100, 200, 300, 400, 500, 600],
                         userPoints: userData.points)),
               ),
             ),

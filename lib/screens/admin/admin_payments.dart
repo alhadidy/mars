@@ -124,7 +124,7 @@ class _AdminPaymentsState extends State<AdminPayments> {
             List<Payment> payments = snapshot.data;
             return ListView.separated(
               separatorBuilder: (context, index) {
-                return Divider();
+                return const Divider();
               },
               itemCount: payments.length,
               itemBuilder: (BuildContext context, int index) {

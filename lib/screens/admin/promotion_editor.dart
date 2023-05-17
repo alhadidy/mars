@@ -1,14 +1,9 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mars/models/category.dart';
-import 'package:mars/models/item.dart';
 import 'package:mars/models/promo.dart';
-import 'package:mars/services/firestore/categories.dart';
-import 'package:mars/services/firestore/items.dart';
 import 'package:mars/services/firestore/promos.dart';
 import 'package:mars/services/locator.dart';
 import 'package:mars/services/methods.dart';

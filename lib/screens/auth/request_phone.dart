@@ -55,6 +55,7 @@ class _RequestPhoneState extends ConsumerState<RequestPhone> {
     if (user == null) {
       return Container();
     }
+
     return Scaffold(
       body: Stack(
         children: [
@@ -105,7 +106,7 @@ class _RequestPhoneState extends ConsumerState<RequestPhone> {
                               errorMsg ?? '',
                               textAlign: TextAlign.center,
                               style: GoogleFonts.tajawal(
-                                  fontSize: 18, color: Colors.red),
+                                  fontSize: 16, color: Colors.red),
                             ),
                           ),
                           Padding(
@@ -118,6 +119,16 @@ class _RequestPhoneState extends ConsumerState<RequestPhone> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: PinCodeTextField(
+                              beforeTextPaste: (text) {
+                                print(text);
+                                int? code;
+                                code = int.tryParse(text ?? '');
+                                if (code is int) {
+                                  return true;
+                                }
+                                return false;
+                              },
+                              dialogConfig: null,
                               appContext: context,
                               onChanged: (value) {},
                               controller: otpFieldController,
@@ -142,13 +153,18 @@ class _RequestPhoneState extends ConsumerState<RequestPhone> {
                                       case "credential-already-in-use":
                                         setState(() {
                                           errorMsg =
-                                              'هذا الرقم غير متوفر الرجاء اضافة رقم جديد او تسجيل الدخول عن طريق حساب اخر';
+                                              "لقد تمت إضافة هذا الرقم في حساب آخر \n قم بإضافة رقم جديد أو سجل الدخول عن طريق ذلك الحساب";
                                         });
                                         break;
                                       case "session-expired":
                                         setState(() {
                                           errorMsg =
                                               'انتهت صلاحية رسالة التحقق';
+                                        });
+                                        break;
+                                      case 'invalid-verification-code':
+                                        setState(() {
+                                          errorMsg = 'رمز التحقق غير صحيح';
                                         });
                                         break;
                                       default:
@@ -216,6 +232,10 @@ class _RequestPhoneState extends ConsumerState<RequestPhone> {
                         ],
                       ),
                     )),
+                    const Divider(
+                      color: Colors.black,
+                      height: 0,
+                    ),
                     Container(
                       color: Colors.white,
                       child: Padding(
@@ -271,7 +291,7 @@ class _RequestPhoneState extends ConsumerState<RequestPhone> {
                             errorMsg ?? '',
                             textAlign: TextAlign.center,
                             style: GoogleFonts.tajawal(
-                                fontSize: 18, color: Colors.red),
+                                fontSize: 16, color: Colors.red),
                           ),
                         ),
                         Padding(

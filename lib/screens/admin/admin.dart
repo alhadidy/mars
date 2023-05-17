@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mars/models/user.dart';
+import 'package:mars/services/firestore/orders.dart';
+import 'package:mars/services/locator.dart';
 import 'package:mars/services/providers.dart';
 
 class Admin extends ConsumerStatefulWidget {
@@ -103,14 +106,22 @@ class _AdminState extends ConsumerState<Admin> {
             ),
             ListTile(
               title: const Text('Orders'),
-              trailing: SizedBox(
-                  height: 30,
-                  width: 30,
-                  child: Center(
-                      child: FaIcon(
-                    FontAwesomeIcons.bagShopping,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ))),
+              trailing: FutureBuilder<AggregateQuerySnapshot>(
+                  future: locator.get<Orders>().countPendingOrders(),
+                  builder: (context, snapshot) {
+                    return Badge(
+                      isLabelVisible: snapshot.hasData,
+                      label: Text(snapshot.data?.count.toString() ?? ''),
+                      child: SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: Center(
+                              child: FaIcon(
+                            FontAwesomeIcons.bagShopping,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ))),
+                    );
+                  }),
               onTap: () {
                 Navigator.pushNamed(context, '/adminOrders');
               },
@@ -169,6 +180,22 @@ class _AdminState extends ConsumerState<Admin> {
                 Navigator.pushNamed(context, '/adminPayments');
               },
             ),
+            user.role == Roles.admin
+                ? ListTile(
+                    title: const Text('Settings'),
+                    trailing: SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: Center(
+                            child: FaIcon(
+                          FontAwesomeIcons.gear,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ))),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/adminSettings');
+                    },
+                  )
+                : Container(),
           ],
         ),
       ),

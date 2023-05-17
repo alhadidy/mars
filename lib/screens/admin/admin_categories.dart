@@ -1,7 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mars/models/category.dart';
-import 'package:mars/screens/home/widgets/shop_topic_button.dart';
 import 'package:mars/services/firestore/categories.dart';
 import 'package:mars/services/locator.dart';
 
@@ -24,7 +25,7 @@ class _AdminCategoriesState extends State<AdminCategories> {
                 Navigator.pushNamed(context, '/categoryEditor',
                     arguments: {'category': null});
               },
-              icon: FaIcon(FontAwesomeIcons.plus))
+              icon: const FaIcon(FontAwesomeIcons.plus))
         ],
       ),
       body: StreamBuilder(
@@ -39,14 +40,45 @@ class _AdminCategoriesState extends State<AdminCategories> {
           return GridView.builder(
               itemCount: categories.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3),
+                  crossAxisCount: 3, mainAxisExtent: 160),
               itemBuilder: ((context, index) {
-                return ShopTopicButton(
-                    icon: FontAwesomeIcons.mugHot,
-                    title: categories[index].name,
-                    route: '/categoryEditor',
-                    arg: {'category': categories[index]},
-                    img: categories[index].imgUrl);
+                return InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/categoryEditor',
+                        arguments: {'category': categories[index]});
+                  },
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ClipOval(
+                            child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          height: 100,
+                          width: 100,
+                          imageUrl: categories[index].imgUrl,
+                          errorWidget: (context, url, error) {
+                            return Container(
+                              color: Theme.of(context).colorScheme.primary,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.asset(
+                                  'assets/imgs/logo_dark.png',
+                                ),
+                              ),
+                            );
+                          },
+                        )),
+                      ),
+                      Text(
+                        categories[index].name,
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.tajawal(),
+                      )
+                    ],
+                  ),
+                );
               }));
         },
       ),

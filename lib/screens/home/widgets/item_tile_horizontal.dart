@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mars/models/item.dart';
 
 class ItemTileHorizontal extends StatelessWidget {
@@ -41,7 +42,8 @@ class ItemTileHorizontal extends StatelessWidget {
                       item.name,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
+                          fontFamily: GoogleFonts.tajawal().fontFamily,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                           color: Colors.black),
@@ -54,8 +56,9 @@ class ItemTileHorizontal extends StatelessWidget {
                       textDirection: TextDirection.rtl,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+                      style: TextStyle(
+                          fontFamily: GoogleFonts.tajawal().fontFamily,
+                          height: 2,
                           fontSize: 14,
                           color: Colors.black87),
                     ),

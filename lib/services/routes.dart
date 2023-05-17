@@ -7,12 +7,14 @@ import 'package:mars/screens/admin/admin_orders.dart';
 import 'package:mars/screens/admin/admin_payments.dart';
 import 'package:mars/screens/admin/admin_points.dart';
 import 'package:mars/screens/admin/admin_promotion.dart';
+import 'package:mars/screens/admin/admin_settings.dart';
 import 'package:mars/screens/admin/admin_stores.dart';
 import 'package:mars/screens/admin/admin_support.dart';
 import 'package:mars/screens/admin/category_editor.dart';
 import 'package:mars/screens/admin/generated_cards.dart';
 import 'package:mars/screens/admin/item_editor.dart';
 import 'package:mars/screens/admin/promotion_editor.dart';
+import 'package:mars/screens/admin/reward_points.dart';
 import 'package:mars/screens/home/basket.dart';
 import 'package:mars/screens/home/calenadar_page.dart';
 import 'package:mars/screens/home/category_page.dart';
@@ -127,9 +129,17 @@ class RoutesHelper {
         return MaterialPageRoute(builder: (_) {
           return const AdminPayments();
         });
+      case '/adminSettings':
+        return MaterialPageRoute(builder: (_) {
+          return const AdminSettings();
+        });
       case '/generatedCards':
         return MaterialPageRoute(builder: (_) {
           return const GeneratedCards();
+        });
+      case '/rewardPoints':
+        return MaterialPageRoute(builder: (_) {
+          return const RewardPoints();
         });
       case '/stores':
         return MaterialPageRoute(builder: (_) {

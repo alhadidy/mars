@@ -1,9 +1,7 @@
-import 'dart:isolate';
 
 import 'package:drift/drift.dart';
 import 'dart:io';
 import 'package:drift/native.dart';
-import 'package:flutter/foundation.dart';
 import 'package:mars/services/methods.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -38,7 +36,6 @@ class AppDatabase extends _$AppDatabase {
     return MigrationStrategy(
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
-        Isolate.spawn((message) {}, 'message');
       },
       onUpgrade: (Migrator m, int from, int to) async {
         if (from < 2) {

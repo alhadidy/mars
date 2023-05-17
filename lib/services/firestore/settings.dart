@@ -2,6 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mars/models/sSettings.dart';
 
+//TODO
+//set delivery price
+//set default reward amount
+//set card types
+//set app dev true
+
 class SSettings {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -32,5 +38,10 @@ class SSettings {
       }
       return map;
     });
+  }
+
+  Future updateSettings(Map<Object, Object?> data) async {
+    DocumentReference ref = firestore.collection('settings').doc('sSettings');
+    return ref.update(data);
   }
 }

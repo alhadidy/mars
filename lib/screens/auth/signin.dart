@@ -1,12 +1,9 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mars/models/link.dart';
 import 'package:mars/screens/auth/widgets/signin_apple_button.dart';
 import 'package:mars/screens/auth/widgets/signin_google_button.dart';
@@ -125,7 +122,8 @@ class SigninState extends ConsumerState<Signin> {
                         Text(
                           'جميع الحقوق محفوظة لصالح Mars Coffee House',
                           textDirection: TextDirection.rtl,
-                          style: GoogleFonts.tajawal(color: Colors.white),
+                          style: GoogleFonts.tajawal(
+                              color: Colors.white, fontSize: 12),
                         ),
                         const SizedBox(
                           height: 25,
@@ -138,7 +136,7 @@ class SigninState extends ConsumerState<Signin> {
                               backgroundColor: Colors.transparent,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20)),
-                              side: BorderSide(color: Colors.white),
+                              side: const BorderSide(color: Colors.white),
                             ),
                             onPressed: loading == null
                                 ? () async {
@@ -162,12 +160,12 @@ class SigninState extends ConsumerState<Signin> {
                                   }
                                 : null,
                             child: loading == 'skip'
-                                ? Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                ? const Padding(
+                                    padding: EdgeInsets.all(8.0),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceAround,
-                                      children: const [
+                                      children: [
                                         SizedBox(
                                           width: 28,
                                           height: 28,

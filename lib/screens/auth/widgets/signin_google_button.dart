@@ -15,7 +15,7 @@ class SignInGoogleButton extends ConsumerStatefulWidget {
   final String? loading;
   final OnErrorCallback onError;
   final OnLoadingChangeCallback onLoadingChange;
-  const SignInGoogleButton(this.loading, this.onError, this.onLoadingChange);
+  const SignInGoogleButton(this.loading, this.onError, this.onLoadingChange, {super.key});
 
   @override
   _SignInGoogleButtonState createState() => _SignInGoogleButtonState();
@@ -33,8 +33,7 @@ class _SignInGoogleButtonState extends ConsumerState<SignInGoogleButton> {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          primary: Theme.of(context).colorScheme.primary,
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)), backgroundColor: Theme.of(context).colorScheme.primary,
         ),
         onPressed: widget.loading == null
             ? () async {
@@ -62,9 +61,9 @@ class _SignInGoogleButtonState extends ConsumerState<SignInGoogleButton> {
                       return AlertDialog(
                         backgroundColor:
                             Theme.of(context).scaffoldBackgroundColor,
-                        title: Column(
+                        title: const Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
+                          children: [
                             Text(
                               'تسجيل الدخول',
                               textAlign: TextAlign.center,
@@ -133,11 +132,11 @@ class _SignInGoogleButtonState extends ConsumerState<SignInGoogleButton> {
               }
             : null,
         child: widget.loading == 'google'
-            ? Padding(
-                padding: const EdgeInsets.all(8.0),
+            ? const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: const [
+                  children: [
                     SizedBox(
                       width: 28,
                       height: 28,
@@ -148,11 +147,11 @@ class _SignInGoogleButtonState extends ConsumerState<SignInGoogleButton> {
                   ],
                 ),
               )
-            : Padding(
-                padding: const EdgeInsets.all(8.0),
+            : const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: const [
+                  children: [
                     FaIcon(FontAwesomeIcons.google, color: Colors.white),
                   ],
                 ),

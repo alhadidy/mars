@@ -30,9 +30,15 @@ class _GeneratedCardsState extends State<GeneratedCards> {
               ),
             );
           }
-          if (!snapshot.hasData || snapshot.hasError) {
+          if (!snapshot.hasData) {
             return const Center(
               child: Text('Network Error'),
+            );
+          }
+
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(snapshot.error.toString()),
             );
           }
 

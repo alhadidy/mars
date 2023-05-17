@@ -40,26 +40,6 @@ class _ProfileState extends ConsumerState<Profile> {
       );
     }
 
-    double percent = 0;
-    Color accountRankColor = Colors.indigo.shade800;
-    IconData accountRankIcon = FontAwesomeIcons.solidStar;
-    // String accountRankName = 'وردي';
-
-    if (userData.points < 1000) {
-      percent = setUserAccountRankPercent(1000, userData.points);
-    } else if (userData.points >= 1000 && userData.points < 2000) {
-      percent = setUserAccountRankPercent(2000, userData.points);
-      accountRankColor = Colors.yellow.shade800;
-      accountRankIcon = FontAwesomeIcons.fireFlameCurved;
-
-      // accountRankName = 'ذهبي';
-    } else {
-      percent = setUserAccountRankPercent(5000, userData.points);
-      accountRankColor = Colors.red.shade800;
-      accountRankIcon = FontAwesomeIcons.bomb;
-      // accountRankName = 'ذهبي';
-    }
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -340,7 +320,7 @@ class _ProfileState extends ConsumerState<Profile> {
 
                   Methods.showConfirmDialog(context,
                       'هل انت متأكد من حذف الحساب بالكامل؟ جميع المعلومات الخاصة بك سوف تحذف بشكل نهائي',
-                      () async {
+                      confirmActionText: 'تأكيد حذف الحساب', () async {
                     Methods.showLoaderDialog(context);
                     await ref.read(dbProvider).localOrdersDao.clearTheOrder();
 

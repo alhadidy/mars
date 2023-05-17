@@ -40,7 +40,7 @@ class Methods {
 
   static initFCM(context) async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
-    NotificationSettings settings = await messaging.requestPermission(
+    await messaging.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -49,22 +49,27 @@ class Methods {
       provisional: false,
       sound: true,
     );
-    
+
     messaging.subscribeToTopic('allUsers');
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       inspect(message);
 
-      NotificationsApi.showNotification(
-          title: message.data['title'],
-          body: message.data['body'],
-          payload: jsonEncode(message.data));
+      if (message.notification != null) {
+        NotificationsApi.showNotification(
+            title: message.notification?.title,
+            body: message.notification?.body,
+            payload: jsonEncode(message.data));
+      }
     });
   }
 
   static void showConfirmDialog(
-      BuildContext context, String header, Function() confirm) {
+      BuildContext context, String header, Function() confirm,
+      {required String confirmActionText}) {
     AlertDialog alert = AlertDialog(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20))),
       title: const Directionality(
         textDirection: TextDirection.rtl,
         child: Text(
@@ -86,9 +91,9 @@ class Methods {
           },
         ),
         TextButton(
-          child: const Text(
-            'تأكيد حذف الحساب',
-            style: TextStyle(color: Colors.red),
+          child: Text(
+            confirmActionText,
+            style: const TextStyle(color: Colors.red),
           ),
           onPressed: confirm,
         )
@@ -233,53 +238,6 @@ class Methods {
         Future.error(error ?? 'حدثت مشكلة اثناء تحديد الموقع'));
   }
 
-  // static Stream<Position> listenToLocationChange() async* {
-  //   bool locationAvailable = await isLocationAvailable();
-  //   if (locationAvailable is bool && locationAvailable) {
-  //     yield* Geolocator.getPositionStream(
-  //         desiredAccuracy: LocationAccuracy.bestForNavigation);
-  //   } else {
-  //     yield* Stream.error(locationAvailable);
-  //   }
-  // }
-
-  // static Future setFromTo(WidgetRef ref) async {
-  //   Prefs prefs = ref.read(prefProvider);
-  //   try {
-  //     LatLng position;
-  //     if (prefs.address == null) {
-  //       position = await determinePosition();
-  //     } else {
-  //       position = LatLng(prefs.address.location.geopoint.latitude,
-  //           prefs.address.location.geopoint.longitude);
-  //     }
-
-  //     Map nearestPharmay = await getNearestPharmay(prefs.city, position);
-  //     Pharma pharma = nearestPharmay['nearestPharam'];
-
-  //     if (prefs.address == null) {
-  //       ref.read(prefProvider.notifier).setPharmaAndAddress(
-  //           pharma,
-  //           Address(
-  //               type: AddressType.current,
-  //               city: prefs.city,
-  //               name: 'موقعك الحالي',
-  //               location: GeoLocation(
-  //                   geopoint:
-  //                       GeoPoint(position.latitude, position.longitude))));
-  //     } else {
-  //       ref.read(prefProvider.notifier).setPharma(pharma);
-  //     }
-  //     ref.read(localOrderProvider).clearTheOrder();
-  //   } catch (e) {
-  //     if (prefs.address != null) {
-  //       ref.read(prefProvider.notifier).setCity(prefs.address.city);
-  //     }
-
-  //     return Future.error(e);
-  //   }
-  // }
-
   static String formatDate(Timestamp? time, String local) {
     DateTime? date;
     if (time == null) {
@@ -349,62 +307,6 @@ class Methods {
     }
   }
 
-  static Color? stringToColor(String colorName) {
-    switch (colorName) {
-      case 'purple':
-        return Colors.purple;
-
-      case 'green':
-        return Colors.green[700];
-
-      case 'blue':
-        return Colors.blue[700];
-
-      case 'indigo':
-        return Colors.indigo;
-
-      case 'cyan':
-        return Colors.cyan[900];
-
-      case 'teal':
-        return Colors.teal[700];
-
-      case 'orange':
-        return Colors.orange[900];
-
-      default:
-        return Colors.pink[700];
-    }
-  }
-
-  static Color? stringToColorBG(String colorName) {
-    switch (colorName) {
-      case 'purple':
-        return Colors.purple[400];
-
-      case 'green':
-        return Colors.green[400];
-
-      case 'blue':
-        return Colors.blue[400];
-
-      case 'indigo':
-        return Colors.indigo[400];
-
-      case 'cyan':
-        return Colors.cyan[400];
-
-      case 'teal':
-        return Colors.teal[400];
-
-      case 'orange':
-        return Colors.orange[400];
-
-      default:
-        return Colors.pink[400];
-    }
-  }
-
   static OrderStatus getOrderStatus(
       bool confirmed, bool delivering, bool delivered, bool canceled) {
     if (!confirmed && !delivering && !delivered && !canceled) {
@@ -421,31 +323,6 @@ class Methods {
       return OrderStatus.other;
     }
   }
-
-  // static int convPriceUSDToIQD(double price, int conv) {
-  //   double convPrice = price * conv;
-
-  //   int roundedPrice = (convPrice / 250).ceil() * 250;
-
-  //   return roundedPrice;
-  // }
-
-  // static int convPriceWithDiscountIQD(
-  //     {@required double price, @required int conv, double discount = 0}) {
-  //   double convPrice = price * conv;
-  //   double priceMinusDiscount = convPrice - (convPrice * (discount / 100));
-  //   int roundedPrice = (priceMinusDiscount / 250).ceil() * 250;
-
-  //   return roundedPrice;
-  // }
-
-  // static int convPriceWithDiscountUSD(
-  //     {@required double price, double discount = 0}) {
-  //   double priceMinusDiscount = price - (price * (discount / 100));
-  //   int roundedPrice = (priceMinusDiscount / 250).ceil() * 250;
-
-  //   return roundedPrice;
-  // }
 
   static int roundPriceWithDiscountIQD({required int price, int discount = 0}) {
     double priceMinusDiscount = price - (price * (discount / 100));

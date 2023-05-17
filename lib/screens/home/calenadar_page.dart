@@ -8,7 +8,6 @@ import 'package:mars/services/firestore/appointments.dart';
 import 'package:mars/services/locator.dart';
 import 'package:mars/services/methods.dart';
 import 'package:mars/services/providers.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CalenadarPage extends ConsumerStatefulWidget {
   const CalenadarPage({Key? key}) : super(key: key);

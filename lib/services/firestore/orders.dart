@@ -7,6 +7,15 @@ class Orders {
   firestoreDB.FirebaseFirestore firestore =
       firestoreDB.FirebaseFirestore.instance;
 
+  Future<firestoreDB.AggregateQuerySnapshot> countPendingOrders() async {
+    firestoreDB.AggregateQuery query = firestore
+        .collection('orders')
+        .where('confirmed', isEqualTo: false)
+        .count();
+
+    return query.get();
+  }
+
   Future<void> addOrder({
     required String userId,
     required String userName,

@@ -5,7 +5,6 @@ import 'package:mars/screens/home/widgets/shop_topic_button.dart';
 import 'package:mars/services/firestore/categories.dart';
 import 'package:mars/services/locator.dart';
 
-import 'home_title.dart';
 
 class CategoriesList extends StatelessWidget {
   const CategoriesList({Key? key}) : super(key: key);

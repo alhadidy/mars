@@ -8,6 +8,7 @@ import 'package:mars/services/firestore/items.dart';
 import 'package:mars/services/firestore/orders.dart';
 import 'package:mars/services/firestore/payments.dart';
 import 'package:mars/services/firestore/promos.dart';
+import 'package:mars/services/firestore/rewards.dart';
 import 'package:mars/services/firestore/settings.dart';
 import 'package:mars/services/firestore/stores.dart';
 import 'package:mars/services/firestore/support.dart';
@@ -27,5 +28,6 @@ void setupLocator() {
   locator.registerLazySingleton(() => Support());
   locator.registerLazySingleton(() => Orders());
   locator.registerLazySingleton(() => Payments());
+  locator.registerLazySingleton(() => Rewards());
   locator.registerLazySingleton(() => Users());
 }

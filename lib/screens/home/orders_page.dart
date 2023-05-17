@@ -24,8 +24,10 @@ class _OrdersPageState extends State<OrdersPage> {
           child: Scaffold(
             appBar: AppBar(
               elevation: 1,
+              centerTitle: false,
               title: Text(
                 'الطلبات',
+                textAlign: TextAlign.start,
                 style: GoogleFonts.tajawal(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,

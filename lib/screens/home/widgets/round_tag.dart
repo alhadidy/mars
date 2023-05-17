@@ -35,7 +35,7 @@ class RoundTag extends StatelessWidget {
     Color? _textColor;
     color == null ? _color = Theme.of(context).cardColor : _color = color;
     textColor == null
-        ? _textColor = Theme.of(context).textTheme.headline1!.color
+        ? _textColor = Theme.of(context).textTheme.displayLarge!.color
         : _textColor = textColor;
     return GestureDetector(
       onTap: () async {

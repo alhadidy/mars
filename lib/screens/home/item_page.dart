@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:badges/badges.dart' as badge;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +11,6 @@ import 'package:mars/models/item.dart';
 import 'package:mars/models/cup_size.dart';
 import 'package:mars/models/user.dart';
 import 'package:mars/screens/home/widgets/basket_button.dart';
-import 'package:mars/screens/home/widgets/round_icon_button.dart';
 import 'package:mars/services/firebase_links.dart';
 import 'package:mars/services/firestore/users.dart';
 import 'package:mars/services/locator.dart';
@@ -105,11 +103,11 @@ class _ItemPageState extends ConsumerState<ItemPage> {
           ),
         ],
       ),
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: Stack(
-          children: [
-            SingleChildScrollView(
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height - kToolbarHeight,
               child: Column(
                 children: [
                   Hero(
@@ -193,7 +191,7 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                   widget.item.sizes.isEmpty
                       ? Container(
                           height: 100,
-                          margin: EdgeInsets.all(16),
+                          margin: const EdgeInsets.all(16),
                           color: Colors.grey[100],
                           child: const Center(
                             child: Text('هذا المنتج غير متوفر حاليا'),
@@ -306,11 +304,14 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                       );
                     }).toList(),
                   ),
+                  const Spacer(),
                   widget.item.desc.isEmpty
                       ? Container()
                       : Container(
+                          width: MediaQuery.of(context).size.width,
                           color: Theme.of(context).colorScheme.primary,
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(16.0),
@@ -330,63 +331,57 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                 ],
               ),
             ),
-            Positioned(
-                bottom: 8,
-                right: 0,
-                left: 0,
-                child: CircleAvatar(
-                  backgroundColor: Colors.indigo[700],
-                  radius: 28,
-                  child: const BasketButton(),
-                )),
-            Positioned(
-                bottom: 8,
-                right: 8,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.indigo[700],
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(30)))),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'إضافة الى السلة',
-                      style: GoogleFonts.tajawal(
-                          height: 2.5, fontWeight: FontWeight.bold),
-                    ),
+          ),
+          Positioned(
+              bottom: 8,
+              right: 0,
+              left: 0,
+              child: CircleAvatar(
+                backgroundColor: Colors.indigo[700],
+                radius: 28,
+                child: const BasketButton(),
+              )),
+          Positioned(
+              bottom: 8,
+              right: 8,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.indigo[700],
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30)))),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'إضافة الى السلة',
+                    style: GoogleFonts.tajawal(
+                        height: 2.5, fontWeight: FontWeight.bold),
                   ),
-                  onPressed: selectedSize == null
-                      ? null
-                      : () async {
-                          int price = selectedSize!.price;
-                          Map details = {};
-                          details['addons'] = selectedAddons.map((e) {
-                            price += e.price;
-                            return {'name': e.name, 'price': e.price};
-                          }).toList();
+                ),
+                onPressed: selectedSize == null
+                    ? null
+                    : () async {
+                        int price = selectedSize!.price;
+                        Map details = {};
+                        details['addons'] = selectedAddons.map((e) {
+                          price += e.price;
+                          return {'name': e.name, 'price': e.price};
+                        }).toList();
 
-                          LocalOrder? order = await db.localOrdersDao
-                              .searchInOrderFuture(widget.item.name +
-                                  ' - ' +
-                                  selectedSize!.name);
-                          // if (order == null) {
-                          db.localOrdersDao.insertInTheOrder(LocalOrder(
-                              details: json.encode(details),
-                              fid: widget.item.fid,
-                              name:
-                                  widget.item.name + ' - ' + selectedSize!.name,
-                              imgurl: widget.item.imgUrl,
-                              quantity: 1,
-                              price: price,
-                              discount: selectedSize!.discount));
-                          // }
-                          // else {
-                          //   db.localOrdersDao.increaseQuantity(order);
-                          // }
-                        },
-                )),
-          ],
-        ),
+                        // LocalOrder? order = await db.localOrdersDao
+                        //     .searchInOrderFuture(
+                        //         widget.item.name + ' - ' + selectedSize!.name);
+
+                        db.localOrdersDao.insertInTheOrder(LocalOrder(
+                            details: json.encode(details),
+                            fid: widget.item.fid,
+                            name: widget.item.name + ' - ' + selectedSize!.name,
+                            imgurl: widget.item.imgUrl,
+                            quantity: 1,
+                            price: price,
+                            discount: selectedSize!.discount));
+                      },
+              )),
+        ],
       ),
     );
   }

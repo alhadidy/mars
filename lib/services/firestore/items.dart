@@ -49,7 +49,7 @@ class Items {
     Stream<QuerySnapshot> snapshot = firestore
         .collection('items')
         .where('bestSeller', isEqualTo: true)
-        .where('bestSellerCategory', isEqualTo: 'معجنات')
+        .where('category', isEqualTo: 'معجنات')
         .snapshots();
 
     return snapshot

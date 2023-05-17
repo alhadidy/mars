@@ -14,12 +14,8 @@ import 'package:mars/screens/home/orders_page.dart';
 import 'package:mars/screens/home/scan.dart';
 import 'package:mars/screens/home/stores_page.dart';
 import 'package:mars/screens/home/widgets/basket_button.dart';
-import 'package:mars/screens/home/widgets/calendar_sliver.dart';
 
-import 'package:mars/screens/home/widgets/drinks_sliver.dart';
-import 'package:mars/screens/home/widgets/food_sliver.dart';
 import 'package:mars/screens/home/widgets/promo_sliver.dart';
-import 'package:mars/screens/home/widgets/shops_orders_sliver.dart';
 import 'package:mars/services/methods.dart';
 import 'package:mars/services/notifications.dart';
 import 'package:mars/services/providers.dart';
@@ -28,10 +24,10 @@ import 'package:mars/services/providers.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   inspect(message);
 
-  NotificationsApi.showNotification(
-      title: message.data['title'],
-      body: message.data['body'],
-      payload: jsonEncode(message.data));
+  // NotificationsApi.showNotification(
+  //     title: message.data['title'],
+  //     body: message.data['body'],
+  //     payload: jsonEncode(message.data));
 }
 
 class Home extends ConsumerStatefulWidget {
@@ -49,7 +45,8 @@ class _HomeState extends ConsumerState<Home> {
   void _handleNotificationClicked(String payload) async {
     final notificationData = jsonDecode(payload);
     switch (notificationData['page']) {
-      case 'item':
+      case 'orders':
+        Navigator.pushNamed(context, '/adminOrders');
         break;
     }
   }
@@ -127,7 +124,11 @@ class _HomeState extends ConsumerState<Home> {
             ),
             FittedBox(
               child: Text(
-                user.name.isEmpty ? 'Guest' : user.name,
+                user.isAnon
+                    ? 'Guest'
+                    : user.name.isEmpty
+                        ? 'User'
+                        : user.name,
                 style: const TextStyle(fontSize: 18),
               ),
             ),

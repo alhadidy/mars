@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mars/models/cup_size.dart';
 
 class Fav {
   final String fid;

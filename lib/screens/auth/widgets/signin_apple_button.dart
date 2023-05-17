@@ -36,8 +36,7 @@ class SignInAppleButtonState extends ConsumerState<SignInAppleButton> {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            primary: Theme.of(context).colorScheme.primary,
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)), backgroundColor: Theme.of(context).colorScheme.primary,
           ),
           onPressed: widget.loading == null
               ? () async {
@@ -64,9 +63,9 @@ class SignInAppleButtonState extends ConsumerState<SignInAppleButton> {
                         return AlertDialog(
                           backgroundColor:
                               Theme.of(context).scaffoldBackgroundColor,
-                          title: Column(
+                          title: const Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
+                            children: [
                               Text(
                                 'تسجيل الدخول',
                                 textAlign: TextAlign.center,
@@ -135,11 +134,11 @@ class SignInAppleButtonState extends ConsumerState<SignInAppleButton> {
                 }
               : null,
           child: widget.loading == 'apple'
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
+              ? const Padding(
+                  padding: EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: const [
+                    children: [
                       SizedBox(
                         width: 28,
                         height: 28,
@@ -150,11 +149,11 @@ class SignInAppleButtonState extends ConsumerState<SignInAppleButton> {
                     ],
                   ),
                 )
-              : Padding(
-                  padding: const EdgeInsets.all(8.0),
+              : const Padding(
+                  padding: EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: const [
+                    children: [
                       FaIcon(FontAwesomeIcons.apple, color: Colors.white),
                     ],
                   ),
