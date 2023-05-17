@@ -61,9 +61,9 @@ class _SignInGoogleButtonState extends ConsumerState<SignInGoogleButton> {
                       return AlertDialog(
                         backgroundColor:
                             Theme.of(context).scaffoldBackgroundColor,
-                        title: const Column(
+                        title:  Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
+                          children: const [
                             Text(
                               'تسجيل الدخول',
                               textAlign: TextAlign.center,
@@ -132,11 +132,11 @@ class _SignInGoogleButtonState extends ConsumerState<SignInGoogleButton> {
               }
             : null,
         child: widget.loading == 'google'
-            ? const Padding(
+            ?  Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
+                  children: const [
                     SizedBox(
                       width: 28,
                       height: 28,
@@ -147,11 +147,11 @@ class _SignInGoogleButtonState extends ConsumerState<SignInGoogleButton> {
                   ],
                 ),
               )
-            : const Padding(
+            :  Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
+                  children: const [
                     FaIcon(FontAwesomeIcons.google, color: Colors.white),
                   ],
                 ),

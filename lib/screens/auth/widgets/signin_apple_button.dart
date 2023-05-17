@@ -63,9 +63,9 @@ class SignInAppleButtonState extends ConsumerState<SignInAppleButton> {
                         return AlertDialog(
                           backgroundColor:
                               Theme.of(context).scaffoldBackgroundColor,
-                          title: const Column(
+                          title:  Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
+                            children: const [
                               Text(
                                 'تسجيل الدخول',
                                 textAlign: TextAlign.center,
@@ -134,11 +134,11 @@ class SignInAppleButtonState extends ConsumerState<SignInAppleButton> {
                 }
               : null,
           child: widget.loading == 'apple'
-              ? const Padding(
+              ?  Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
+                    children: const [
                       SizedBox(
                         width: 28,
                         height: 28,
@@ -149,11 +149,11 @@ class SignInAppleButtonState extends ConsumerState<SignInAppleButton> {
                     ],
                   ),
                 )
-              : const Padding(
+              :  Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
+                    children: const [
                       FaIcon(FontAwesomeIcons.apple, color: Colors.white),
                     ],
                   ),

@@ -468,8 +468,8 @@ class _AdminOrdersState extends State<AdminOrders> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          const Row(
-                                            children: [
+                                           Row(
+                                            children: const [
                                               FaIcon(
                                                 FontAwesomeIcons.wallet,
                                                 color: Colors.white,
@@ -506,8 +506,8 @@ class _AdminOrdersState extends State<AdminOrders> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          const Row(
-                                            children: [
+                                           Row(
+                                            children: const [
                                               FaIcon(
                                                 FontAwesomeIcons.moneyBills,
                                                 color: Colors.white,

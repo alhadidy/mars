@@ -209,8 +209,8 @@ class _CompleteOrderState extends ConsumerState<CompleteOrder> {
                               }
                               return ListTile(
                                 title: const Text('الدفع عن طريق المحفظة'),
-                                subtitle: const Row(
-                                  children: [
+                                subtitle:  Row(
+                                  children: const [
                                     FaIcon(
                                       FontAwesomeIcons.solidStar,
                                       color: Colors.green,
