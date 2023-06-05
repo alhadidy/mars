@@ -6,6 +6,7 @@ import 'package:mars/models/prefs.dart';
 import 'package:mars/models/sSettings.dart';
 import 'package:mars/models/user.dart';
 import 'package:mars/models/user_data.dart';
+import 'package:mars/models/user_info.dart';
 import 'package:mars/services/auth_service.dart';
 import 'package:mars/services/firestore/settings.dart';
 import 'package:mars/services/firestore/users.dart';
@@ -46,7 +47,8 @@ final userDataProvider = StateProvider<UserData>((ref) {
       return value;
     },
     orElse: (() {
-      return UserData([], 0, 0, null);
+      return UserData(
+          [], 0, 0, UserInfo(birth: DateTime.now(), gender: '', address: ''));
     }),
   );
 }); // user data

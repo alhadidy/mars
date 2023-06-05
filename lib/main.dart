@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,6 +55,8 @@ class _MyAppState extends ConsumerState<MyApp> {
     ThemeData theme = ref.watch(prefProvider.select((value) => value.theme));
 
     UserModel? user = ref.watch(userProvider);
+
+    UserData userData = ref.watch(userDataProvider);
 
     SSetting settings = ref.watch(shopSettingsProvider);
     ref.listen<int>(rolesProvider.select((value) => value.refreshTime),
@@ -127,8 +131,6 @@ class _MyAppState extends ConsumerState<MyApp> {
         if (user.phone == '' && !user.isAnon) {
           return const RequestPhone();
         }
-
-        UserData userData = ref.watch(userDataProvider);
 
         if (userData.info == null) {
           return const CollectInfo();

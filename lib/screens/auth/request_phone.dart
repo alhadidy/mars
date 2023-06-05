@@ -324,7 +324,6 @@ class _RequestPhoneState extends ConsumerState<RequestPhone> {
                                 phoneValidated = value;
                               });
                             },
-                            countries: const ['IQ'],
                             locale: 'ar',
                             autoValidateMode:
                                 AutovalidateMode.onUserInteraction,
