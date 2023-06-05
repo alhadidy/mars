@@ -106,230 +106,228 @@ class _ItemPageState extends ConsumerState<ItemPage> {
       body: Stack(
         children: [
           SingleChildScrollView(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height - kToolbarHeight,
-              child: Column(
-                children: [
-                  Hero(
-                    tag: widget.item.fid,
-                    child: ClipOval(
-                      child: CachedNetworkImage(
-                        width: MediaQuery.of(context).size.width / 2,
-                        height: MediaQuery.of(context).size.width / 2,
-                        fit: BoxFit.cover,
-                        imageUrl: widget.item.imgUrl,
-                        errorWidget: ((context, url, error) {
-                          return Container(
-                            color: Theme.of(context).colorScheme.primary,
-                            width: MediaQuery.of(context).size.width / 2,
-                            height: MediaQuery.of(context).size.width / 2,
-                          );
-                        }),
-                        placeholder: (context, url) {
-                          return Container(
-                            color: Theme.of(context).colorScheme.primary,
-                            width: MediaQuery.of(context).size.width / 2,
-                            height: MediaQuery.of(context).size.width / 2,
-                          );
-                        },
-                      ),
+            child: Column(
+              children: [
+                Hero(
+                  tag: widget.item.fid,
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                      width: MediaQuery.of(context).size.width / 2,
+                      height: MediaQuery.of(context).size.width / 2,
+                      fit: BoxFit.cover,
+                      imageUrl: widget.item.imgUrl,
+                      errorWidget: ((context, url, error) {
+                        return Container(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: MediaQuery.of(context).size.width / 2,
+                          height: MediaQuery.of(context).size.width / 2,
+                        );
+                      }),
+                      placeholder: (context, url) {
+                        return Container(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: MediaQuery.of(context).size.width / 2,
+                          height: MediaQuery.of(context).size.width / 2,
+                        );
+                      },
                     ),
                   ),
-                  SizedBox(
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          widget.item.name,
+                          textDirection: TextDirection.rtl,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.tajawal(
+                              fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          widget.item.category,
+                          textDirection: TextDirection.rtl,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.tajawal(fontSize: 18, height: 2),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const Divider(
+                  indent: 16,
+                  endIndent: 16,
+                ),
+                SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          Text(
-                            widget.item.name,
-                            textDirection: TextDirection.rtl,
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.tajawal(
-                                fontSize: 22, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            widget.item.category,
-                            textDirection: TextDirection.rtl,
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.tajawal(fontSize: 18, height: 2),
-                          ),
-                        ],
+                      padding: const EdgeInsets.only(right: 16.0),
+                      child: Text(
+                        'الأحجام المتوفرة',
+                        textDirection: TextDirection.rtl,
+                        style: GoogleFonts.tajawal(
+                            fontWeight: FontWeight.bold, fontSize: 18),
                       ),
-                    ),
+                    )),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Container(
+                    height: 4,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .secondary
+                            .withOpacity(0.5),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20))),
                   ),
-                  const Divider(
-                    indent: 16,
-                    endIndent: 16,
-                  ),
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 16.0),
-                        child: Text(
-                          'الأحجام المتوفرة',
-                          textDirection: TextDirection.rtl,
-                          style: GoogleFonts.tajawal(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                widget.item.sizes.isEmpty
+                    ? Container(
+                        height: 100,
+                        margin: const EdgeInsets.all(16),
+                        color: Colors.grey[100],
+                        child: const Center(
+                          child: Text('هذا المنتج غير متوفر حاليا'),
                         ),
-                      )),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Container(
-                      height: 4,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .secondary
-                              .withOpacity(0.5),
+                      )
+                    : Container(),
+                Wrap(
+                    alignment: WrapAlignment.center,
+                    children: widget.item.sizes.map((s) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          highlightColor: Colors.amber.withOpacity(0.2),
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(20))),
-                    ),
-                  ),
-                  widget.item.sizes.isEmpty
-                      ? Container(
-                          height: 100,
-                          margin: const EdgeInsets.all(16),
-                          color: Colors.grey[100],
-                          child: const Center(
-                            child: Text('هذا المنتج غير متوفر حاليا'),
-                          ),
-                        )
-                      : Container(),
-                  Wrap(
-                      alignment: WrapAlignment.center,
-                      children: widget.item.sizes.map((s) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: InkWell(
-                            highlightColor: Colors.amber.withOpacity(0.2),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(20)),
-                            onTap: (() async {
-                              setState(() {
-                                selectedSize = s;
-                              });
-                            }),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: 60,
-                                    width: 60,
-                                    decoration: BoxDecoration(
-                                        color: selectedSize?.name == s.name
-                                            ? Colors.amber.withOpacity(0.3)
-                                            : null,
-                                        border: Border.all(
-                                            width: 2,
-                                            color: selectedSize?.name == s.name
-                                                ? Colors.amber
-                                                : Colors.transparent),
-                                        shape: BoxShape.circle),
-                                    child: Center(
-                                      child: Image.asset(
-                                        'assets/imgs/cup.png',
-                                        height: 40,
-                                      ),
+                              const BorderRadius.all(Radius.circular(20)),
+                          onTap: (() async {
+                            setState(() {
+                              selectedSize = s;
+                            });
+                          }),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 60,
+                                  width: 60,
+                                  decoration: BoxDecoration(
+                                      color: selectedSize?.name == s.name
+                                          ? Colors.amber.withOpacity(0.3)
+                                          : null,
+                                      border: Border.all(
+                                          width: 2,
+                                          color: selectedSize?.name == s.name
+                                              ? Colors.amber
+                                              : Colors.transparent),
+                                      shape: BoxShape.circle),
+                                  child: Center(
+                                    child: Image.asset(
+                                      'assets/imgs/cup.png',
+                                      height: 40,
                                     ),
                                   ),
-                                  Text(
-                                    s.name,
-                                    style: GoogleFonts.tajawal(
-                                        height: 2, fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
+                                ),
+                                Text(
+                                  s.name,
+                                  style: GoogleFonts.tajawal(
+                                      height: 2, fontWeight: FontWeight.bold),
+                                )
+                              ],
                             ),
-                          ),
-                        );
-                      }).toList()),
-                  widget.item.addons.isEmpty
-                      ? Container()
-                      : SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 16.0),
-                            child: Text(
-                              'إصنع مشروبك الخاص',
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.tajawal(
-                                  fontWeight: FontWeight.bold, fontSize: 18),
-                            ),
-                          )),
-                  widget.item.addons.isEmpty
-                      ? Container()
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          child: Container(
-                            height: 4,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondary
-                                    .withOpacity(0.5),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(20))),
-                          ),
-                        ),
-                  Column(
-                    children: widget.item.addons.map((addon) {
-                      return Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: CheckboxListTile(
-                          value: selectedAddons.contains(addon),
-                          onChanged: (value) {
-                            setState(() {
-                              if (!selectedAddons.contains(addon)) {
-                                selectedAddons.add(addon);
-                              } else {
-                                selectedAddons.remove(addon);
-                              }
-                            });
-                          },
-                          title: Text(
-                            addon.name,
-                            style: GoogleFonts.tajawal(
-                                fontWeight: FontWeight.bold),
-                          ),
-                          secondary: Text(
-                            '${Methods.formatPrice(addon.price)} د.ع',
                           ),
                         ),
                       );
-                    }).toList(),
-                  ),
-                  const Spacer(),
-                  widget.item.desc.isEmpty
-                      ? Container()
-                      : Container(
-                          width: MediaQuery.of(context).size.width,
-                          color: Theme.of(context).colorScheme.primary,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Text(
-                                  widget.item.desc,
-                                  textDirection: TextDirection.rtl,
-                                  style: GoogleFonts.tajawal(
-                                      color: Colors.white, height: 2),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 100,
-                              )
-                            ],
+                    }).toList()),
+                widget.item.addons.isEmpty
+                    ? Container()
+                    : SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: Text(
+                            'إصنع مشروبك الخاص',
+                            textDirection: TextDirection.rtl,
+                            style: GoogleFonts.tajawal(
+                                fontWeight: FontWeight.bold, fontSize: 18),
                           ),
+                        )),
+                widget.item.addons.isEmpty
+                    ? Container()
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        child: Container(
+                          height: 4,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .secondary
+                                  .withOpacity(0.5),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(20))),
                         ),
-                ],
-              ),
+                      ),
+                widget.item.addons.isEmpty
+                    ? Container()
+                    : Column(
+                        children: widget.item.addons.map((addon) {
+                          return Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: CheckboxListTile(
+                              value: selectedAddons.contains(addon),
+                              onChanged: (value) {
+                                setState(() {
+                                  if (!selectedAddons.contains(addon)) {
+                                    selectedAddons.add(addon);
+                                  } else {
+                                    selectedAddons.remove(addon);
+                                  }
+                                });
+                              },
+                              title: Text(
+                                addon.name,
+                                style: GoogleFonts.tajawal(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              secondary: Text(
+                                '${Methods.formatPrice(addon.price)} د.ع',
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                widget.item.desc.isEmpty
+                    ? Container()
+                    : Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: Theme.of(context).colorScheme.primary,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text(
+                                widget.item.desc,
+                                textDirection: TextDirection.rtl,
+                                style: GoogleFonts.tajawal(
+                                    color: Colors.white, height: 2),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 100,
+                            )
+                          ],
+                        ),
+                      ),
+              ],
             ),
           ),
           Positioned(
@@ -366,11 +364,9 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                           price += e.price;
                           return {'name': e.name, 'price': e.price};
                         }).toList();
-
                         // LocalOrder? order = await db.localOrdersDao
                         //     .searchInOrderFuture(
                         //         widget.item.name + ' - ' + selectedSize!.name);
-
                         db.localOrdersDao.insertInTheOrder(LocalOrder(
                             details: json.encode(details),
                             fid: widget.item.fid,
