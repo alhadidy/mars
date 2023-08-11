@@ -54,7 +54,7 @@ class _HomeState extends ConsumerState<Home> {
   @override
   void initState() {
     Methods.initFCM(context);
-    NotificationsApi.init(initScheduled: true);
+    NotificationsApi.init(initScheduled: false);
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     NotificationsApi.onNotificationsClick.stream.listen((payload) {
       _handleNotificationClicked(payload);

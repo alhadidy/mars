@@ -13,6 +13,7 @@ import 'package:intl/intl.dart' as intl;
 import 'package:mars/models/order.dart';
 import 'package:mars/screens/home/widgets/round_icon_button.dart';
 import 'package:mars/services/notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Methods {
   static void showLoaderDialog(BuildContext context) {
@@ -39,8 +40,13 @@ class Methods {
   }
 
   static initFCM(context) async {
+    await Permission.notification.isDenied.then((value) async {
+      if (value) {
+        Permission.notification.request();
+      }
+    });
     FirebaseMessaging messaging = FirebaseMessaging.instance;
-    await messaging.requestPermission(
+    NotificationSettings settings = await messaging.requestPermission(
       alert: true,
       announcement: false,
       badge: true,

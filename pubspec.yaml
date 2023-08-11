@@ -5,7 +5,7 @@ description: A new Flutter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 
-version: 1.0.9+10
+version: 1.1.12+14
 
 environment:
   sdk: '>=2.18.4 <3.0.0'
@@ -28,7 +28,7 @@ dependencies:
   flutter_local_notifications: ^9.5.3+1
   cloud_functions:
   google_sign_in:
-  google_maps_flutter:
+  google_maps_flutter: ^2.4.0
   sign_in_with_apple: ^3.0.0
   flutter_riverpod:
 
@@ -66,6 +66,9 @@ dependencies:
   pin_code_fields:
   dotted_line:
   scroll_date_picker:
+  permission_handler:
+  notification_permissions:
+  firebase_app_check: ^0.1.5+1
 
 
 dev_dependencies:

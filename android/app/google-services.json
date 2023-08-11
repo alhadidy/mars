@@ -30,6 +30,14 @@
           }
         },
         {
+          "client_id": "641358260927-ud2tkk26ifff3ucnk6v45doib0ki0omu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alhadidy.mars",
+            "certificate_hash": "d12a8c0a827d4b13b16935d4d7fc6b0c67e26eea"
+          }
+        },
+        {
           "client_id": "641358260927-g8fh3kin0vq245rt8rp3j69uf0mir9ip.apps.googleusercontent.com",
           "client_type": 3
         }

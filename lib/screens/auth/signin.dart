@@ -160,12 +160,12 @@ class SigninState extends ConsumerState<Signin> {
                                   }
                                 : null,
                             child: loading == 'skip'
-                                ?  Padding(
+                                ?  const Padding(
                                     padding: EdgeInsets.all(8.0),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceAround,
-                                      children: const [
+                                      children: [
                                         SizedBox(
                                           width: 28,
                                           height: 28,
