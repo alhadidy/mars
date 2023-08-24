@@ -128,14 +128,16 @@ class Users {
     }, SetOptions(merge: true));
   }
 
-  Future<void> setUserInfos(String userId, UserInfo info) async {
+  Future<void> setUserInfos(String userId, UserInfo? info) async {
     DocumentReference ref = firestore.collection('users').doc(userId);
 
     return await ref.set({
       'info': {
-        'birth': Timestamp.fromDate(info.birth),
-        'gender': info.gender,
-        'address': info.address
+        'birth': info == null
+            ? FieldValue.serverTimestamp()
+            : Timestamp.fromDate(info.birth),
+        'gender': info == null ? '' : info.gender,
+        'address': info == null ? '' : info.address
       },
     }, SetOptions(merge: true));
   }

@@ -109,6 +109,9 @@ class _CollectInfoState extends ConsumerState<CollectInfo> {
                 },
               ),
             ),
+            const SizedBox(
+              height: 16,
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -162,36 +165,60 @@ class _CollectInfoState extends ConsumerState<CollectInfo> {
               width: MediaQuery.of(context).size.width,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(30)))),
-                    onPressed: () async {
-                      if (controller.text == '') {
-                        setState(() {
-                          validate = true;
-                        });
-                        return;
-                      }
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)))),
+                        onPressed: () async {
+                          if (controller.text == '') {
+                            setState(() {
+                              validate = true;
+                            });
+                            return;
+                          }
 
-                      await locator.get<Users>().setUserInfos(
-                          user!.uid,
-                          UserInfo(
-                              birth: _selectedDate,
-                              gender: gender,
-                              address: controller.text));
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'حفظ المعلومات',
-                        style: GoogleFonts.tajawal(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            height: 2.5),
-                      ),
-                    )),
+                          await locator.get<Users>().setUserInfos(
+                              user!.uid,
+                              UserInfo(
+                                  birth: _selectedDate,
+                                  gender: gender,
+                                  address: controller.text));
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'حفظ المعلومات',
+                            style: GoogleFonts.tajawal(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                height: 2.5),
+                          ),
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: TextButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)))),
+                          onPressed: () async {
+                            await locator
+                                .get<Users>()
+                                .setUserInfos(user!.uid, null);
+                          },
+                          child: Text(
+                            'تخطي',
+                            style: GoogleFonts.tajawal(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                height: 2.5),
+                          )),
+                    ),
+                  ],
+                ),
               ),
             )
           ],
