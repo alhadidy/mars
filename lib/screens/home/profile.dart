@@ -7,6 +7,7 @@ import 'package:mars/models/user.dart';
 import 'package:mars/models/user_data.dart';
 import 'package:mars/screens/auth/widgets/signin_apple_button.dart';
 import 'package:mars/screens/auth/widgets/signin_google_button.dart';
+import 'package:mars/screens/home/home_header_sliver.dart';
 import 'package:mars/services/auth_service.dart';
 import 'package:mars/services/firebase_links.dart';
 import 'package:mars/services/methods.dart';
@@ -206,6 +207,7 @@ class _ProfileState extends ConsumerState<Profile> {
             //     ],
             //   ),
             // ),
+
             const Divider(
               height: 16,
               indent: 8,

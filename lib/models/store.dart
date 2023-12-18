@@ -5,6 +5,7 @@ class Store {
   final String name;
   final String address;
   final String imgUrl;
+  final String phone;
   final GeoPoint location;
 
   Store(
@@ -12,6 +13,7 @@ class Store {
       required this.name,
       required this.address,
       required this.imgUrl,
+      required this.phone,
       required this.location});
 
   factory Store.fromDoc(QueryDocumentSnapshot doc) {
@@ -21,6 +23,7 @@ class Store {
         name: data['name'] ?? '',
         address: data['address'] ?? '',
         imgUrl: data['imgUrl'] ?? '',
+        phone: data['phone'] ?? '',
         location: data['location']);
   }
 }

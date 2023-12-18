@@ -20,12 +20,14 @@ class _CategoryEditorState extends State<CategoryEditor> {
   late bool update;
   TextEditingController nameController = TextEditingController();
   String image = '';
+  int order = 1;
   @override
   void initState() {
     widget.category == null ? update = false : update = true;
 
     if (update) {
       nameController.text = widget.category!.name;
+      order = widget.category!.order;
     }
 
     super.initState();
@@ -56,15 +58,16 @@ class _CategoryEditorState extends State<CategoryEditor> {
                 Methods.showLoaderDialog(context);
                 if (update) {
                   await locator.get<Categories>().updateCategory(
-                        fid: widget.category!.fid,
-                        name: nameController.text,
-                        image: image == '' ? null : File(image),
-                        updateImage: image.isNotEmpty,
-                      );
+                      fid: widget.category!.fid,
+                      name: nameController.text,
+                      image: image == '' ? null : File(image),
+                      updateImage: image.isNotEmpty,
+                      order: order);
                 } else {
                   await locator.get<Categories>().addCategory(
                       name: nameController.text,
-                      image: image == '' ? null : File(image));
+                      image: image == '' ? null : File(image),
+                      order: order);
                 }
                 Navigator.pop(context);
                 Navigator.pop(context);
@@ -139,6 +142,46 @@ class _CategoryEditorState extends State<CategoryEditor> {
               decoration: const InputDecoration(labelText: 'الأسم'),
             ),
           ),
+          const Padding(
+            padding: EdgeInsets.only(top: 16),
+            child: Text('Order'),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                    child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            order++;
+                          });
+                        },
+                        icon: const FaIcon(FontAwesomeIcons.plus))),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    order.toString(),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                CircleAvatar(
+                  child: IconButton(
+                      onPressed: () {
+                        if (order <= 1) {
+                          return;
+                        }
+                        setState(() {
+                          order--;
+                        });
+                      },
+                      icon: const FaIcon(FontAwesomeIcons.minus)),
+                ),
+              ],
+            ),
+          )
         ]),
       )),
     );

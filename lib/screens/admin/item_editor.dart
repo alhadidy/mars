@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +8,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mars/models/addon.dart';
 import 'package:mars/models/category.dart';
 import 'package:mars/models/item.dart';
-import 'package:mars/models/cup_size.dart';
+import 'package:mars/models/size_preset.dart';
 import 'package:mars/services/firestore/categories.dart';
 import 'package:mars/services/firestore/items.dart';
 import 'package:mars/services/locator.dart';
 import 'package:mars/services/methods.dart';
+import 'package:mars/services/firestore/sizes.dart';
 
 class ItemEditor extends StatefulWidget {
   final Item? item;
@@ -34,20 +36,27 @@ class _ItemEditorState extends State<ItemEditor> {
   String image = '';
   bool bestSeller = false;
   String selectedCategory = '';
-  List<CupSize> sizes = [];
+  late List<SizePreset> cupSizes;
   List<Addon> addons = [];
+
+  Future sizesFuture = locator.get<Sizes>().getSizes();
+  Future categoriesFuturer = locator.get<Categories>().getCategoriesFuturer();
   @override
   void initState() {
+    inspect(widget.item);
     widget.item == null ? update = false : update = true;
 
     if (update) {
       nameController.text = widget.item!.name;
       descController.text = widget.item!.desc;
-      sizes = widget.item!.sizes;
+      cupSizes = [...widget.item!.sizes];
+
       addons = widget.item!.addons;
 
       selectedCategory = widget.item!.category;
       bestSeller = widget.item!.bestSeller;
+    } else {
+      cupSizes = [];
     }
 
     super.initState();
@@ -93,7 +102,7 @@ class _ItemEditorState extends State<ItemEditor> {
                       name: nameController.text,
                       desc: descController.text,
                       category: selectedCategory,
-                      sizes: sizes,
+                      sizes: cupSizes,
                       addons: addons,
                       image: image == '' ? null : File(image),
                       updateImage: image.isNotEmpty,
@@ -103,7 +112,7 @@ class _ItemEditorState extends State<ItemEditor> {
                       name: nameController.text,
                       desc: descController.text,
                       category: selectedCategory,
-                      sizes: sizes,
+                      sizes: cupSizes,
                       addons: addons,
                       image: image == '' ? null : File(image),
                       bestSeller: bestSeller);
@@ -214,7 +223,7 @@ class _ItemEditorState extends State<ItemEditor> {
             ),
           ),
           FutureBuilder(
-            future: locator.get<Categories>().getCategoriesFuturer(),
+            future: categoriesFuturer,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.data == null) {
                 return Container();
@@ -241,8 +250,11 @@ class _ItemEditorState extends State<ItemEditor> {
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(16)),
                             color: selectedCategory == categories[index].name
-                                ? Colors.amber
-                                : null,
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .secondary
+                                    .withOpacity(0.5)
+                                : Colors.grey.shade200,
                           ),
                           width: 120,
                           child: Padding(
@@ -285,36 +297,159 @@ class _ItemEditorState extends State<ItemEditor> {
               );
             },
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: TextButton.icon(
-              style: TextButton.styleFrom(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12))),
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
-                  foregroundColor: Colors.black),
-              onPressed: () {
-                sizesDialog();
+          SizedBox(
+            height: 200,
+            width: MediaQuery.of(context).size.width,
+            child: FutureBuilder(
+              future: sizesFuture,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (!snapshot.hasData) {
+                  return Container();
+                }
+                List<SizePreset> sizePresets = snapshot.data;
+
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                    itemCount: sizePresets.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int index) {
+                      bool selected = cupSizes.where(((element) {
+                        return element.fid == sizePresets[index].fid;
+                      })).isNotEmpty;
+                      return InkWell(
+                        highlightColor: Colors.amber.withOpacity(0.2),
+                        splashColor: Colors.amber.withOpacity(0.2),
+                        focusColor: Colors.amber.withOpacity(0.2),
+                        hoverColor: Colors.amber.withOpacity(0.2),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20)),
+                        onTap: selected
+                            ? () {
+                                setState(() {
+                                  cupSizes.removeWhere(
+                                    (element) {
+                                      return element.fid ==
+                                          sizePresets[index].fid;
+                                    },
+                                  );
+                                });
+                              }
+                            : () {
+                                setState(() {
+                                  cupSizes.add(sizePresets[index]);
+                                });
+                              },
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: selected
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .secondary
+                                        .withOpacity(0.5)
+                                    : Colors.grey.shade200),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Image.asset(
+                                      'assets/imgs/cup.png',
+                                      height: 50,
+                                      width: 50,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      sizePresets[index].name,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Text(
+                                    Methods.formatPrice(
+                                            Methods.roundPriceWithDiscountIQD(
+                                          price: sizePresets[index].price,
+                                          discount: sizePresets[index].discount,
+                                        )) +
+                                        ' IQD',
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  sizePresets[index].discount != 0
+                                      ? Directionality(
+                                          textDirection: TextDirection.ltr,
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                Methods.formatPrice(
+                                                      sizePresets[index].price,
+                                                    ) +
+                                                    ' IQD',
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  decoration: TextDecoration
+                                                      .lineThrough,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Text(
+                                                '-' +
+                                                    Methods.formatPrice(
+                                                      sizePresets[index]
+                                                          .discount,
+                                                    ) +
+                                                    '%',
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : Container(),
+                                  Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      sizePresets[index]
+                                              .amount
+                                              .toStringAsFixed(0) +
+                                          ' ' +
+                                          sizePresets[index].unit,
+                                      overflow: TextOverflow.ellipsis,
+                                      textDirection: TextDirection.ltr,
+                                      style: TextStyle(
+                                          color: Colors.grey[600],
+                                          fontSize: 14),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
               },
-              icon: const FaIcon(FontAwesomeIcons.plus),
-              label: const Padding(
-                padding: EdgeInsets.all(4.0),
-                child: Text(
-                  'اضافة حجم',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Column(
-              children: sizes.map((size) {
+              children: cupSizes.map((size) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: ListTile(
                     onTap: () {
-                      sizesDialog(size: size);
+                      // sizesDialog(size: size);
                     },
                     title: Text(size.name),
                     trailing: Column(
@@ -346,7 +481,7 @@ class _ItemEditorState extends State<ItemEditor> {
                     leading: IconButton(
                       onPressed: () {
                         setState(() {
-                          sizes.remove(size);
+                          cupSizes.remove(size);
                         });
                       },
                       icon: const FaIcon(FontAwesomeIcons.xmark),
@@ -416,90 +551,97 @@ class _ItemEditorState extends State<ItemEditor> {
     );
   }
 
-  sizesDialog({CupSize? size}) {
-    if (size != null) {
-      sizeNameController.text = size.name;
-      sizePriceController.text = size.price.toString();
-      sizeDiscountController.text = size.discount.toString();
-    }
-    showDialog(
-        context: context,
-        builder: ((context) {
-          return AlertDialog(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            content: Directionality(
-              textDirection: TextDirection.rtl,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: 100,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: TextField(
-                        autofocus: true,
-                        textAlign: TextAlign.center,
-                        controller: sizeNameController,
-                        decoration: const InputDecoration(labelText: 'الاسم'),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    // width: MediaQuery.of(context).size.width / 2,
-                    height: 100,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: TextField(
-                        textAlign: TextAlign.center,
-                        controller: sizePriceController,
-                        decoration: const InputDecoration(labelText: 'السعر'),
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    // width: MediaQuery.of(context).size.width / 2,
-                    height: 100,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: TextField(
-                        textAlign: TextAlign.center,
-                        controller: sizeDiscountController,
-                        decoration: const InputDecoration(labelText: 'الخصم'),
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        setState(() {
-                          if (size != null) {
-                            sizes.remove(size);
-                          }
-                          sizes.add(CupSize(
-                              sizeNameController.text,
-                              int.tryParse(sizePriceController.text) ?? 0,
-                              int.tryParse(sizeDiscountController.text) ?? 0));
-                        });
-                      },
-                      child: Text(size != null ? 'تعديل' : 'اضافة'))
-                ],
-              ),
-            ),
-          );
-        })).then((value) {
-      sizeNameController.text = '';
-      sizePriceController.text = '';
-      sizeDiscountController.text = '';
-    });
-  }
+  // sizesDialog({SizePreset? size}) {
+  //   if (size != null) {
+  //     sizeNameController.text = size.name;
+  //     sizePriceController.text = size.price.toString();
+  //     sizeDiscountController.text = size.discount.toString();
+  //   }
+  //   showDialog(
+  //       context: context,
+  //       builder: ((context) {
+  //         return AlertDialog(
+  //           contentPadding: const EdgeInsets.all(0),
+  //           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+  //           content: SingleChildScrollView(
+  //             child: Directionality(
+  //               textDirection: TextDirection.rtl,
+  //               child: Column(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   SizedBox(
+  //                     height: 100,
+  //                     child: Padding(
+  //                       padding: const EdgeInsets.all(16.0),
+  //                       child: TextField(
+  //                         autofocus: true,
+  //                         textAlign: TextAlign.center,
+  //                         controller: sizeNameController,
+  //                         decoration: const InputDecoration(labelText: 'الاسم'),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   SizedBox(
+  //                     // width: MediaQuery.of(context).size.width / 2,
+  //                     height: 100,
+  //                     child: Padding(
+  //                       padding: const EdgeInsets.all(16.0),
+  //                       child: TextField(
+  //                         textAlign: TextAlign.center,
+  //                         controller: sizePriceController,
+  //                         decoration: const InputDecoration(labelText: 'السعر'),
+  //                         keyboardType: TextInputType.number,
+  //                         inputFormatters: <TextInputFormatter>[
+  //                           FilteringTextInputFormatter.digitsOnly
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   SizedBox(
+  //                     // width: MediaQuery.of(context).size.width / 2,
+  //                     height: 100,
+  //                     child: Padding(
+  //                       padding: const EdgeInsets.all(16.0),
+  //                       child: TextField(
+  //                         textAlign: TextAlign.center,
+  //                         controller: sizeDiscountController,
+  //                         decoration: const InputDecoration(labelText: 'الخصم'),
+  //                         keyboardType: TextInputType.number,
+  //                         inputFormatters: <TextInputFormatter>[
+  //                           FilteringTextInputFormatter.digitsOnly
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   ElevatedButton(
+  //                       onPressed: () {
+  //                         Navigator.pop(context);
+  //                         setState(() {
+  //                           if (size != null) {
+  //                             sizes.remove(size);
+  //                           }
+  //                           sizes.add(SizePreset(
+  //                               null,
+  //                               sizeNameController.text,
+  //                               0,
+  //                               '',
+  //                               int.tryParse(sizePriceController.text) ?? 0,
+  //                               int.tryParse(sizeDiscountController.text) ??
+  //                                   0));
+  //                         });
+  //                       },
+  //                       child: Text(size != null ? 'تعديل' : 'اضافة'))
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         );
+  //       })).then((value) {
+  //     sizeNameController.text = '';
+  //     sizePriceController.text = '';
+  //     sizeDiscountController.text = '';
+  //   });
+  // }
 
   addonsDialog({Addon? addon}) {
     if (addon != null) {
@@ -510,55 +652,58 @@ class _ItemEditorState extends State<ItemEditor> {
         context: context,
         builder: ((context) {
           return AlertDialog(
+            contentPadding: const EdgeInsets.all(0),
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            content: Directionality(
-              textDirection: TextDirection.rtl,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: 100,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: TextField(
-                        autofocus: true,
-                        textAlign: TextAlign.center,
-                        controller: addonNameController,
-                        decoration: const InputDecoration(labelText: 'الاسم'),
+            content: SingleChildScrollView(
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 100,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: TextField(
+                          autofocus: true,
+                          textAlign: TextAlign.center,
+                          controller: addonNameController,
+                          decoration: const InputDecoration(labelText: 'الاسم'),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 100,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: TextField(
-                        textAlign: TextAlign.center,
-                        controller: addonPriceController,
-                        decoration: const InputDecoration(labelText: 'السعر'),
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
+                    SizedBox(
+                      height: 100,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          controller: addonPriceController,
+                          decoration: const InputDecoration(labelText: 'السعر'),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
 
-                        setState(() {
-                          if (addon != null) {
-                            addons.remove(addon);
-                          }
-                          addons.add(Addon(
-                            addonNameController.text,
-                            int.tryParse(addonPriceController.text) ?? 0,
-                          ));
-                        });
-                      },
-                      child: Text(addon != null ? 'تعديل' : 'اضافة'))
-                ],
+                          setState(() {
+                            if (addon != null) {
+                              addons.remove(addon);
+                            }
+                            // addons.add(Addon(
+                            //   addonNameController.text,
+                            //   int.tryParse(addonPriceController.text) ?? 0,
+                            // ));
+                          });
+                        },
+                        child: Text(addon != null ? 'تعديل' : 'اضافة'))
+                  ],
+                ),
               ),
             ),
           );

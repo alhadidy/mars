@@ -106,7 +106,7 @@ class Methods {
       ],
     );
     showDialog(
-      barrierDismissible: false,
+      barrierDismissible: true,
       context: context,
       builder: (BuildContext context) {
         return alert;

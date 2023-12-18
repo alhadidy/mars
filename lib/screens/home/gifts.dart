@@ -10,10 +10,14 @@ class Gifts extends StatefulWidget {
 class _GiftsState extends State<Gifts> {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'قريباً',
-        style: TextStyle(fontSize: 22),
+    return Center(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: const Text(
+          'قريباً',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 22),
+        ),
       ),
     );
   }

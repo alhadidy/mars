@@ -38,7 +38,7 @@ class Home extends ConsumerStatefulWidget {
 }
 
 class _HomeState extends ConsumerState<Home> {
-  int _navIndex = 0;
+  int _navIndex = 2;
   late List<Widget> pages;
 
   //TODO pages notifications

@@ -8,7 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mars/drift/drift.dart';
 import 'package:mars/models/addon.dart';
 import 'package:mars/models/item.dart';
-import 'package:mars/models/cup_size.dart';
+import 'package:mars/models/size_preset.dart';
 import 'package:mars/models/user.dart';
 import 'package:mars/screens/home/widgets/basket_button.dart';
 import 'package:mars/services/firebase_links.dart';
@@ -27,7 +27,7 @@ class ItemPage extends ConsumerStatefulWidget {
 }
 
 class _ItemPageState extends ConsumerState<ItemPage> {
-  CupSize? selectedSize;
+  SizePreset? selectedSize;
   List<Addon> selectedAddons = [];
   @override
   void initState() {
@@ -106,6 +106,21 @@ class _ItemPageState extends ConsumerState<ItemPage> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          // ElevatedButton(
+          //   style: ElevatedButton.styleFrom(
+          //       backgroundColor: Colors.indigo[700],
+          //       shape: const RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.all(Radius.circular(30)))),
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(8.0),
+          //     child: Text(
+          //       'إضافة الى السلة',
+          //       style: GoogleFonts.tajawal(
+          //           height: 2.5, fontWeight: FontWeight.bold),
+          //     ),
+          //   ),
+          //   onPressed: () async {},
+          // ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: CircleAvatar(
@@ -254,6 +269,9 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                           padding: const EdgeInsets.all(8.0),
                           child: InkWell(
                             highlightColor: Colors.amber.withOpacity(0.2),
+                            splashColor: Colors.amber.withOpacity(0.2),
+                            focusColor: Colors.amber.withOpacity(0.2),
+                            hoverColor: Colors.amber.withOpacity(0.2),
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(20)),
                             onTap: (() async {
@@ -289,6 +307,12 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                                     s.name,
                                     style: GoogleFonts.tajawal(
                                         height: 2, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    '${Methods.formatPrice(s.price)} IQD',
+                                    style: GoogleFonts.tajawal(
+                                      height: 2,
+                                    ),
                                   )
                                 ],
                               ),

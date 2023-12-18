@@ -11,6 +11,6 @@ class Category {
   factory Category.fromDoc(DocumentSnapshot doc) {
     Map data = doc.data() as Map;
     return Category(
-        doc.id, data['name'] ?? '', data['imgUrl'] ?? '', data['order'] ?? 0);
+        doc.id, data['name'] ?? '', data['imgUrl'] ?? '', data['order'] ?? 1);
   }
 }

@@ -4,10 +4,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mars/models/store.dart';
 import 'package:mars/services/firestore/stores.dart';
 import 'package:mars/services/locator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StoresPage extends StatefulWidget {
   const StoresPage({Key? key}) : super(key: key);
@@ -30,8 +32,12 @@ class _StoresPageState extends State<StoresPage> {
     zoom: 18,
   );
 
-  void _addMarker(String id, String name, GeoPoint location) {
+  void _addMarker(String id, String name, GeoPoint location) async {
     final MarkerId markerId = MarkerId(id);
+
+    BitmapDescriptor bitmapDescriptor = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(size: Size(100, 100)),
+        'assets/imgs/marker.png');
 
     // creating a new MARKER
     final Marker marker = Marker(
@@ -40,6 +46,7 @@ class _StoresPageState extends State<StoresPage> {
         location.latitude,
         location.longitude,
       ),
+      icon: bitmapDescriptor,
       onTap: () {
         if (stores == null) {
           return;
@@ -104,8 +111,9 @@ class _StoresPageState extends State<StoresPage> {
                           stores = snapshot.data;
                           WidgetsBinding.instance
                               .addPostFrameCallback((timeStamp) {
-                            _addMarker(stores![0].fid, stores![0].name,
-                                stores![0].location);
+                            for (var store in stores!) {
+                              _addMarker(store.fid, store.name, store.location);
+                            }
                           });
 
                           return CarouselSlider.builder(
@@ -197,6 +205,19 @@ class _StoresPageState extends State<StoresPage> {
                                                     ),
                                                   ),
                                                 ),
+                                                const Spacer(),
+                                                IconButton(
+                                                    onPressed: () async {
+                                                      final Uri launchUri = Uri(
+                                                        scheme: 'tel',
+                                                        path: stores![index]
+                                                            .phone,
+                                                      );
+                                                      await launchUrl(
+                                                          launchUri);
+                                                    },
+                                                    icon: const FaIcon(
+                                                        FontAwesomeIcons.phone))
                                               ],
                                             ),
                                           ),

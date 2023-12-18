@@ -13,6 +13,7 @@ import 'package:mars/services/methods.dart';
 import 'package:mars/services/providers.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:dotted_line/dotted_line.dart';
+import 'package:badges/badges.dart' as badge;
 
 class Basket extends ConsumerStatefulWidget {
   const Basket({super.key});
@@ -262,22 +263,35 @@ class _BasketState extends ConsumerState<Basket>
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  order[index].name,
-                                  style: GoogleFonts.tajawal(
-                                      fontWeight: FontWeight.bold),
+                                SizedBox(
+                                  width: 200,
+                                  child: Text(
+                                    order[index].name,
+                                    style: GoogleFonts.tajawal(
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                                 Text(
                                     '${Methods.formatPrice((Methods.roundPriceWithDiscountIQD(price: order[index].price, discount: order[index].discount) * order[index].quantity))} د.ع')
                               ],
                             ),
                           ),
-                          leading: ClipOval(
-                            child: CachedNetworkImage(
-                              imageUrl: order[index].imgurl,
-                              errorWidget: (context, url, error) {
-                                return Image.asset('assets/imgs/logo_dark.png');
-                              },
+                          leading: badge.Badge(
+                            badgeContent: Text(
+                              (index + 1).toString(),
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                            animationType: badge.BadgeAnimationType.scale,
+                            position: badge.BadgePosition.topStart(),
+                            badgeColor: Theme.of(context).colorScheme.secondary,
+                            child: ClipOval(
+                              child: CachedNetworkImage(
+                                imageUrl: order[index].imgurl,
+                                errorWidget: (context, url, error) {
+                                  return Image.asset(
+                                      'assets/imgs/logo_dark.png');
+                                },
+                              ),
                             ),
                           ),
                           subtitle: Column(

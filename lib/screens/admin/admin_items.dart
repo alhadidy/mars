@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mars/models/item.dart';
+import 'package:mars/models/size_preset.dart';
 import 'package:mars/services/firestore/items.dart';
+import 'package:mars/services/firestore/sizes.dart';
 import 'package:mars/services/locator.dart';
 import 'package:mars/services/methods.dart';
 
@@ -14,6 +18,7 @@ class AdminItems extends StatefulWidget {
 }
 
 class _AdminItemsState extends State<AdminItems> {
+  Stream itemsStream = locator.get<Items>().getItems();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,19 +30,19 @@ class _AdminItemsState extends State<AdminItems> {
                 Navigator.pushNamed(context, '/itemEditor',
                     arguments: {'item': null});
               },
-              icon: const FaIcon(FontAwesomeIcons.plus))
+              icon: const FaIcon(FontAwesomeIcons.plus)),
         ],
       ),
       body: Directionality(
         textDirection: TextDirection.rtl,
         child: StreamBuilder(
-          stream: locator.get<Items>().getItems(),
+          stream: itemsStream,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
-            print(snapshot);
             if (snapshot.data == null) {
               return Container();
             }
             List<Item> items = snapshot.data;
+
             return ListView.builder(
               itemCount: items.length,
               itemBuilder: (BuildContext context, int index) {

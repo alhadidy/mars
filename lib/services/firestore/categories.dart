@@ -10,8 +10,12 @@ class Categories {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Stream<List<Category>> getCategories() {
-    Stream<QuerySnapshot> snapshot =
-        firestore.collection('categories').snapshots();
+    Stream<QuerySnapshot> snapshot = firestore
+        .collection('categories')
+        .orderBy(
+          'order',
+        )
+        .snapshots();
 
     return snapshot.map((event) {
       return event.docs.map((e) => Category.fromDoc(e)).toList();
@@ -56,7 +60,7 @@ class Categories {
       {required String fid,
       required String name,
       required File? image,
-      int order = 0,
+      int order = 1,
       bool updateImage = false}) {
     if (updateImage && image != null) {
       String fileName = Methods.getRandomString(10);

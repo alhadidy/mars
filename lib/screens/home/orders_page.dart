@@ -58,7 +58,7 @@ class _OrdersPageState extends State<OrdersPage> {
                 CategoriesList(),
                 CustomScrollView(
                   slivers: [
-                    SliverToBoxAdapter(child: Divider()),
+                    // SliverToBoxAdapter(child: Divider()),
                     DrinksSliver(),
                     SliverToBoxAdapter(child: Divider()),
                     FoodSliver(),

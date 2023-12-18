@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mars/screens/admin/admin.dart';
+import 'package:mars/screens/admin/admin_addons.dart';
+import 'package:mars/screens/admin/admin_addons_editor.dart';
 import 'package:mars/screens/admin/admin_categories.dart';
 import 'package:mars/screens/admin/admin_editors.dart';
 import 'package:mars/screens/admin/admin_items.dart';
@@ -8,6 +10,7 @@ import 'package:mars/screens/admin/admin_payments.dart';
 import 'package:mars/screens/admin/admin_points.dart';
 import 'package:mars/screens/admin/admin_promotion.dart';
 import 'package:mars/screens/admin/admin_settings.dart';
+import 'package:mars/screens/admin/admin_sizes.dart';
 import 'package:mars/screens/admin/admin_stores.dart';
 import 'package:mars/screens/admin/admin_support.dart';
 import 'package:mars/screens/admin/category_editor.dart';
@@ -43,6 +46,20 @@ class RoutesHelper {
       case '/adminItems':
         return MaterialPageRoute(builder: (_) {
           return const AdminItems();
+        });
+      case '/adminAddons':
+        return MaterialPageRoute(builder: (_) {
+          return const AdminAddons();
+        });
+      case '/adminAddonsEditor':
+        return MaterialPageRoute(builder: (_) {
+          return AdminAddonsEditor(
+            addon: Map<String, dynamic>.from(args)['addon'],
+          );
+        });
+      case '/adminSizes':
+        return MaterialPageRoute(builder: (_) {
+          return const AdminSizes();
         });
       case '/itemEditor':
         return MaterialPageRoute(builder: (_) {

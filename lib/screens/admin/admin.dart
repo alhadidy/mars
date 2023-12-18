@@ -32,20 +32,20 @@ class _AdminState extends ConsumerState<Admin> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // ListTile(
-            //   title: const Text('Stores'),
-            //   trailing: SizedBox(
-            //       height: 30,
-            //       width: 30,
-            //       child: Center(
-            //           child: FaIcon(
-            //         FontAwesomeIcons.store,
-            //         color: Theme.of(context).colorScheme.secondary,
-            //       ))),
-            //   onTap: () {
-            //     Navigator.pushNamed(context, '/adminStores');
-            //   },
-            // ),
+            ListTile(
+              title: const Text('Stores'),
+              trailing: SizedBox(
+                  height: 30,
+                  width: 30,
+                  child: Center(
+                      child: FaIcon(
+                    FontAwesomeIcons.store,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ))),
+              onTap: () {
+                Navigator.pushNamed(context, '/adminStores');
+              },
+            ),
             ListTile(
               title: const Text('Categories'),
               trailing: SizedBox(
@@ -72,6 +72,34 @@ class _AdminState extends ConsumerState<Admin> {
                   ))),
               onTap: () {
                 Navigator.pushNamed(context, '/adminItems');
+              },
+            ),
+            ListTile(
+              title: const Text('Addons'),
+              trailing: SizedBox(
+                  height: 30,
+                  width: 30,
+                  child: Center(
+                      child: FaIcon(
+                    FontAwesomeIcons.puzzlePiece,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ))),
+              onTap: () {
+                Navigator.pushNamed(context, '/adminAddons');
+              },
+            ),
+            ListTile(
+              title: const Text('Sizes'),
+              trailing: SizedBox(
+                  height: 30,
+                  width: 30,
+                  child: Center(
+                      child: FaIcon(
+                    FontAwesomeIcons.weightScale,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ))),
+              onTap: () {
+                Navigator.pushNamed(context, '/adminSizes');
               },
             ),
             user.role == Roles.admin

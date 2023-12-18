@@ -4,7 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mars/models/addon.dart';
 import 'package:mars/models/item.dart';
-import 'package:mars/models/cup_size.dart';
+import 'package:mars/models/size_preset.dart';
+
 import 'package:mars/services/methods.dart';
 import 'package:path/path.dart' as p;
 
@@ -28,7 +29,8 @@ class Items {
   }
 
   Stream<List<Item>> getItems() {
-    Stream<QuerySnapshot> snapshot = firestore.collection('items').snapshots();
+    Stream<QuerySnapshot> snapshot =
+        firestore.collection('items').orderBy('category').snapshots();
 
     return snapshot
         .map((event) => event.docs.map((e) => Item.fromDoc(e)).toList());
@@ -64,7 +66,7 @@ class Items {
     required String name,
     required String desc,
     required String category,
-    required List<CupSize> sizes,
+    required List<SizePreset> sizes,
     List<Addon>? addons,
     required File? image,
     bool bestSeller = false,
@@ -85,6 +87,7 @@ class Items {
           'category': category,
           'sizes': sizes
               .map((size) => {
+                    'fid': size.fid,
                     'name': size.name,
                     'price': size.price,
                     'discount': size.discount
@@ -107,6 +110,7 @@ class Items {
         'category': category,
         'sizes': sizes
             .map((size) => {
+                  'fid': size.fid,
                   'name': size.name,
                   'price': size.price,
                   'discount': size.discount
@@ -130,7 +134,7 @@ class Items {
     required String category,
     required File? image,
     bool updateImage = false,
-    required List<CupSize> sizes,
+    required List<SizePreset> sizes,
     List<Addon>? addons,
     required bool bestSeller,
   }) async {
@@ -150,6 +154,7 @@ class Items {
           'category': category,
           'sizes': sizes
               .map((size) => {
+                    'fid': size.fid,
                     'name': size.name,
                     'price': size.price,
                     'discount': size.discount
@@ -172,6 +177,7 @@ class Items {
         'category': category,
         'sizes': sizes
             .map((size) => {
+                  'fid': size.fid,
                   'name': size.name,
                   'price': size.price,
                   'discount': size.discount
